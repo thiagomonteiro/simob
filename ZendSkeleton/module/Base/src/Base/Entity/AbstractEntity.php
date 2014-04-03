@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace ZfBase\Entity;
+namespace Base\Entity;
 
 use Zend\Stdlib\Hydrator\ClassMethods;
 

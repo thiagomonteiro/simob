@@ -7,10 +7,34 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'home' => array(
+$rota_login=array(
+    'type'    => 'segment',
+    'options' => array(
+        'route'    => '/admin/login[:action]',
+        'constraints' => array(
+            'action' => '[a-zA-Z0-9_-]+',//valores de possiveis parametros
+
+        ),
+        'defaults' => array(
+            'controller' => 'Application\Controller\Admin',// localizaçao do controlher
+            'action'     => 'login',//action da rota
+        ),
+    ),
+);
+
+$rota_adm_home = array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/admin/index',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Admin',
+                        'action'     => 'index',
+                    ),
+                ),
+            ); 
+
+
+$rota_home = array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/',
@@ -19,7 +43,16 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
-            ),
+            ); 
+
+return array(
+    'router' => array(
+        'routes' => array(
+            'login_admin' => $rota_login,
+            'home_admin'    =>  $rota_adm_home,
+            'home'  => $rota_home
+        ),
+            
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -50,7 +83,8 @@ return array(
                     ),
                 ),
             ),
-        ),
+            
+            
     ),
     'service_manager' => array(
         'abstract_factories' => array(
@@ -73,7 +107,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Admin' => 'Application\Controller\AdminController',
         ),
     ),
     'view_manager' => array(
@@ -85,6 +120,8 @@ return array(
         'template_map' => array(
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+            'application/admin/login' => __DIR__ . '/../view/application/admin/login.phtml',
+            'application/admin/index' => __DIR__ . '/../view/application/admin/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

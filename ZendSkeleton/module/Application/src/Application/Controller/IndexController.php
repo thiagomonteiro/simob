@@ -14,16 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    public function __construct() {
-        $view = new ViewModel(array(/*aqui vai as views*/));
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/layout_1');
-        return $view;
-    }
-    
     public function indexAction()
     {
         return new ViewModel();
-        
     }
 }

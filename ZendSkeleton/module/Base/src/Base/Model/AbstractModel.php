@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace ZfBase\Model;
+namespace Base\Model;
 
 use Zend\Db\Sql\Sql;  //classe que executa query
 use Zend\Db\Adapter\Adapter; // classe que conecta ao banco de dados
@@ -18,7 +18,7 @@ abstract class AbstractModel {
 
     protected  $config = array(
         "driver" => "Mysqli",
-        "database" => "zend_imobiliaria",
+        "database" => "zend",
         "username" => "root",
         "password" => ""
     );
