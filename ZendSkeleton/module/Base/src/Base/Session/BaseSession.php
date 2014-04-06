@@ -22,12 +22,11 @@ class BaseSession {
     }
     
     public function salvarDados($obj){
-        $this->user_session->email= $obj->getEmail();
-        $this->user_session->senha= $obj->getSenha();
+        $this->user_session->dados= serialize($obj);    
     }
     
     public function getDados(){
-        return $this->user_session;
+        return unserialize($this->user_session->dados);
     }
    
      

@@ -26,17 +26,16 @@ use Zend\Session\Container;
 
 
 class AdminController extends \Base\Controller\BaseAbstractController{
+    
     public function indexAction() {
-        /*$sessao = $this->sessao->getDados();
-        echo $sessao->email;*/ 
+        //$sessao = $this->sessao->getDados();
         $view = new ViewModel();
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
         return $view; 
     }
-    public function loginAction(){
-        
-        
+    
+    public function loginAction(){       
         $form = new form_login();//1- primeiro eu instancio o formulario
         $request = $this->getRequest();//2- pego a requisiçao
         if($request->isPost()){//3-verifico se é um post se for:
