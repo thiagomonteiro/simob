@@ -16,6 +16,9 @@ class Administrador extends \Base\Model\AbstractModel{
 private $classe = "\\Application\\Entity\\Administrador"; // este valor será modificado sempre
 
 
+    public function criarNovo($params){
+        return new AdmEntity($params);
+    }
 
     public function insert($obj)
     {
