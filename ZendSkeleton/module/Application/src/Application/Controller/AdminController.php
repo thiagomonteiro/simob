@@ -26,12 +26,23 @@ use Zend\Session\Container;
 
 class AdminController extends \Base\Controller\BaseAbstractController{
     
+    public function __construct() {
+        parent::__construct();
+    }
+    
     public function indexAction() {
-        //$sessao = $this->sessao->getDados();
-        $view = new ViewModel();
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/admin');
-        return $view; 
+        try{
+            $sessao = $this->sessao->isAutenticado();
+            print_r(boolval($sessao));
+            $view = new ViewModel();
+            $event = $this->getEvent();
+            $event->getViewModel()->setTemplate('layout/admin');
+            return $view;
+            //$this->sessao->limparSessao();
+        } catch (Exception $ex) {
+
+        }
+         
     }
     
     public function loginAction(){       
@@ -48,7 +59,7 @@ class AdminController extends \Base\Controller\BaseAbstractController{
             if($form->isValid()){
                 $response = $this->validarLoginAction($usuarioDto);
                 if($response['success']){
-                  $this->sessao->salvarDados($usuarioDto);
+                  $this->sessao->salvarSessaoUsuario($usuarioDto);
                   $this->redirect()->toRoute('home_admin');
                 }
                 else{

@@ -16,17 +16,33 @@ namespace Base\Session;
 use Zend\Session\Container;
 
 class BaseSession {
- private $user_session;    
+ 
+    private $user_session;    
+    private $_Autenticado;
+    
     public function __construct() {
        $this->user_session = new Container('user');
+       if(isset($this->user_session->dados)){
+           $this->_Autenticado = true;
+       }
     }
     
-    public function salvarDados($obj){
-        $this->user_session->dados= serialize($obj);    
+    public function salvarSessaoUsuario($obj){
+        $this->user_session->dados= serialize($obj);  
+        $this->_Autenticado = true;
     }
     
-    public function getDados(){
+    public function getSessaoUsuario(){
         return unserialize($this->user_session->dados);
+    }
+    
+    public function limparSessao(){
+        $this->user_session->getManager()->getStorage()->clear('user');
+        $this->_Autenticado = false;
+    }
+    
+    public function isAutenticado(){
+        return boolval($this->_Autenticado);
     }
    
      
