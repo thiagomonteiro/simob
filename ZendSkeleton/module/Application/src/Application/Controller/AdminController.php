@@ -90,6 +90,13 @@ class AdminController extends \Base\Controller\BaseAbstractController{
 
     }
 
+    public function alterarSenhaAction(){
+        
+    }
+    
+    public function visualizarLogAction(){
+        
+    }
     
   
 }

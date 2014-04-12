@@ -3,6 +3,34 @@ body {
     padding-bottom: 40px;
 }
 
+/*formularios*/
+
+.criar,.buscar,.listar{
+    border: 1px solid black;
+}
+
+.simob-input{
+    display: block;
+}
+
+.formulario ul{
+    list-style: none;
+}
+
+.formulario ul li{
+    width: 200px;
+    color: white;
+    background-color: #FFBABA;
+    border-radius: 1em;
+}
+
+.formulario ul li:before{
+    content:url("/img/erro.png");
+    position : relative;
+    top: 3px;
+}
+
+/*formularios*/
 
 /*inicio menu lateral*/
 aside{

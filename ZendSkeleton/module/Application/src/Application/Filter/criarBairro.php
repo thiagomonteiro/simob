@@ -16,7 +16,7 @@ use Zend\Validator\EmailAddress;
 use Zend\Validator\Identical;
 use Zend\Validator\NotEmpty;
 
-class login implements InputFilterAwareInterface {
+class criarBairro implements InputFilterAwareInterface {
 
     public function getInputFilter()
     {
@@ -25,7 +25,7 @@ class login implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'email',
+                    'name' => 'nome',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -34,7 +34,7 @@ class login implements InputFilterAwareInterface {
                     'validators' => array(
                         array('name' => 'Zend\Validator\NotEmpty',
                               'options' => array(
-                                  'messages' => array('isEmpty' => 'informe um email valido')
+                                  'messages' => array('isEmpty' => 'O campo nao pode ficar vazio')
                               ),
                         ),
                     ),
@@ -46,7 +46,7 @@ class login implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'senha',
+                    'name' => 'cidade',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -55,7 +55,7 @@ class login implements InputFilterAwareInterface {
                     'validators' => array(
                         array('name' => 'Zend\Validator\NotEmpty',
                             'options' => array(
-                                'messages' => array(NotEmpty::IS_EMPTY => 'informe a senha'),
+                                'messages' => array(NotEmpty::IS_EMPTY => 'O campo não pode ficar vazio'),
                             ),
                         ),
                     ),

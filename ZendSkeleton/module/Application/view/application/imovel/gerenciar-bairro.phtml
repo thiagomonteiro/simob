@@ -1,0 +1,30 @@
+<header>
+    Gerenciamento de Bairros
+</header>
+<section class="criar">
+    criar
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('login_admin'));
+    $form->setAttribute('method', 'post');
+
+    /*
+     * To change this template, choose Tools | Templates
+     * and open the template in the editor
+     */
+
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+
+    ?>
+</section>
+<section class="buscar">
+    buscar
+</section>
+<section class="listar">
+    listar
+</section>
+<?php
+
+?>

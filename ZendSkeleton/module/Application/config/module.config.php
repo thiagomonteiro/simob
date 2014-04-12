@@ -45,12 +45,41 @@ $rota_home = array(
                 ),
             ); 
 
+$rota_bairro = array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/imovel/gerenciarBairro',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Imovel',
+                        'action'     => 'gerenciarBairro',
+                    ),
+                ),
+            ); 
+
+/*
+$rota_imovel = array(
+                'type'  =>  'Zend\Mvc\Router\Http\Literal',
+                'options'   =>  array(
+                    'route' => '/imovel/index',
+                    'defaults'  =>  array(
+                        'controller'  =>  'Application\Controller\Index',
+                        'action'    =>  'index',
+                    ),
+                    'may_terminate' =>  true,
+                    'child_routes'  => array(
+                        'criarBairro'   => $rota_bairro,
+                    ),
+                ),
+    
+            );*/
+
 return array(
     'router' => array(
         'routes' => array(
             'login_admin' => $rota_login,
             'home_admin'    =>  $rota_adm_home,
-            'home'  => $rota_home
+            'home'  => $rota_home,
+            'crud_bairro' =>    $rota_bairro,
         ),
             
             // The following is a route to simplify getting started creating
@@ -109,6 +138,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Admin' => 'Application\Controller\AdminController',
+            'Application\Controller\Imovel' =>  'Application\Controller\ImovelController',
         ),
     ),
     'view_manager' => array(
@@ -122,6 +152,7 @@ return array(
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'application/admin/login' => __DIR__ . '/../view/application/admin/login.phtml',
             'application/admin/index' => __DIR__ . '/../view/application/admin/index.phtml',
+            'application/imovel/gerenciarBairro' =>    __DIR__ . '/../view/application/imovel/gerenciar-bairro.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

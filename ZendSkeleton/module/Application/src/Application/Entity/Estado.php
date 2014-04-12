@@ -7,6 +7,7 @@
  */
 
 namespace Application\Entity;
+use Application\Entity\Pais;
 
 /**
  * Description of estado
@@ -21,7 +22,7 @@ class Estado extends \Base\Entity\AbstractEntity {
     private $_uf;
     private $_pais;
     
-   
+    
     
     public function setId($id){
         $this->_id = $id;
@@ -41,6 +42,10 @@ class Estado extends \Base\Entity\AbstractEntity {
     
     public function setUf($uf){
         $this->_uf = $uf;
+    }
+    
+    public function getUf(){
+        return $this->_uf;
     }
     
     public function setPais(\Application\Entity\Pais $pais){
