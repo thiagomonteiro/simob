@@ -16,8 +16,16 @@ use Application\Entity\Pais as PaisEntity;
  */
 class Pais extends \Base\Model\AbstractModel {
     
+    public function __construct() {
+        
+    }
+    
     public function criarNovo($params=null){
       return new PaisEntity($params);    
+    }
+    
+     public function save($obj){
+        //implements insert and update here;
     }
     
     public function insert($obj){
@@ -49,7 +57,6 @@ class Pais extends \Base\Model\AbstractModel {
     }
     
     public function getAll($de,$qtd){
-        
-        
+           
     }
 }

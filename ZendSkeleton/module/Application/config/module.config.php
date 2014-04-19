@@ -56,22 +56,23 @@ $rota_bairro = array(
                 ),
             ); 
 
-/*
-$rota_imovel = array(
-                'type'  =>  'Zend\Mvc\Router\Http\Literal',
-                'options'   =>  array(
-                    'route' => '/imovel/index',
-                    'defaults'  =>  array(
-                        'controller'  =>  'Application\Controller\Index',
-                        'action'    =>  'index',
+$rota_get_cidade = array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
+                'options' => array(
+                    'route'    => '/imovel/getCidades[/:uf]',
+                    'constraints' => array(
+                        'uf'     => '[A-Z]*'
                     ),
-                    'may_terminate' =>  true,
-                    'child_routes'  => array(
-                        'criarBairro'   => $rota_bairro,
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Imovel',
+                        'action'     => 'getCidades',
                     ),
                 ),
-    
-            );*/
+            ); 
+
+
+
+
 
 return array(
     'router' => array(
@@ -80,6 +81,7 @@ return array(
             'home_admin'    =>  $rota_adm_home,
             'home'  => $rota_home,
             'crud_bairro' =>    $rota_bairro,
+            'get_cidades' =>    $rota_get_cidade,
         ),
             
             // The following is a route to simplify getting started creating

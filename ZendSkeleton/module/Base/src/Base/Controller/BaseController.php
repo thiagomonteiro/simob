@@ -18,10 +18,22 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Base\Session\BaseSession;
 
-class BaseAbstractController extends AbstractActionController{
+class BaseController extends AbstractActionController{
     protected $sessao;
     
     public function __construct() {
         $this->sessao = new BaseSession();//verificar se ha um jeito de tirar da inicialização
+    }
+    
+    public function appendJavaScript($js){
+        //adicionando scripts pelo controller
+        $script = $this->getServiceLocator()->get('viewhelpermanager')
+                ->get('inlineScript');
+        // No need to add beginning or ending <script> tags, as they
+        // will be automatically inserted by the appendScript method.
+        $script->appendFile(
+                '/js/'.$js,
+                'text/javascript',
+                array('noescape' => true)); // Disable CDATA comments
     }
 }

@@ -6,10 +6,14 @@
 
 
 $(document).ready(function() { 
-    $("#uf").change(function(){
-        var uf = $("#uf option:selected").text();
+    $("#uf-select").change(function(e){
+        e.preventDefault();
+        var uf = $("#uf-select option:selected").text();
         $.get("/imovel/getCidades/"+uf,function(data){
-            alert(data);
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+                $("#cidade-select").replaceWith(res.cidades);
+            }
         });
     });
 });

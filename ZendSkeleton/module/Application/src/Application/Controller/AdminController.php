@@ -24,7 +24,7 @@ use Application\Model\Administrador as AdmModel;
 use Zend\Session\Container;
 
 
-class AdminController extends \Base\Controller\BaseAbstractController{
+class AdminController extends \Base\Controller\BaseController{
     
     public function __construct() {
         parent::__construct();

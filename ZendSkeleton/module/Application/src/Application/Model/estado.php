@@ -16,9 +16,29 @@ use Application\Model\Pais as PaisModel;
  * @author thiago
  */
 class estado extends \Base\Model\AbstractModel {
+    private $_paisDao;
     
+    public function __construct() {
+        $this->_paisDao = new PaisModel();
+    }
     public function criarNovo($params = null){
       return new EstadoEntity($params);    
+    }
+    
+    public function criarVarios($results){
+        $lista_estados = array();
+        foreach($results as $result){
+            $dadosPais = $this->_paisDao->select($result['pais']);
+            $paisObj = $this->_paisDao->criarNovo($dadosPais);
+            $result['pais']=$paisObj;
+            $lista_estados[] = $this->criarNovo($result);
+        }
+        if(count($lista_estados)>1){
+            $response = $lista_estados;
+        }else{
+            $response = $lista_estados[0];
+        }
+        return $response;
     }
     
     public function insert($obj){
@@ -29,11 +49,19 @@ class estado extends \Base\Model\AbstractModel {
         
     }
     
-    public function select($obj){
-        
+    public function select($id){
+        $adapter = $this->getAdapter();
+        $sql = "select * from estado where(uf ='".$id."')";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return $this->criarVarios($results);
     }
     
     public function delete($obj){
+        
+    }
+    
+    public function save($obj){
         
     }
     
@@ -43,16 +71,7 @@ class estado extends \Base\Model\AbstractModel {
             $sql = 'select * from estado where(pais = 1)';
             $statement = $adapter->query($sql);
             $results =  $statement->execute();
-            $lista_estados = array();
-            
-            foreach($results as $result){
-                $paisDao =  new PaisModel();
-                $dadosPais = $paisDao->select($result['pais']);
-                $paisObj = $paisDao->criarNovo($dadosPais);
-                $result['pais']=$paisObj;
-                $lista_estados[] = new EstadoEntity($result);
-            }
-            return $lista_estados;
+            return $this->criarVarios($results);
         }
     }
 }

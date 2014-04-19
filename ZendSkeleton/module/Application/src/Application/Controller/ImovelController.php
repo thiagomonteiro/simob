@@ -8,14 +8,18 @@
 
 namespace Application\Controller;
 use Zend\View\Model\ViewModel;
+use Zend\Json\Json;
 use Application\Form\criarBairro as form_criar_bairro;
 use Application\Filter\criarBairro as criar_bairro_filter;
+
 /**
  * Description of ImovelController
  *
  * @author thiago
  */
-class ImovelController extends \Base\Controller\BaseAbstractController {
+class ImovelController extends \Base\Controller\BaseController {
+    
+   
     
     public function __construct() {
         parent::__construct();
@@ -45,12 +49,29 @@ class ImovelController extends \Base\Controller\BaseAbstractController {
             if($form->isValid()){
                 echo 'ok';
             }
-        }
-        
+        }        
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
-        return new ViewModel(array('form'   =>  $form));
+        $this->appendJavaScript('imovel.js');
+        $view = new ViewModel(array('form'   =>  $form));
+        return $view;
     }
+    
+    public function getCidadesAction(){        
+        $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
+        $estadoDAO = new \Application\Model\estado;
+        $estado = $estadoDAO->select($uf);
+        $cidadeDAO = new \Application\Model\cidade;
+        $cidades = $cidadeDAO->recuperarPorEstado($estado);
+        $selectCidades = '<select id="cidade-select">';
+        foreach ($cidades as $row){
+            $selectCidades.='<option value="'.$row->getId().'">'.  utf8_encode($row->getNome()).'</option>';
+        }
+        $selectCidades.='</select>';   
+        $data = array('success' => true,'cidades' => $selectCidades);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
     
     
 }

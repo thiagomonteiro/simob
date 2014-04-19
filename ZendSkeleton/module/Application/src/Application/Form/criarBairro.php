@@ -21,8 +21,10 @@ class criarBairro extends Form{
         $nome->setLabel('Nome');
         $uf = new \Zend\Form\Element\Select('uf');
         $uf->setLabel('uf');
-        $uf->setAttribute('id', 'uf');
+        $uf->setAttribute('id', 'uf-select');
         $cidade = new \Zend\Form\Element\Select('cidade');
+        $cidade->setAttribute('id', 'cidade-select');
+        $cidade->setEmptyOption('selecione estado');
         $cidade->setLabel('Cidade');
         $submit = new \Zend\Form\Element\Submit('enviar');
         $submit->setAttribute('value','ok');

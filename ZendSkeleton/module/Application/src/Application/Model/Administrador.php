@@ -20,6 +20,10 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         return new AdmEntity($params);
     }
 
+    public function save($obj){
+        //implements insert and update here;
+    }
+    
     public function insert($obj)
     {
         try {
