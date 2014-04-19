@@ -5,7 +5,8 @@
  */
 
 
-$(document).ready(function() { 
+$(document).ready(function() {
+    
     $("#uf-select").change(function(e){
         e.preventDefault();
         var uf = $("#uf-select option:selected").text();
@@ -16,6 +17,13 @@ $(document).ready(function() {
             }
         });
     });
+    
+    
+   $("#form-criar-bairro").submit(function(ev) {
+        ev.preventDefault();
+        var form = $(this);
+        alert(form.attr('action'));  
+  });
 });
 
 

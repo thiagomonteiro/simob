@@ -27,12 +27,11 @@ class criarBairro extends Form{
         $cidade->setEmptyOption('selecione estado');
         $cidade->setLabel('Cidade');
         $submit = new \Zend\Form\Element\Submit('enviar');
-        $submit->setAttribute('value','salvar');
-        $this->setAttribute('class', 'formulario');
+        $submit->setAttributes(array('value'=>'salvar','id'=>'bairro-submit'));
+        $this->setAttributes(array('class' => 'formulario', 'id' => 'form-criar-bairro'));
         $this->add($nome);
         $this->add($uf);
         $this->add($cidade);
         $this->add($submit);
     }
-  
 }

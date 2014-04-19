@@ -32,28 +32,11 @@ class ImovelController extends \Base\Controller\BaseController {
  
     
     public function gerenciarBairroAction(){
-        $estadoDAO = new \Application\Model\estado;
-        $Array_estado = $estadoDAO->getAll(null, null);
-        $dados_select = array();
-        foreach ($Array_estado as $row){
-            $dados_select[$row->getId()] = $row->getUf();
-        }
-        $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
-        $form->get('uf')->setAttribute('options', $dados_select);
-        $request = $this->getRequest();//2- pego a requisiçao
-        if($request->isPost()){//3-verifico se é um post se for:
-            $bairroFilter = new criar_bairro_filter();//4- instancio os filtros
-            $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
-            $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
-            $form->setInputFilter($bairroFilter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
-            if($form->isValid()){
-                echo 'ok';
-            }
-        }        
+        $criar = $this->formCriarBairroAction();    
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $view = new ViewModel(array('form'   =>  $form));
+        $view = new ViewModel(array('criar'   =>  $criar));
         return $view;
     }
     
@@ -76,7 +59,29 @@ class ImovelController extends \Base\Controller\BaseController {
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
-    public function salvarBairroAction(){
+    public function formCriarBairroAction(){
+       $estadoDAO = new \Application\Model\estado;
+        $Array_estado = $estadoDAO->getAll(null, null);
+        $dados_select = array();
+        foreach ($Array_estado as $row){
+            $dados_select[$row->getId()] = $row->getUf();
+        }
+        $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
+        $form->get('uf')->setAttribute('options', $dados_select);
+        $request = $this->getRequest();//2- pego a requisiçao
+        if($request->isPost()){//3-verifico se é um post se for:
+            $bairroFilter = new criar_bairro_filter();//4- instancio os filtros
+            $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
+            $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
+            $form->setInputFilter($bairroFilter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
+            if($form->isValid()){
+                echo 'ok';
+            }
+        } 
+        return $form;
+    }
+    
+    public function criarBairro(){
         
     }
     

@@ -20,9 +20,10 @@ use Base\Session\BaseSession;
 
 class BaseController extends AbstractActionController{
     protected $sessao;
+  
     
     public function __construct() {
-        $this->sessao = new BaseSession();//verificar se ha um jeito de tirar da inicialização
+        $this->sessao = new BaseSession();//verificar se ha um jeito de tirar da inicialização        
     }
     
     public function appendJavaScript($js){
@@ -35,5 +36,10 @@ class BaseController extends AbstractActionController{
                 '/js/'.$js,
                 'text/javascript',
                 array('noescape' => true)); // Disable CDATA comments
+    }
+    
+    public function criarNotificacao($mensagem,$tipo){
+        //implementar if para array
+        return '<div class = "response-error" tipo ="'.$tipo.'">'.$mensagem.'</div>';
     }
 }

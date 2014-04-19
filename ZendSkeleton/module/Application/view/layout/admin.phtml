@@ -13,6 +13,7 @@
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                         ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/notifIt.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.css') ?>
 
@@ -20,6 +21,7 @@
         <?php echo $this->headScript()
             ->prependFile($this->basePath() . '/js/simob/admin.js')
             ->prependFile($this->basePath() . '/js/simob/default.js')
+            ->prependFile($this->basePath() . '/js/libs/notifIt.js')
             ->prependFile($this->basePath() . '/js/bootstrap.js')
             ->prependFile($this->basePath() . '/js/jquery.min.js')
             ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
@@ -28,6 +30,11 @@
 
     </head>
     <body>
+        <?php
+        if(isset($this->mensagem)){
+         echo $this->mensagem;   
+        }
+        ?>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="collapse navbar-collapse">
