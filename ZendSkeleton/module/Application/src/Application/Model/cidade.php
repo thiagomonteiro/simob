@@ -45,11 +45,11 @@ class cidade extends \Base\Model\AbstractModel{
         //implements insert and update here;
     }
     
-    public function insert($obj){
+    protected function insert($obj){
         
     }
     
-    public function update($obj){
+    protected function update($obj){
         
     }
     
@@ -66,10 +66,14 @@ class cidade extends \Base\Model\AbstractModel{
     } 
     
     public function recuperarPorEstado(\Application\Entity\Estado $estado){
-        $adapter = $this->getAdapter();
-        $sql = 'select * from cidade where(estado ='.$estado->getId().')';
-        $statement = $adapter->query($sql);
-        $results =  $statement->execute();
-        return $this->criarVarios($results,$estado);
+        try{
+            $adapter = $this->getAdapter();
+            $sql = 'select * from cidade where(estado ='.$estado->getId().')';
+            $statement = $adapter->query($sql);
+            $results =  $statement->execute();
+            return $this->criarVarios($results,$estado);
+        }catch (Exception $e){
+            return false;
+        }
     }
 }

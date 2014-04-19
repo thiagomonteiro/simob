@@ -24,7 +24,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         //implements insert and update here;
     }
     
-    public function insert($obj)
+    protected function insert($obj)
     {
         try {
             $adapter =  $this->getAdapter();
@@ -37,7 +37,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
             }
     }
 
-    public function update($obj)
+    protected function update($obj)
     {
     }
 

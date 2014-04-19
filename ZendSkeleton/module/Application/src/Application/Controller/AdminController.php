@@ -40,7 +40,7 @@ class AdminController extends \Base\Controller\BaseController{
             return $view;
             //$this->sessao->limparSessao();
         } catch (Exception $ex) {
-
+            return false;
         }
          
     }
@@ -63,7 +63,7 @@ class AdminController extends \Base\Controller\BaseController{
                   $this->redirect()->toRoute('home_admin');
                 }
                 else{
-                   echo $response['message'];
+                   echo '<div class = "response-error">'.$response['message'].'</div>';
                 }
                
             }

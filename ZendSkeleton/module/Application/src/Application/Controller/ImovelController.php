@@ -52,7 +52,7 @@ class ImovelController extends \Base\Controller\BaseController {
         }        
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
-        $this->appendJavaScript('imovel.js');
+        $this->appendJavaScript('simob/imovel.js');
         $view = new ViewModel(array('form'   =>  $form));
         return $view;
     }
@@ -64,14 +64,20 @@ class ImovelController extends \Base\Controller\BaseController {
         $cidadeDAO = new \Application\Model\cidade;
         $cidades = $cidadeDAO->recuperarPorEstado($estado);
         $selectCidades = '<select id="cidade-select">';
-        foreach ($cidades as $row){
-            $selectCidades.='<option value="'.$row->getId().'">'.  utf8_encode($row->getNome()).'</option>';
+        if(count($cidades)>1){
+            foreach ($cidades as $row){
+                $selectCidades.='<option value="'.$row->getId().'">'.  utf8_encode($row->getNome()).'</option>';
+            }
+        }else{
+            $selectCidades.='<option value="'.$cidades->getId().'">'.  utf8_encode($cidades->getNome()).'</option>';
         }
-        $selectCidades.='</select>';   
+        $selectCidades.='</select>'; 
         $data = array('success' => true,'cidades' => $selectCidades);
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
-    
+    public function salvarBairroAction(){
+        
+    }
     
 }

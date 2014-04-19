@@ -28,11 +28,11 @@ class Pais extends \Base\Model\AbstractModel {
         //implements insert and update here;
     }
     
-    public function insert($obj){
+    protected function insert($obj){
         
     }
     
-    public function update($obj){
+    protected function update($obj){
         
     }
     

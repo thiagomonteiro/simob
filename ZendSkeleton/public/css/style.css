@@ -29,6 +29,14 @@ body {
     position : relative;
     top: 3px;
 }
+.response-error{
+    position: fixed;
+    width: 100%;
+    top:0px;
+    display:block;
+    background-color: red;
+    text-align: center;
+}
 
 /*formularios*/
 

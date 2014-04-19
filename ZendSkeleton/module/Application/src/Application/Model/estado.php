@@ -41,20 +41,24 @@ class estado extends \Base\Model\AbstractModel {
         return $response;
     }
     
-    public function insert($obj){
+    protected function insert($obj){
         
     }
     
-    public function update($obj){
+    protected function update($obj){
         
     }
     
     public function select($id){
-        $adapter = $this->getAdapter();
-        $sql = "select * from estado where(uf ='".$id."')";
-        $statement = $adapter->query($sql);
-        $results = $statement->execute();
-        return $this->criarVarios($results);
+        try{
+            $adapter = $this->getAdapter();
+            $sql = "select * from estado where(uf ='".$id."')";
+            $statement = $adapter->query($sql);
+            $results = $statement->execute();
+            return $this->criarVarios($results);
+        }  catch (Exception $e){
+            return false;
+        }
     }
     
     public function delete($obj){
@@ -67,11 +71,15 @@ class estado extends \Base\Model\AbstractModel {
     
     public function getAll($de,$qtd){
         if($de == null and $qtd == null){
-            $adapter = $this->getAdapter();
-            $sql = 'select * from estado where(pais = 1)';
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            return $this->criarVarios($results);
+            try{
+                $adapter = $this->getAdapter();
+                $sql = 'select * from estado where(pais = 1)';
+                $statement = $adapter->query($sql);
+                $results =  $statement->execute();
+                return $this->criarVarios($results);
+            }catch(Exception $e){
+                return false;
+            }
         }
     }
 }

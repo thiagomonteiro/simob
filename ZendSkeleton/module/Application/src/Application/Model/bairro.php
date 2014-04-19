@@ -29,14 +29,22 @@ class Bairro extends \Base\Model\AbstractModel {
     }
     
      public function save($obj){
-        //implements insert and update here;
-    }
-    
-    public function insert($obj){
         
     }
     
-    public function update($obj){
+    protected function insert($obj){
+        try {
+            $adapter =  $this->getAdapter();
+            $sql = "";
+            $statement = $adapter -> query($sql);
+            $results = $statement -> execute();
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
+    }
+    
+    protected function update($obj){
         
     }
     
@@ -50,6 +58,7 @@ class Bairro extends \Base\Model\AbstractModel {
     
     public function getAll($de,$qtd){
         if($de == null and $qtd == null){
+        try{
             $adapter = $this->getAdapter();
             $sql = 'select * from cidade where(estado = )';
             $statement = $adapter->query($sql);
@@ -64,6 +73,9 @@ class Bairro extends \Base\Model\AbstractModel {
                 $lista_estados[] = new EstadoEntity($result);
             }
             return $lista_estados;
+        }  catch (Exception $e){
+            return false;
+        }
         }
     } 
 }

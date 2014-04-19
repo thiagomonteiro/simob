@@ -27,7 +27,7 @@ class criarBairro extends Form{
         $cidade->setEmptyOption('selecione estado');
         $cidade->setLabel('Cidade');
         $submit = new \Zend\Form\Element\Submit('enviar');
-        $submit->setAttribute('value','ok');
+        $submit->setAttribute('value','salvar');
         $this->setAttribute('class', 'formulario');
         $this->add($nome);
         $this->add($uf);
