@@ -22,7 +22,9 @@ $(document).ready(function() {
    $("#form-criar-bairro").submit(function(ev) {
         ev.preventDefault();
         var form = $(this);
-        alert(form.attr('action'));  
+        var url = form.attr('action');          
+        $.post(url,form.serialize(),function(data){   
+        });
   });
 });
 

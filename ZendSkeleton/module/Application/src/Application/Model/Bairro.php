@@ -7,7 +7,7 @@
  */
 
 namespace Application\Model;
-use Application\Entity\bairro;
+use Application\Entity\Bairro;
 use Application\Model\cidade;
 /**
  * Description of bairro

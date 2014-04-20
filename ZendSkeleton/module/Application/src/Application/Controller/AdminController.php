@@ -31,11 +31,14 @@ class AdminController extends \Base\Controller\BaseController{
     
     public function indexAction() {
         try{
-            $sessao = $this->sessao->isAutenticado();            
+            $sessao = $this->sessao->isAutenticado();           
+            $mensagem = $this->flashMessenger()->getSuccessMessages();
             $view = new ViewModel();
             $event = $this->getEvent();
             $event->getViewModel()->setTemplate('layout/admin');
-            $this->layout()->mensagem = $this->criarNotificacao('Bem vindo!','success');
+            if(count($mensagem)){
+                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+            }
             return $view;
             //$this->sessao->limparSessao();
         } catch (Exception $ex) {
@@ -59,6 +62,7 @@ class AdminController extends \Base\Controller\BaseController{
                 $response = $this->validarLoginAction($usuarioDto);
                 if($response['success']){
                   $this->sessao->salvarSessaoUsuario($usuarioDto);
+                  $this->flashMessenger()->addSuccessMessage('bem vindo!');
                   $this->redirect()->toRoute('home_admin');
                 }
                 else{

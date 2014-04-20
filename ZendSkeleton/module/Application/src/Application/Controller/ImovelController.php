@@ -42,11 +42,11 @@ class ImovelController extends \Base\Controller\BaseController {
     
     public function getCidadesAction(){        
         $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
-        $estadoDAO = new \Application\Model\estado;
+        $estadoDAO = new \Application\Model\Estado;
         $estado = $estadoDAO->select($uf);
-        $cidadeDAO = new \Application\Model\cidade;
+        $cidadeDAO = new \Application\Model\Cidade;
         $cidades = $cidadeDAO->recuperarPorEstado($estado);
-        $selectCidades = '<select id="cidade-select">';
+        $selectCidades = '<select name="cidade" id="cidade-select">';
         if(count($cidades)>1){
             foreach ($cidades as $row){
                 $selectCidades.='<option value="'.$row->getId().'">'.  utf8_encode($row->getNome()).'</option>';
@@ -60,7 +60,7 @@ class ImovelController extends \Base\Controller\BaseController {
     }
     
     public function formCriarBairroAction(){
-       $estadoDAO = new \Application\Model\estado;
+       $estadoDAO = new \Application\Model\Estado;
         $Array_estado = $estadoDAO->getAll(null, null);
         $dados_select = array();
         foreach ($Array_estado as $row){
@@ -81,8 +81,11 @@ class ImovelController extends \Base\Controller\BaseController {
         return $form;
     }
     
-    public function criarBairro(){
-        
+    public function criarBairroAction(){
+        //$bairroDAO = \Application\Model\
+        $dados=$this->getRequest()->getPost();
+        $data = array('success' => true, 'mensagem' => 'salvo com sucesso');
+        return $this->getResponse()->setContent(json_encode($data));
     }
     
 }

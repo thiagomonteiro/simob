@@ -15,7 +15,7 @@ use Application\Model\estado as EstadoModel;
  *
  * @author thiago
  */
-class cidade extends \Base\Model\AbstractModel{
+class Cidade extends \Base\Model\AbstractModel{
     
     private $_estadoDAO;
     

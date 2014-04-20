@@ -40,6 +40,11 @@ class BaseController extends AbstractActionController{
     
     public function criarNotificacao($mensagem,$tipo){
         //implementar if para array
-        return '<div class = "response-error" tipo ="'.$tipo.'">'.$mensagem.'</div>';
+        if(is_array($mensagem)){
+            $response = '<div class = "response-error" tipo ="'.$tipo.'">'.implode("",$mensagem).'</div>';
+        }else{
+            $response = '<div class = "response-error" tipo ="'.$tipo.'">'.$mensagem.'</div>';
+        }
+        return $response;
     }
 }

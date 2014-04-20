@@ -15,7 +15,7 @@ use Application\Model\Pais as PaisModel;
  *
  * @author thiago
  */
-class estado extends \Base\Model\AbstractModel {
+class Estado extends \Base\Model\AbstractModel {
     private $_paisDao;
     
     public function __construct() {

@@ -13,7 +13,7 @@ namespace Application\Entity;
  *
  * @author thiago
  */
-class bairro extends \Base\Entity\AbstractEntity {
+class Bairro extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_nome;
     private $_cidade;
