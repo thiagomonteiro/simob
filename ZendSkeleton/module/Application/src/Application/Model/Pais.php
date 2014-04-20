@@ -24,32 +24,26 @@ class Pais extends \Base\Model\AbstractModel {
       return new PaisEntity($params);    
     }
     
-     public function save($obj){
-        //implements insert and update here;
-    }
+   
     
-    protected function insert($obj){
+    public function insert($obj){
         
     }
     
-    protected function update($obj){
+    public function update($obj){
         
     }
     
     public function select($id){
-        try {
-            $adapter = $this->getAdapter();
-            $sql = "SELECT * FROM pais WHERE(id='".$id."')";
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            $arrayPais = array();
-            foreach ($results as $row){
-                $arrayPais = $row;
-            }
-            return $arrayPais;
-        }catch (\Exception $e){
-            return false;
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM pais WHERE(id='".$id."')";
+        $statement = $adapter->query($sql);
+        $results =  $statement->execute();
+        $arrayPais = array();
+        foreach ($results as $row){
+            $arrayPais = $row;
         }
+        return $arrayPais;
     }
     
     public function delete($obj){

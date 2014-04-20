@@ -20,58 +20,45 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         return new AdmEntity($params);
     }
 
-    public function save($obj){
-        //implements insert and update here;
-    }
     
-    protected function insert($obj)
+    
+    public function insert($obj)
     {
-        try {
-            $adapter =  $this->getAdapter();
-            $sql = "INSERT INTO Administrador (nome, email, senha)VALUES ('".$obj->getNome()."','".$obj->getEmail()."','".$obj->getSenha()."')";
-            $statement = $adapter -> query($sql);
-            $results = $statement -> execute();
-            return true;
-        }catch(\Exception $e){
-            return false;
-            }
+        $adapter =  $this->getAdapter();
+        $sql = "INSERT INTO Administrador (nome, email, senha)VALUES ('".$obj->getNome()."','".$obj->getEmail()."','".$obj->getSenha()."')";
+        $statement = $adapter -> query($sql);
+        $results = $statement -> execute();
     }
 
-    protected function update($obj)
+    public function update($obj)
     {
     }
 
     public function select($obj)
     {
-        try {
-            $adapter = $this->getAdapter();
-            $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."')";
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            $lista_usuario = array();
-            foreach($results as $result){
-                $lista_usuario[] = new AdmEntity($result);
-            }
-            return $lista_usuario;
-        }catch (\Exception $e){
-            return false;
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."')";
+        $statement = $adapter->query($sql);
+        $results =  $statement->execute();
+        $lista_usuario = array();
+        foreach($results as $result){
+            $lista_usuario[] = new AdmEntity($result);
         }
+        return $lista_usuario;
     }
 
     public function selectLogin($obj){ 
-        try {
-            $adapter = $this->getAdapter();
-            $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."' and senha='".$obj->getSenha()."')";
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            $lista_usuario = array();
-            foreach($results as $result){
-                $lista_usuario[] = new AdmEntity($result);
-            }
-            return $lista_usuario;
-        }catch (\Exception $e){
-            return false;
+        
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."' and senha='".$obj->getSenha()."')";
+        $statement = $adapter->query($sql);
+        $results =  $statement->execute();
+        $lista_usuario = array();
+        foreach($results as $result){
+            $lista_usuario[] = new AdmEntity($result);
         }
+        return $lista_usuario;
+       
     }
 
     public function delete($obj)
@@ -87,21 +74,16 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         if($de == null){
             $de=0;
         }
-        try {
-            $adapter = $this->getAdapter();
-
-            $sql = "SELECT * FROM Administrador LIMIT $de,$qtd";
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            $lista_usuario = array();
-            foreach($results as $result){
-                $obj = new $this->classe($result);//instanciando um objeto
-                $lista_usuario[] = $obj;
-            }
-            return $lista_usuario;
-        }catch (\Exception $e){
-            return false;
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Administrador LIMIT $de,$qtd";
+        $statement = $adapter->query($sql);
+        $results =  $statement->execute();
+        $lista_usuario = array();
+        foreach($results as $result){
+            $obj = new $this->classe($result);//instanciando um objeto
+            $lista_usuario[] = $obj;
         }
+        return $lista_usuario;
 
     }
 

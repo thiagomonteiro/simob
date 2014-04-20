@@ -36,7 +36,13 @@ abstract class AbstractModel {
 
     }
 
-    abstract protected function save($obj);
+     public function save($obj){
+        if($obj->isPersistido()) {
+            $this->update($obj);
+        }else{
+            $this->insert($obj);
+        }
+    }
     abstract protected function insert($obj);
     abstract protected function update($obj);
     abstract protected function select($obj);

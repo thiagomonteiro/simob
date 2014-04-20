@@ -23,7 +23,8 @@ $(document).ready(function() {
         ev.preventDefault();
         var form = $(this);
         var url = form.attr('action');          
-        $.post(url,form.serialize(),function(data){   
+        $.post(url,form.serialize(),function(data){  
+            var res = jQuery.parseJSON(data);
         });
   });
 });

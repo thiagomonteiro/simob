@@ -6,45 +6,42 @@
  * and open the template in the editor.
  */
 
-namespace Application\Model;
-use Application\Entity\Bairro;
-use Application\Model\cidade;
+
 /**
  * Description of bairro
  *
  * @author thiago
  */
+
+namespace Application\Model;
+use \Application\Entity\Bairro as BairroEntity;
+use Application\Model\Cidade as CidadeModel;
+
 class Bairro extends \Base\Model\AbstractModel {
-    private $_bairro;
+    private $_bairroObj;
     private $_cidadeDao;
     
     public function __construct() {
-        $this->_bairroObj = new bairro();
-        $this->_cidadeDao = new cidade;
+        $this->_bairroObj = new BairroEntity();
+        $this->_cidadeDao = new CidadeModel();
     }
     
     
     public function criarNovo($params = null){
-      return $this->_bairroObj->preencherPropriedades($params);    
+      return $this->_bairroObj = new BairroEntity($params);
     }
     
-     public function save($obj){
-        
+    
+    
+    public function insert($obj){
+        $adapter =  $this->getAdapter();
+        $sql = "INSERT INTO Bairro (nome,cidade)VALUES('".$obj->getNome()."','".$obj->getCidade()->getId()."')";
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
     
-    protected function insert($obj){
-        try {
-            $adapter =  $this->getAdapter();
-            $sql = "";
-            $statement = $adapter -> query($sql);
-            $results = $statement -> execute();
-            return true;
-        }catch(\Exception $e){
-            return false;
-        }
-    }
-    
-    protected function update($obj){
+    public function update($obj){
         
     }
     
@@ -58,7 +55,6 @@ class Bairro extends \Base\Model\AbstractModel {
     
     public function getAll($de,$qtd){
         if($de == null and $qtd == null){
-        try{
             $adapter = $this->getAdapter();
             $sql = 'select * from cidade where(estado = )';
             $statement = $adapter->query($sql);
@@ -73,9 +69,6 @@ class Bairro extends \Base\Model\AbstractModel {
                 $lista_estados[] = new EstadoEntity($result);
             }
             return $lista_estados;
-        }  catch (Exception $e){
-            return false;
-        }
         }
     } 
 }

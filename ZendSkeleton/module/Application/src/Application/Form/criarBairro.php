@@ -22,10 +22,12 @@ class criarBairro extends Form{
         $uf = new \Zend\Form\Element\Select('uf');
         $uf->setLabel('uf');
         $uf->setAttribute('id', 'uf-select');
+        $uf->setDisableInArrayValidator(true);
         $cidade = new \Zend\Form\Element\Select('cidade');
         $cidade->setAttribute('id', 'cidade-select');
         $cidade->setEmptyOption('selecione estado');
         $cidade->setLabel('Cidade');
+        $cidade->setDisableInArrayValidator(true);
         $submit = new \Zend\Form\Element\Submit('enviar');
         $submit->setAttributes(array('value'=>'salvar','id'=>'bairro-submit'));
         $this->setAttributes(array('class' => 'formulario', 'id' => 'form-criar-bairro'));

@@ -25,12 +25,16 @@ class Estado extends \Base\Model\AbstractModel {
       return new EstadoEntity($params);    
     }
     
-    public function criarVarios($results){
+    public function criarVarios($results,$pais=null){
         $lista_estados = array();
         foreach($results as $result){
-            $dadosPais = $this->_paisDao->select($result['pais']);
-            $paisObj = $this->_paisDao->criarNovo($dadosPais);
-            $result['pais']=$paisObj;
+            if(is_null($pais)){
+                $dadosPais = $this->_paisDao->select($result['pais']);
+                $paisObj = $this->_paisDao->criarNovo($dadosPais);
+                $result['pais']=$paisObj;
+            }else{
+                $result['pais'] = $pais;
+            }  
             $lista_estados[] = $this->criarNovo($result);
         }
         if(count($lista_estados)>1){
@@ -41,45 +45,43 @@ class Estado extends \Base\Model\AbstractModel {
         return $response;
     }
     
-    protected function insert($obj){
+    public function insert($obj){
         
     }
     
-    protected function update($obj){
+    public function update($obj){
         
     }
     
     public function select($id){
-        try{
-            $adapter = $this->getAdapter();
-            $sql = "select * from estado where(uf ='".$id."')";
-            $statement = $adapter->query($sql);
-            $results = $statement->execute();
-            return $this->criarVarios($results);
-        }  catch (Exception $e){
-            return false;
-        }
+        $adapter = $this->getAdapter();
+        $sql = "select * from estado where(id ='".$id."')";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return $this->criarVarios($results);
+    }
+    
+    public function recuperarPorUf($uf){       
+        $adapter = $this->getAdapter();
+        $sql = "select * from estado where(uf ='".$uf."')";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return $this->criarVarios($results);
     }
     
     public function delete($obj){
         
     }
     
-    public function save($obj){
-        
-    }
+   
     
     public function getAll($de,$qtd){
         if($de == null and $qtd == null){
-            try{
-                $adapter = $this->getAdapter();
-                $sql = 'select * from estado where(pais = 1)';
-                $statement = $adapter->query($sql);
-                $results =  $statement->execute();
-                return $this->criarVarios($results);
-            }catch(Exception $e){
-                return false;
-            }
+            $adapter = $this->getAdapter();
+            $sql = 'select * from estado where(pais = 1)';
+            $statement = $adapter->query($sql);
+            $results =  $statement->execute();
+            return $this->criarVarios($results);
         }
     }
 }

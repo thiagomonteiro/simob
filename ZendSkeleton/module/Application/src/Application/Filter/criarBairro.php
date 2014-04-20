@@ -42,6 +42,26 @@ class criarBairro implements InputFilterAwareInterface {
             )
         );
 
+        
+        $inputFilter->add(
+            $factory->createInput(
+                array(
+                    'name' => 'uf',
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StripTags'),
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\NotEmpty',
+                            'options' => array(
+                                'messages' => array(NotEmpty::IS_EMPTY => 'O campo não pode ficar vazio'),
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
 
         $inputFilter->add(
             $factory->createInput(
