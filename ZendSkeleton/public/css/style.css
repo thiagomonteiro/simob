@@ -15,6 +15,9 @@ body {
 
 .formulario ul{
     list-style: none;
+    display:inline;
+    position:relative;
+    left:-40px;
 }
 
 .formulario ul li{
@@ -22,6 +25,7 @@ body {
     color: white;
     background-color: #FFBABA;
     border-radius: 1em;
+    display:inherit;
 }
 
 .formulario ul li:before{

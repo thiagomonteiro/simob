@@ -19,14 +19,7 @@ $(document).ready(function() {
     });
     
     
-   $("#form-criar-bairro").submit(function(ev) {
-        ev.preventDefault();
-        var form = $(this);
-        var url = form.attr('action');          
-        $.post(url,form.serialize(),function(data){  
-            var res = jQuery.parseJSON(data);
-        });
-  });
+  
 });
 
 

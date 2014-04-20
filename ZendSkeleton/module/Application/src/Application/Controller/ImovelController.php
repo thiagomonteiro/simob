@@ -32,11 +32,36 @@ class ImovelController extends \Base\Controller\BaseController {
  
     
     public function gerenciarBairroAction(){
-        $criar = $this->formCriarBairroAction();    
+        $mensagem = $this->flashMessenger()->getSuccessMessages();
+        if(count($mensagem)){
+                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+        }
+        $form = $this->formCriarBairroAction(); 
+        $request = $this->getRequest();//2- pego a requisiçao
+            if($request->isPost()){//3-verifico se é um post se for:
+                $Filter = new criar_bairro_filter();//4- instancio os filtros
+                $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
+                $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
+                $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
+                if($form->isValid()){//validação do formulario
+                    $dados=(array)$this->getRequest()->getPost();
+                    $bairroDAO = new \Application\Model\Bairro;
+                    $cidadeDAO = new \Application\Model\Cidade;
+                    $cidadeOBJ = $cidadeDAO->select($dados['cidade']);        
+                    $bairroOBJ = $bairroDAO->criarNovo();
+                    $bairroOBJ->setCidade($cidadeOBJ);
+                    $bairroOBJ->setNome($dados['nome']);
+                    $resposta = $bairroDAO->insert($bairroOBJ);
+                    $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
+                    $this->redirect()->toRoute('crud_bairro');
+                }else{  
+                   //se der alguma errro 
+                }
+            }
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $view = new ViewModel(array('criar'   =>  $criar));
+        $view = new ViewModel(array('criar'   =>  $form));
         return $view;
     }
     
@@ -54,38 +79,6 @@ class ImovelController extends \Base\Controller\BaseController {
         return $form;
     }
     
-    //se nao funcionar tentar isso no gerenciar bairro action
-    public function inserirBairroAction(){//função que salva a cidade
-        $form = new form_criar_bairro;//1- primeiro eu instancio o formulario
-        $request = $this->getRequest();//2- pego a requisiçao
-        if($request->isPost()){//3-verifico se é um post se for:
-            $Filter = new criar_bairro_filter();//4- instancio os filtros
-            $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
-            $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
-            $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
-            if($form->isValid()){
-                $dados=(array)$this->getRequest()->getPost();
-                $bairroDAO = new \Application\Model\Bairro;
-                $cidadeDAO = new \Application\Model\Cidade;
-                $cidadeOBJ = $cidadeDAO->select($dados['cidade']);        
-                $bairroOBJ = $bairroDAO->criarNovo();
-                $bairroOBJ->setCidade($cidadeOBJ);
-                $bairroOBJ->setNome($dados['nome']);
-                $resposta = $bairroDAO->insert($bairroOBJ);
-                $data = array('success' => true, 'mensagem' => 'salvo com sucesso'); 
-                 return $this->getResponse()->setContent(json_encode($data));
-            }else{  
-                $data = array('success' => false, 'mensagem' => 'erro');    
-            }
-           
-            
-            
-        }
-        
-        
-        
-        
-    }
     
     public function getCidadesAction(){//funçao que preenche o select-box de cidades        
         $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
