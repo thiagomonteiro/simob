@@ -80,7 +80,7 @@ class AdminController extends \Base\Controller\BaseController{
     
      public function validarLoginAction(\Application\Entity\Administrador $usuarioDto){
         $usuarioDao = new AdmModel();
-        $result = $usuarioDao->selectLogin($usuarioDto);
+        $result = $usuarioDao->recuperarPorLogin($usuarioDto);
         if(is_array($result)){
             if(count($result)>0){
                 return array('success' => true);

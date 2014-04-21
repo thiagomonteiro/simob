@@ -31,9 +31,13 @@ class Bairro extends \Base\Model\AbstractModel {
       return $this->_bairroObj = new BairroEntity($params);
     }
     
+    public function criarVarios($results,$cidade){
+        
+    }
     
     
-    public function insert($obj){
+    
+    public function inserir($obj){
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Bairro (nome,cidade)VALUES('".$obj->getNome()."','".$obj->getCidade()->getId()."')";
         $statement = $adapter->createStatement($sql);
@@ -41,34 +45,21 @@ class Bairro extends \Base\Model\AbstractModel {
         return true;
     }
     
-    public function update($obj){
+    public function atualizar($obj){
         
     }
     
-    public function select($obj){
+    public function recuperar($obj){
         
     }
     
-    public function delete($obj){
+    public function remover($obj){
         
     }
     
-    public function getAll($de,$qtd){
+    public function recuperarTodos($de,$qtd){
         if($de == null and $qtd == null){
-            $adapter = $this->getAdapter();
-            $sql = 'select * from cidade where(estado = )';
-            $statement = $adapter->query($sql);
-            $results =  $statement->execute();
-            $lista_estados = array();
             
-            foreach($results as $result){
-                $paisDao =  new PaisModel();
-                $dadosPais = $paisDao->select($result['pais']);
-                $paisObj = $paisDao->criarNovo($dadosPais);
-                $result['pais']=$paisObj;
-                $lista_estados[] = new EstadoEntity($result);
-            }
-            return $lista_estados;
         }
     } 
 }

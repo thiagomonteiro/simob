@@ -31,7 +31,7 @@ class Cidade extends \Base\Model\AbstractModel{
         $lista_cidades = array();
         foreach($results as $result){
             if(is_null($estado)){
-                $dadosEstado = $this->_estadoDAO->select($result['estado']);
+                $dadosEstado = $this->_estadoDAO->recuperar($result['estado']);
                 $result['estado'] = $dadosEstado;
             }else{
                $result['estado']=$estado;
@@ -48,15 +48,15 @@ class Cidade extends \Base\Model\AbstractModel{
     
      
     
-    public function insert($obj){
+    public function inserir($obj){
         
     }
     
-    public function update($obj){
+    public function atualizar($obj){
         
     }
     
-    public function select($id){
+    public function recuperar($id){
         $adapter = $this->getAdapter();
         $sql = 'select * from cidade where(id ='.$id.')';
         $statement = $adapter->query($sql);
@@ -64,11 +64,11 @@ class Cidade extends \Base\Model\AbstractModel{
         return $this->criarVarios($results);
     }
     
-    public function delete($obj){
+    public function remover($obj){
         
     }
     
-    public function getAll($de,$qtd){
+    public function recuperarTodos($de,$qtd){
         
     } 
     

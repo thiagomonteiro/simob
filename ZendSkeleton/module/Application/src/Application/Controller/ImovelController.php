@@ -47,11 +47,11 @@ class ImovelController extends \Base\Controller\BaseController {
                     $dados=(array)$this->getRequest()->getPost();
                     $bairroDAO = new \Application\Model\Bairro;
                     $cidadeDAO = new \Application\Model\Cidade;
-                    $cidadeOBJ = $cidadeDAO->select($dados['cidade']);        
+                    $cidadeOBJ = $cidadeDAO->recuperar($dados['cidade']);        
                     $bairroOBJ = $bairroDAO->criarNovo();
                     $bairroOBJ->setCidade($cidadeOBJ);
                     $bairroOBJ->setNome($dados['nome']);
-                    $resposta = $bairroDAO->insert($bairroOBJ);
+                    $resposta = $bairroDAO->inserir($bairroOBJ);
                     $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
                     $this->redirect()->toRoute('crud_bairro');
                 }else{  
@@ -69,7 +69,7 @@ class ImovelController extends \Base\Controller\BaseController {
     
     public function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
        $estadoDAO = new \Application\Model\Estado;
-        $Array_estado = $estadoDAO->getAll(null, null);
+        $Array_estado = $estadoDAO->recuperarTodos(null, null);
         $dados_select = array();
         foreach ($Array_estado as $row){
             $dados_select[$row->getId()] = $row->getUf();

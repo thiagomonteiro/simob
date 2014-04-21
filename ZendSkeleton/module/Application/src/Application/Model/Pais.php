@@ -26,15 +26,15 @@ class Pais extends \Base\Model\AbstractModel {
     
    
     
-    public function insert($obj){
+    public function inserir($obj){
         
     }
     
-    public function update($obj){
+    public function atualizar($obj){
         
     }
     
-    public function select($id){
+    public function recuperar($id){
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM pais WHERE(id='".$id."')";
         $statement = $adapter->query($sql);
@@ -46,11 +46,11 @@ class Pais extends \Base\Model\AbstractModel {
         return $arrayPais;
     }
     
-    public function delete($obj){
+    public function remover($obj){
         
     }
     
-    public function getAll($de,$qtd){
+    public function recuperarTodos($de,$qtd){
            
     }
 }

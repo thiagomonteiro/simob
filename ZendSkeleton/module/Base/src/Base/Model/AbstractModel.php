@@ -43,10 +43,10 @@ abstract class AbstractModel {
             $this->insert($obj);
         }
     }
-    abstract protected function insert($obj);
-    abstract protected function update($obj);
-    abstract protected function select($obj);
-    abstract protected function delete($obj);
-    abstract protected function getAll($de,$qtd);
+    abstract protected function inserir($obj);
+    abstract protected function atualizar($obj);
+    abstract protected function recuperar($obj);
+    abstract protected function remover($obj);
+    abstract protected function recuperarTodos($de,$qtd);
 
 }

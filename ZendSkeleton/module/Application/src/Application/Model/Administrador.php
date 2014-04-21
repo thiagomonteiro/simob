@@ -22,7 +22,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
 
     
     
-    public function insert($obj)
+    public function inserir($obj)
     {
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Administrador (nome, email, senha)VALUES ('".$obj->getNome()."','".$obj->getEmail()."','".$obj->getSenha()."')";
@@ -30,11 +30,11 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         $results = $statement -> execute();
     }
 
-    public function update($obj)
+    public function atualizar($obj)
     {
     }
 
-    public function select($obj)
+    public function recuperar($obj)
     {
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."')";
@@ -47,7 +47,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         return $lista_usuario;
     }
 
-    public function selectLogin($obj){ 
+    public function recuperarPorLogin($obj){ 
         
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."' and senha='".$obj->getSenha()."')";
@@ -61,11 +61,11 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
        
     }
 
-    public function delete($obj)
+    public function remover($obj)
     {
     }
 
-    public function getAll($de,$qtd)
+    public function recuperarTodos($de,$qtd)
     {
         echo $qtd;
         if($qtd ==  null){

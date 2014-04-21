@@ -29,7 +29,7 @@ class Estado extends \Base\Model\AbstractModel {
         $lista_estados = array();
         foreach($results as $result){
             if(is_null($pais)){
-                $dadosPais = $this->_paisDao->select($result['pais']);
+                $dadosPais = $this->_paisDao->recuperar($result['pais']);
                 $paisObj = $this->_paisDao->criarNovo($dadosPais);
                 $result['pais']=$paisObj;
             }else{
@@ -45,15 +45,15 @@ class Estado extends \Base\Model\AbstractModel {
         return $response;
     }
     
-    public function insert($obj){
+    public function inserir($obj){
         
     }
     
-    public function update($obj){
+    public function atualizar($obj){
         
     }
     
-    public function select($id){
+    public function recuperar($id){
         $adapter = $this->getAdapter();
         $sql = "select * from estado where(id ='".$id."')";
         $statement = $adapter->query($sql);
@@ -69,13 +69,13 @@ class Estado extends \Base\Model\AbstractModel {
         return $this->criarVarios($results);
     }
     
-    public function delete($obj){
+    public function remover($obj){
         
     }
     
    
     
-    public function getAll($de,$qtd){
+    public function recuperarTodos($de,$qtd){
         if($de == null and $qtd == null){
             $adapter = $this->getAdapter();
             $sql = 'select * from estado where(pais = 1)';
