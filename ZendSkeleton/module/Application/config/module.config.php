@@ -56,6 +56,17 @@ $rota_gerenciar_bairro = array(
                 ),
             ); 
 
+$rota_criar_bairro = array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/imovel/criarBairro',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Imovel',
+                        'action'     => 'criarBairro',
+                    ),
+                ),
+            ); 
+
 $rota_get_cidade = array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
                 'options' => array(
@@ -81,7 +92,8 @@ return array(
             'login_admin' => $rota_login,
             'home_admin'    =>  $rota_adm_home,
             'home'  => $rota_home,
-            'crud_bairro' =>    $rota_gerenciar_bairro,
+            'gerenciar_bairro' =>    $rota_gerenciar_bairro,
+            'criar_bairro'  => $rota_criar_bairro,
             'get_cidades' =>    $rota_get_cidade,
         ),
             
@@ -156,6 +168,7 @@ return array(
             'application/admin/login' => __DIR__ . '/../view/application/admin/login.phtml',
             'application/admin/index' => __DIR__ . '/../view/application/admin/index.phtml',
             'application/imovel/gerenciarBairro' =>    __DIR__ . '/../view/application/imovel/gerenciar-bairro.phtml',
+            'application/imovel/criarBairro' =>    __DIR__ . '/../view/application/imovel/criar-bairro.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

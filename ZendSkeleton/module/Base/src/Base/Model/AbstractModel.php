@@ -23,7 +23,7 @@ abstract class AbstractModel {
         "password" => ""
     );
 
-    public function getAdapter(){
+    protected function getAdapter(){
         $adapter = new Adapter($this->config);
         return $adapter;
     }

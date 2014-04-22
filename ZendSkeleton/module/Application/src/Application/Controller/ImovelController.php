@@ -32,10 +32,20 @@ class ImovelController extends \Base\Controller\BaseController {
  
     
     public function gerenciarBairroAction(){
+        $x=\Base\Model\daoFactory::factory('Administrador');
+
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
         }
+        $event = $this->getEvent();
+        $event->getViewModel()->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/imovel.js');
+        $view = new ViewModel();
+        return $view;
+    }
+    
+    public function criarBairroAction(){
         $form = $this->formCriarBairroAction(); 
         $request = $this->getRequest();//2- pego a requisiçao
             if($request->isPost()){//3-verifico se é um post se for:
@@ -45,15 +55,15 @@ class ImovelController extends \Base\Controller\BaseController {
                 $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
                 if($form->isValid()){//validação do formulario
                     $dados=(array)$this->getRequest()->getPost();
-                    $bairroDAO = new \Application\Model\Bairro;
-                    $cidadeDAO = new \Application\Model\Cidade;
+                    $bairroDAO = \Base\Model\daoFactory::factory('Bairro');
+                    $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
                     $cidadeOBJ = $cidadeDAO->recuperar($dados['cidade']);        
                     $bairroOBJ = $bairroDAO->criarNovo();
                     $bairroOBJ->setCidade($cidadeOBJ);
                     $bairroOBJ->setNome($dados['nome']);
                     $resposta = $bairroDAO->inserir($bairroOBJ);
                     $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
-                    $this->redirect()->toRoute('crud_bairro');
+                    $this->redirect()->toRoute('gerenciar_bairro');
                 }else{  
                    //se der alguma errro 
                 }
@@ -66,9 +76,8 @@ class ImovelController extends \Base\Controller\BaseController {
     }
     
     
-    
     public function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
-       $estadoDAO = new \Application\Model\Estado;
+        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
         $Array_estado = $estadoDAO->recuperarTodos(null, null);
         $dados_select = array();
         foreach ($Array_estado as $row){
@@ -82,9 +91,9 @@ class ImovelController extends \Base\Controller\BaseController {
     
     public function getCidadesAction(){//funçao que preenche o select-box de cidades        
         $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
-        $estadoDAO = new \Application\Model\Estado;
+        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
         $estado = $estadoDAO->recuperarPorUf($uf);
-        $cidadeDAO = new \Application\Model\Cidade;
+        $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
         $cidades = $cidadeDAO->recuperarPorEstado($estado);
         $selectCidades = '<select name="cidade" id="cidade-select">';
         if(count($cidades)>1){

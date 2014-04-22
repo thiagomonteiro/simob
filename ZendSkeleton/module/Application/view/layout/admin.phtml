@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('SIMOB '. $this->translate('Sistema Imobiliaria'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -59,8 +59,8 @@
                        <ul>
                            <li class='has-sub'><a href='#'><span>Bairros</span></a>
                                <ul>
-                                   <li class='last'><a href="#">Adicionar</a></li>
-                                   <li class='last'><a href="<?php echo $this->url('crud_bairro',array('action' => 'AdicionarBairro'));?>">Gerenciar</a></li>
+                                   <li class='last'><a href="<?php echo $this->url('criar_bairro');?>">Adicionar</a></li>
+                                   <li class='last'><a href="<?php echo $this->url('gerenciar_bairro');?>">Gerenciar</a></li>
                                </ul>
                            </li>
                        </ul>

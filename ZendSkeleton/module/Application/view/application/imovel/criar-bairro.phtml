@@ -1,0 +1,20 @@
+<header>
+    Criar Bairro
+</header>
+<section class="criar">
+    <?php
+    $form = $this->criar;
+    $form->setAttribute('action', $this->url('criar_bairro'));
+    $form->setAttribute('method', 'post');
+
+    /*
+     * To change this template, choose Tools | Templates
+     * and open the template in the editor
+     */
+
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+
+    ?>
+</section>
