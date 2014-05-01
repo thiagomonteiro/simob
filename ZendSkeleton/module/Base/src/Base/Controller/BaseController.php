@@ -17,13 +17,16 @@ namespace Base\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Base\Session\BaseSession;
+use Base\Paginador\Paginador;
 
 class BaseController extends AbstractActionController{
     protected $sessao;
+    protected $paginador;
   
     
     public function __construct() {
         $this->sessao = new BaseSession();//verificar se ha um jeito de tirar da inicialização        
+        $this->paginador = new Paginador();
     }
     
     public function appendJavaScript($js){

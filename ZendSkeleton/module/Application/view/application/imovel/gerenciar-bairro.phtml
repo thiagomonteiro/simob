@@ -28,6 +28,15 @@
             <?php endforeach;?>
         </tbody>
     </table>
+    
+     <?php if(boolval($this->paginacao['ha_anterior'])==true):?>
+        <a href="#" data-anterior = "<?php echo $this->paginacao['pagina_anterior'] ?>">anterior</a>
+     <?php endif;?>
+    
+     <?php if(boolval($this->paginacao['ha_proxima'])==true):?>
+        <a href="#" data-proxima = "<?php echo $this->paginacao['proxima_pagina'] ?>">proximo</a>
+     <?php endif;?>
+    
 </section>
 <?php
 
