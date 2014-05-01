@@ -32,8 +32,8 @@ class ImovelController extends \Base\Controller\BaseController {
  
     
     public function gerenciarBairroAction(){
-        $x=\Base\Model\daoFactory::factory('Administrador');
-
+        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
+        $bairros_list = $BairroDao->recuperarTodos();
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
@@ -41,7 +41,7 @@ class ImovelController extends \Base\Controller\BaseController {
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $view = new ViewModel();
+        $view = new ViewModel(array('bairrosList' => $bairros_list));
         return $view;
     }
     

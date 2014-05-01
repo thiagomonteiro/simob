@@ -37,7 +37,7 @@ class Estado extends \Base\Entity\AbstractEntity {
     }
     
     public function getNome(){
-        return $this->_nome;
+        return utf8_encode($this->_nome);
     }
     
     public function setUf($uf){

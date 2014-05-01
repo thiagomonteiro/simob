@@ -32,7 +32,22 @@ class Bairro extends \Base\Model\AbstractModel {
     }
     
     public function criarVarios($results,$cidade){
-        
+        $lista_bairros = array();
+        foreach($results as $result){
+            if(is_null($cidade)){
+                $dadosCidade = $this->_cidadeDao->recuperar($result['cidade']);
+                $result['cidade'] = $dadosCidade;
+            }else{
+               $result['cidade']=$cidade;
+            }
+            $lista_bairros[] = $this->criarNovo($result);
+        }
+        if(count($lista_bairros)>1){
+            $response = $lista_bairros;
+        }else{
+            $response = $lista_bairros[0];
+        }
+        return $response;
     }
     
     
@@ -57,9 +72,15 @@ class Bairro extends \Base\Model\AbstractModel {
         
     }
     
-    public function recuperarTodos($de,$qtd){
+    public function recuperarTodos($de=null,$qtd=null){
         if($de == null and $qtd == null){
             
         }
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Bairro";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $bairros_list = $this->criarVarios($results, null);
+        return $bairros_list;
     } 
 }
