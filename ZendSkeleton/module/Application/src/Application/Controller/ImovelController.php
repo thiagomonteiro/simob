@@ -19,7 +19,7 @@ use Application\Filter\criarBairro as criar_bairro_filter;
  */
 class ImovelController extends \Base\Controller\BaseController {
     
-   
+    private static $_qtd_por_pagina=5;
     
     public function __construct() {
         parent::__construct();
@@ -33,8 +33,8 @@ class ImovelController extends \Base\Controller\BaseController {
     
     public function gerenciarBairroAction(){
         $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $result = $BairroDao->recuperarTodos(5,5);
-        $paginacao = $this->paginador->paginarDados($result,5,5);
+        $result = $BairroDao->recuperarTodos(5,self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($result,5,self::$_qtd_por_pagina);
         print_r($paginacao);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
@@ -44,8 +44,10 @@ class ImovelController extends \Base\Controller\BaseController {
         $event->getViewModel()->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
         $partialListarBairros = $this->listarBairrosAction($result);
-        $view = new ViewModel(array('paginacao' => $paginacao));
+        $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
+        $view = new ViewModel();
         $view->addChild($partialListarBairros,'partialListarBairros');
+        $view->addChild($partialBarraPaginacao,'paginacao');
         return $view;
     }
     
@@ -55,13 +57,29 @@ class ImovelController extends \Base\Controller\BaseController {
         return $lista;
     }
     
-    public function proximaPaginaAction(){
-        //somente requisições ajax
-        echo 'teste';
+    public function criarBarraPaginacaoAction($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao));
+        $view->setTemplate('application/imovel/partials/paginacao.phtml');
+        return $view;
     }
     
-    public function paginaAnteriroAction(){
+    public function proximaPaginaAction(){
+        //somente requisições ajax        
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
+        $bairrosList = $BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
+        $viewModelListar= $this->listarBairrosAction($bairrosList);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function paginaAnteriorAction(){
         //somente requisições ajax
+        echo 'anterior';
     }
     
     public function criarBairroAction(){

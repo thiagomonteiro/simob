@@ -1,22 +1,12 @@
-<table border='1px'>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Cidade</th>
-                <th>Estado</th>
-                <th>Alterar</th>
-                <th>Deletar</th>
-            </tr>              
-        </thead>
+
         <tbody>
             <?php foreach ($this->bairrosList as $row):?>
             <tr>
                 <td><?php echo $row->getNome();?></td>
                 <td><?php echo $row->getCidade()->getNome();?></td>
                 <td><?php echo $row->getCidade()->getEstado()->getUf();?></td>
-                <td><button>Alterar</button></td>
-                <td><button>Deletar</button></td>
+                <td><button class="alterar-bairro">Alterar</button></td>
+                <td><button class="deletar-bairro">Deletar</button></td>
             </tr>
             <?php endforeach;?>
         </tbody>
-    </table>

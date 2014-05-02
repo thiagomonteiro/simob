@@ -3,10 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Application/config/module.config.php</file>
             <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Application/src/Application/Controller/ImovelController.php</file>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/public/js/simob/imovel.js</file>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Application/view/application/imovel/gerenciar-bairro.phtml</file>
         </group>
     </open-files>
 </project-private>

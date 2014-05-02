@@ -59,12 +59,25 @@ $rota_gerenciar_bairro = array(
         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina',
+                'route' => '/proximaPagina[/:pagina]',
                 'defaults' => array(
                   'action' => 'proximaPagina'
                 ),
             ),
         ),
+        'paginaAnterior' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/paginaAnterior[/:pagina]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+'
+                ),
+                'defaults' => array(
+                  'action' => 'paginaAnterior'
+                ),
+            ),
+        ),
+        
     ),
 ); 
 
@@ -72,6 +85,9 @@ $rota_criar_bairro = array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
                     'route'    => '/imovel/criarBairro',
+                    'constraints' => array(
+                    'pagina' => '[0-9]+'
+                     ),
                     'defaults' => array(
                         'controller' => 'Application\Controller\Imovel',
                         'action'     => 'criarBairro',

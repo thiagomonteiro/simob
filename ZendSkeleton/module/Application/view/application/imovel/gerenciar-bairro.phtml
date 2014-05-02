@@ -6,16 +6,19 @@
 </section>
 <section class="listar">
     <h4>Bairros Cadastrados</h4>
-     <?php echo $this->partialListarBairros; ?>
-    
-     <?php if(boolval($this->paginacao['ha_anterior'])==true):?>
-        <a href="#" data-anterior = "<?php echo $this->paginacao['pagina_anterior'] ?>">anterior</a>
-     <?php endif;?>
-    
-     <?php if(boolval($this->paginacao['ha_proxima'])==true):?>
-        <a href="<?php echo $this->url('gerenciar_bairro/proximaPagina');?>"  id="proxima-pagina-bairro" data-proxima = "<?php echo $this->paginacao['proxima_pagina'] ?>">proximo</a>
-     <?php endif;?>
-    
+    <table id="tabela-bairros" border='1px'>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Alterar</th>
+                <th>Deletar</th>
+            </tr>              
+        </thead>
+        <?php echo $this->partialListarBairros; ?>
+     </table>
+        <?php echo $this->paginacao; ?>
 </section>
 <?php
 

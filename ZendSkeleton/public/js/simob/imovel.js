@@ -5,7 +5,22 @@
  */
 
 
-$(document).ready(function() {
+$(document).ready(function() {     
+    
+    var content = $(document);//o metodo live foi descontinuado
+
+    content.delegate(".proxima-pagina-bairro","click",function(){
+        var url = $(this).attr('url');
+        var pagina = $(this).attr('data-proxima');
+        $.get(url+'/'+pagina, function(data){
+            var res = jQuery.parseJSON(data);
+            if(res.success===true){
+                $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+            }
+        });
+    });
+    
     
     $("#uf-select").change(function(e){
         e.preventDefault();
@@ -18,11 +33,23 @@ $(document).ready(function() {
         });
     });
     
-    $("#proxima-pagina-bairro").click(function(e){
-        e.preventDefault();
+   /* $(".proxima-pagina-bairro").on("click",function(e){
         alert('teste');
-    });
-  
+        var url = $(this).attr('url');
+        var pagina = $(this).attr('data-proxima');
+        $.get(url+'/'+pagina, function(data){
+            var res = jQuery.parseJSON(data);
+            if(res.success===true){
+                $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+            }
+        });
+    });*/
+    
+    
+   
+   
+    
 });
 
 
