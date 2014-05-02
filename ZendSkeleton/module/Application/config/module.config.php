@@ -23,38 +23,50 @@ $rota_login=array(
 );
 
 $rota_adm_home = array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/admin/index',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Admin',
-                        'action'     => 'index',
-                    ),
-                ),
-            ); 
+    'type' => 'Zend\Mvc\Router\Http\Literal',
+    'options' => array(
+        'route'    => '/admin/index',
+        'defaults' => array(
+            'controller' => 'Application\Controller\Admin',
+            'action'     => 'index',
+        ),
+    ),
+); 
 
 
 $rota_home = array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Index',
-                        'action'     => 'index',
-                    ),
-                ),
-            ); 
+    'type' => 'Zend\Mvc\Router\Http\Literal',
+    'options' => array(
+        'route'    => '/',
+        'defaults' => array(
+            'controller' => 'Application\Controller\Index',
+            'action'     => 'index',
+        ),
+    ),
+); 
 
 $rota_gerenciar_bairro = array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/imovel/gerenciarBairro',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Imovel',
-                        'action'     => 'gerenciarBairro',
-                    ),
+    'type' => 'Zend\Mvc\Router\Http\Segment',
+    'options' => array(
+        'route'    => '/imovel',
+        'defaults' => array(
+            'controller' => 'Application\Controller\Imovel',
+            'action'     => 'gerenciarBairro',
+        ),
+    ),
+    'may_terminate' => true,
+    'child_routes' => array(
+        'proximaPagina' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/proximaPagina',
+                'defaults' => array(
+                  'action' => 'proximaPagina'
                 ),
-            ); 
+            ),
+        ),
+    ),
+); 
 
 $rota_criar_bairro = array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',

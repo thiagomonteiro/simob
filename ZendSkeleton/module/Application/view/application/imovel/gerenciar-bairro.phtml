@@ -6,35 +6,14 @@
 </section>
 <section class="listar">
     <h4>Bairros Cadastrados</h4>
-    <table border='1px'>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Cidade</th>
-                <th>Estado</th>
-                <th>Alterar</th>
-                <th>Deletar</th>
-            </tr>              
-        </thead>
-        <tbody>
-            <?php foreach ($this->bairrosList as $row):?>
-            <tr>
-                <td><?php echo $row->getNome();?></td>
-                <td><?php echo $row->getCidade()->getNome();?></td>
-                <td><?php echo $row->getCidade()->getEstado()->getUf();?></td>
-                <td><button>Alterar</button></td>
-                <td><button>Deletar</button></td>
-            </tr>
-            <?php endforeach;?>
-        </tbody>
-    </table>
+     <?php echo $this->partialListarBairros; ?>
     
      <?php if(boolval($this->paginacao['ha_anterior'])==true):?>
         <a href="#" data-anterior = "<?php echo $this->paginacao['pagina_anterior'] ?>">anterior</a>
      <?php endif;?>
     
      <?php if(boolval($this->paginacao['ha_proxima'])==true):?>
-        <a href="#" data-proxima = "<?php echo $this->paginacao['proxima_pagina'] ?>">proximo</a>
+        <a href="<?php echo $this->url('gerenciar_bairro/proximaPagina');?>"  id="proxima-pagina-bairro" data-proxima = "<?php echo $this->paginacao['proxima_pagina'] ?>">proximo</a>
      <?php endif;?>
     
 </section>

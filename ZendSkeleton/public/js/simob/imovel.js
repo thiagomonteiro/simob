@@ -18,7 +18,10 @@ $(document).ready(function() {
         });
     });
     
-    
+    $("#proxima-pagina-bairro").click(function(e){
+        e.preventDefault();
+        alert('teste');
+    });
   
 });
 

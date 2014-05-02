@@ -43,12 +43,21 @@ class ImovelController extends \Base\Controller\BaseController {
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $view = new ViewModel(array('bairrosList' => $result,'paginacao' => $paginacao));
+        $partialListarBairros = $this->listarBairrosAction($result);
+        $view = new ViewModel(array('paginacao' => $paginacao));
+        $view->addChild($partialListarBairros,'partialListarBairros');
         return $view;
+    }
+    
+    public function listarBairrosAction($bairrosList){
+        $lista = new ViewModel(array('bairrosList'=>$bairrosList));
+        $lista->setTemplate('application/imovel/partials/listar.phtml');
+        return $lista;
     }
     
     public function proximaPaginaAction(){
         //somente requisições ajax
+        echo 'teste';
     }
     
     public function paginaAnteriroAction(){
