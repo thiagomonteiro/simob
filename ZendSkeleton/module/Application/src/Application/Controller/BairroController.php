@@ -33,8 +33,8 @@ class BairroController extends \Base\Controller\BaseController {
     
     public function gerenciarBairroAction(){
         $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $result = $BairroDao->recuperarTodos(5,self::$_qtd_por_pagina);
-        $paginacao = $this->paginador->paginarDados($result,5,self::$_qtd_por_pagina);
+        $result = $BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
         print_r($paginacao);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
@@ -53,13 +53,13 @@ class BairroController extends \Base\Controller\BaseController {
     
     public function listarBairrosAction($bairrosList){
         $lista = new ViewModel(array('bairrosList'=>$bairrosList));
-        $lista->setTemplate('application/imovel/partials/listar.phtml');
+        $lista->setTemplate('application/bairro/partials/listar.phtml');
         return $lista;
     }
     
     public function criarBarraPaginacaoAction($paginacao){
         $view = new ViewModel(array('paginacao'=>$paginacao));
-        $view->setTemplate('application/imovel/partials/paginacao.phtml');
+        $view->setTemplate('application/bairro/partials/paginacao.phtml');
         return $view;
     }
     
@@ -79,7 +79,16 @@ class BairroController extends \Base\Controller\BaseController {
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
-        echo 'anterior';
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
+        $bairrosList = $BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($bairrosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $viewModelListar= $this->listarBairrosAction($bairrosList);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function criarBairroAction(){

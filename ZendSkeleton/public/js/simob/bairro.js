@@ -21,6 +21,18 @@ $(document).ready(function() {
         });
     });
     
+    content.delegate(".pagina-anterior-bairro","click",function(){
+       var url = $(this).attr('url');
+       var pagina = $(this).attr('data-anterior');
+       $.get(url+'/'+pagina, function(data){
+           var res = jQuery.parseJSON(data);
+           if(res.success === true){
+               $("#tabela-bairros").children('tbody').replaceWith(res.html);
+               $("#barra-paginacao").replaceWith(res.barrapaginacao);
+           }
+       });
+    });
+    
     
     $("#uf-select").change(function(e){
         e.preventDefault();
