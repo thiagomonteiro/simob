@@ -6,19 +6,23 @@
 </section>
 <section class="listar">
     <h4>Bairros Cadastrados</h4>
-    <table id="tabela-bairros" border='1px'>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Cidade</th>
-                <th>Estado</th>
-                <th>Alterar</th>
-                <th>Deletar</th>
-            </tr>              
-        </thead>
-        <?php echo $this->partialListarBairros; ?>
-     </table>
-        <?php echo $this->paginacao; ?>
+    <?php if($this->haDados):?>
+                <table id="tabela-bairros" border='1px'>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>Alterar</th>
+                            <th>Deletar</th>
+                        </tr>
+                    </thead>
+                    <?php echo $this->partialListarBairros; ?>
+                 </table>
+                    <?php echo $this->paginacao; ?>
+    <?php else:?>
+        <h1>Nenhum registro encontrado</h1>
+    <?php endif;?>
 </section>
 <?php
 

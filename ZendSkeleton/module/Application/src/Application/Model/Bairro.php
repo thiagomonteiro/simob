@@ -42,12 +42,7 @@ class Bairro extends \Base\Model\AbstractModel {
             }
             $lista_bairros[] = $this->criarNovo($result);
         }
-        if(count($lista_bairros)>1){
-            $response = $lista_bairros;
-        }else{
-            $response = $lista_bairros[0];
-        }
-        return $response;
+        return $lista_bairros;
     }
     
     

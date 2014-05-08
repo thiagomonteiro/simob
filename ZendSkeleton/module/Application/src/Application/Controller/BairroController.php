@@ -35,7 +35,6 @@ class BairroController extends \Base\Controller\BaseController {
         $BairroDao=\Base\Model\daoFactory::factory('Bairro');
         $result = $BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-        print_r($paginacao);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
@@ -45,7 +44,7 @@ class BairroController extends \Base\Controller\BaseController {
         $this->appendJavaScript('simob/bairro.js');
         $partialListarBairros = $this->listarBairrosAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
-        $view = new ViewModel();
+        $view = new ViewModel(array('haDados' => empty($result)? false:true));
         $view->addChild($partialListarBairros,'partialListarBairros');
         $view->addChild($partialBarraPaginacao,'paginacao');
         return $view;
