@@ -50,4 +50,15 @@ class BaseController extends AbstractActionController{
         }
         return $response;
     }
+    
+    public function getPartial($partial, array $dados){
+        $partial = new ViewModel($dados);
+        $partial->setTemplate($partial);
+        return $partial;
+    }
+    
+    public function setTemplate($template){
+        $event = $this->getEvent();
+        $event->getViewModel()->setTemplate($template);
+    }
 }

@@ -20,6 +20,7 @@ class login implements InputFilterAwareInterface {
 
     public function getInputFilter()
     {
+        
         $inputFilter = new InputFilter();
         $factory = new Factory();
         $inputFilter->add(
@@ -32,11 +33,13 @@ class login implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
                     'validators' => array(
-                        array('name' => 'Zend\Validator\NotEmpty',
+                       
+                        array('name' => 'Zend\Validator\EmailAddress',
                               'options' => array(
-                                  'messages' => array('isEmpty' => 'informe um email valido')
+                                  'messages' => array(EmailAddress::INVALID_FORMAT => 'Entre com um endereco de email valido'),
                               ),
                         ),
+
                     ),
                 )
             )
@@ -52,13 +55,7 @@ class login implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
-                    'validators' => array(
-                        array('name' => 'Zend\Validator\NotEmpty',
-                            'options' => array(
-                                'messages' => array(NotEmpty::IS_EMPTY => 'informe a senha'),
-                            ),
-                        ),
-                    ),
+                   
                 )
             )
         );

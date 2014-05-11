@@ -32,11 +32,11 @@ class criarBairro implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
                     'validators' => array(
-                        array('name' => 'Zend\Validator\NotEmpty',
-                              'options' => array(
-                                  'messages' => array('isEmpty' => 'O campo nao pode ficar vazio')
-                              ),
-                        ),
+                        array('name' => '\Zend\I18n\Validator\Alnum',
+                            'options' => array(
+                                    'messages' => array(\Zend\I18n\Validator\Alnum::NOT_ALNUM=> 'Informe apenas letras ou numeros')
+                                ),
+                            ),
                     ),
                 )
             )
@@ -55,7 +55,7 @@ class criarBairro implements InputFilterAwareInterface {
                     'validators' => array(
                         array('name' => 'Zend\Validator\NotEmpty',
                             'options' => array(
-                                'messages' => array(NotEmpty::IS_EMPTY => 'O campo não pode ficar vazio'),
+                                'messages' => array(NotEmpty::IS_EMPTY => 'Selecione um estado'),
                             ),
                         ),
                     ),
@@ -75,7 +75,7 @@ class criarBairro implements InputFilterAwareInterface {
                     'validators' => array(
                         array('name' => 'Zend\Validator\NotEmpty',
                             'options' => array(
-                                'messages' => array(NotEmpty::IS_EMPTY => 'O campo não pode ficar vazio'),
+                                'messages' => array(NotEmpty::IS_EMPTY => 'Selecione uma cidade'),
                             ),
                         ),
                     ),

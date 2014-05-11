@@ -39,8 +39,7 @@ class BairroController extends \Base\Controller\BaseController {
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
         }
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/admin');
+        $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
         $partialListarBairros = $this->listarBairrosAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
@@ -113,8 +112,7 @@ class BairroController extends \Base\Controller\BaseController {
                    //se der alguma errro 
                 }
             }
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/admin');
+        $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
         $view = new ViewModel(array('criar'   =>  $form));
         return $view;
