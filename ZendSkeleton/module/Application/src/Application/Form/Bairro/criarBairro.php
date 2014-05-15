@@ -11,7 +11,7 @@
  *
  * @author thiago
  */
-namespace Application\Form;
+namespace Application\Form\Bairro;
 use Zend\Form\Form;
 
 class criarBairro extends Form{

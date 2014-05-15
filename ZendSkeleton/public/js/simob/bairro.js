@@ -7,9 +7,12 @@
 
 $(document).ready(function() {     
     
+    
+    /*****************************paginação***************************************/
+    
     var content = $(document);//o metodo live foi descontinuado
 
-    content.delegate(".proxima-pagina-bairro","click",function(){
+    content.delegate(".proxima-pagina","click",function(){
         var url = $(this).attr('url');
         var pagina = $(this).attr('data-proxima');
         $.get(url+'/'+pagina, function(data){
@@ -21,7 +24,7 @@ $(document).ready(function() {
         });
     });
     
-    content.delegate(".pagina-anterior-bairro","click",function(){
+    content.delegate(".pagina-anterior","click",function(){
        var url = $(this).attr('url');
        var pagina = $(this).attr('data-anterior');
        $.get(url+'/'+pagina, function(data){
@@ -32,8 +35,11 @@ $(document).ready(function() {
            }
        });
     });
+    /********************************************************paginacao*******************/
     
     
+    
+    /********************************************************criar********************************/
     $("#uf-select").change(function(e){
         e.preventDefault();
         var uf = $("#uf-select option:selected").text();
@@ -44,6 +50,56 @@ $(document).ready(function() {
             }
         });
     });
+    /*******************************************criar***********************/
+    
+    
+    
+    
+    
+    /************************************busca********************************/
+    //'EXIBIR UMA MODAL PARA SELECIONAR A CIDADE. A CIDADE SELECIONADA SERA COLOCADO DENTRO DO CAMPOS PARAMETRO QUE FICARÁ DESATIVADO PARA EDICAO SO SENDO REABILITADO CASO O USUARIO SELECIONE O CAMPO NOME'
+    $("#filtro").change(
+            function(){
+                var filtro = $("#filtro option:selected").text();
+                if(filtro == "cidade"){
+                    $(function() {
+                        $( "#dialog-busca").dialog({
+                          height: 200,
+                          width:400,
+                          modal: true,
+                          buttons: {
+                            "Selecionar": function () {
+                                var cidade = $("#cidade-select option:selected");
+                                if(cidade.val()!="selecione um estado"){
+                                    $('#param').val(cidade.text());
+                                }else{
+                                    $("#filtro").val('0');
+                                }
+                                $(this).dialog("close");
+                              },
+                            "Cancelar": function () {
+                                $("#filtro").val('0');
+                                $(this).dialog("close");
+                              }
+                          }
+                        });
+                      });
+                }       
+            }
+    );
+    
+    $("#busca-submit").click(     
+            function(e){
+                e.preventDefault();
+                var form = $("#form-busca"); 
+                var rota = form.attr('action');
+                var param = $("#param").val();
+                var filtro = $("#filtro option:selected").text();
+                var url= rota+'/'+filtro+'/'+param;
+                window.location.replace(url);
+            }
+    );
+    
     
    /* $(".proxima-pagina-bairro").on("click",function(e){
         alert('teste');

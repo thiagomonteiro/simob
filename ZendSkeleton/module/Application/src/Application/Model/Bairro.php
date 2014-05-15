@@ -67,7 +67,7 @@ class Bairro extends \Base\Model\AbstractModel {
         
     }
     
-    public function recuperarTodos($de=null,$qtd=null){
+    public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){
         if($de == null){
             $de=0;
         }
@@ -82,14 +82,33 @@ class Bairro extends \Base\Model\AbstractModel {
         return $bairros_list;
     }
     
-    public function recuperarPaginacao($de=null,$qtd=null){
+    public function recuperarPaginacao($de=null,$qtd=null,$filtro=null,$param=null){
         if($de == null and $qtd == null){
             $adapter = $this->getAdapter();
-            $sql = "SELECT * FROM Bairro";
+            if($filtro==null){
+                $sql = "SELECT * FROM Bairro";
+            }else{
+                $sql = "SELECT * FROM Bairro WHERE(".$filtro."=".$param.")"; 
+            }
             $statement = $adapter->query($sql);
             $results = $statement->execute();            
             $bairros_list = $this->criarVarios($results, null);
         }
+        return $bairros_list;
+    }
+    
+    public function recuperarPorParametro($de=null,$qtd=null,$filtro=null,$param=null){
+        if($de == null){
+            $de=0;
+        }
+        if($qtd == null){
+            $qtd=5;
+        }
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Bairro WHERE(".$filtro."=".$param.") LIMIT ".$de.", ".($qtd+1)."";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $bairros_list = $this->criarVarios($results, null);
         return $bairros_list;
     }
 }

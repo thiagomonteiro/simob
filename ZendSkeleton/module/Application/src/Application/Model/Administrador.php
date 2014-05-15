@@ -65,7 +65,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
     {
     }
 
-    public function recuperarTodos($de,$qtd)
+    public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null)
     {
         echo $qtd;
         if($qtd ==  null){

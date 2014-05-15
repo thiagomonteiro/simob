@@ -75,7 +75,7 @@ class Estado extends \Base\Model\AbstractModel {
     
    
     
-    public function recuperarTodos($de,$qtd){
+    public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){
         if($de == null and $qtd == null){
             $adapter = $this->getAdapter();
             $sql = 'select * from estado where(pais = 1)';

@@ -1,9 +1,0 @@
-<div id="barra-paginacao">
-        <?php if(boolval($this->paginacao['ha_anterior'])==true):?>
-           <a href="#" class="pagina-anterior-bairro" url="<?php echo $this->url('gerenciar_bairro/paginaAnterior');?>"  data-anterior = "<?php echo $this->paginacao['pagina_anterior'] ?>">anterior</a>
-        <?php endif;?>
-
-        <?php if(boolval($this->paginacao['ha_proxima'])==true):?>
-           <a href="#"  class="proxima-pagina-bairro" url="<?php echo $this->url('gerenciar_bairro/proximaPagina');?>" data-proxima = "<?php echo $this->paginacao['proxima_pagina'] ?>">proximo</a>
-        <?php endif;?>
-</div>

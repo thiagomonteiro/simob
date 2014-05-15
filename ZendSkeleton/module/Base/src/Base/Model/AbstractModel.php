@@ -47,6 +47,6 @@ abstract class AbstractModel {
     abstract protected function atualizar($obj);
     abstract protected function recuperar($obj);
     abstract protected function remover($obj);
-    abstract protected function recuperarTodos($de,$qtd);
+    abstract protected function recuperarTodos($de,$qtd,$filtro,$param);
 
 }

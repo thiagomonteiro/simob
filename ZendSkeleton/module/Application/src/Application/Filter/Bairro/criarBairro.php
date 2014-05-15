@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Application\Filter;
+namespace Application\Filter\Bairro;
 
 use Zend\InputFilter\InputFilter,
     Zend\InputFilter\Factory,

@@ -68,7 +68,7 @@ class Cidade extends \Base\Model\AbstractModel{
         
     }
     
-    public function recuperarTodos($de,$qtd){
+    public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){
         
     } 
     

@@ -46,7 +46,7 @@ $rota_home = array(
 ); 
 
 $rota_gerenciar_bairro = array(
-    'type' => 'Zend\Mvc\Router\Http\Segment',
+    'type' => 'segment',
     'options' => array(
         'route'    => '/bairro',
         'defaults' => array(
@@ -59,21 +59,32 @@ $rota_gerenciar_bairro = array(
         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina[/:pagina]',
+                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]',
+                    'param' => '[a-zA-Z]'
+                ),
                 'defaults' => array(
-                  'action' => 'proximaPagina'
+                  'action' => 'proximaPagina',
+                  'filtro'  => null,
+                  'param'   => null
                 ),
             ),
         ),
         'paginaAnterior' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/paginaAnterior[/:pagina]',
+                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
-                    'pagina' => '[0-9]+'
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]',
+                    'param' => '[a-zA-Z]'
                 ),
                 'defaults' => array(
-                  'action' => 'paginaAnterior'
+                  'action' => 'paginaAnterior',
+                  'filtro'  => null,
+                  'param'   => null
                 ),
             ),
         ),
@@ -125,7 +136,13 @@ return array(
             'get_cidades' =>    $rota_get_cidade,
         ),
             
-            // The following is a route to simplify getting started creating
+  
+        
+
+
+
+
+// The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action

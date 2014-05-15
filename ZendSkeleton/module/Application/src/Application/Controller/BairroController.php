@@ -9,8 +9,9 @@
 namespace Application\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
-use Application\Form\criarBairro as form_criar_bairro;
-use Application\Filter\criarBairro as criar_bairro_filter;
+use Application\Form\Bairro\criarBairro as form_criar_bairro;
+use Application\Filter\Bairro\criarBairro as criar_bairro_filter;
+use Application\Form\busca as form_busca;
 
 /**
  * Description of ImovelController
@@ -18,11 +19,12 @@ use Application\Filter\criarBairro as criar_bairro_filter;
  * @author thiago
  */
 class BairroController extends \Base\Controller\BaseController {
-    
+    private $BairroDao;
     private static $_qtd_por_pagina=5;
     
     public function __construct() {
         parent::__construct();
+        $this->BairroDao=\Base\Model\daoFactory::factory('Bairro');
     }
     
     public function indexAction() {
@@ -31,9 +33,12 @@ class BairroController extends \Base\Controller\BaseController {
     
  
     
-    public function gerenciarBairroAction(){
-        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $result = $BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
+    public function gerenciarBairroAction($filtro = null, $param = null){                
+        if($filtro == null){
+            $result = $this->BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
+        }else{
+            $result = $this->BairroDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
+        }        
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
@@ -41,33 +46,25 @@ class BairroController extends \Base\Controller\BaseController {
         }
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
-        $partialListarBairros = $this->listarBairrosAction($result);
+        $estados = $this->getEstadosAction();
+        $partialBusca = $this->criarBarraDeBuscaAction('gerenciar_bairro',$estados);
+        $partialListarBairros = $this->criarTabelaAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
-        $view->addChild($partialListarBairros,'partialListarBairros');
-        $view->addChild($partialBarraPaginacao,'paginacao');
+        $view->addChild($partialBusca , 'partialBusca');
+        $view->addChild($partialListarBairros ,'partialListarBairros');
+        $view->addChild($partialBarraPaginacao ,'paginacao');
         return $view;
     }
     
-    public function listarBairrosAction($bairrosList){
-        $lista = new ViewModel(array('bairrosList'=>$bairrosList));
-        $lista->setTemplate('application/bairro/partials/listar.phtml');
-        return $lista;
-    }
     
-    public function criarBarraPaginacaoAction($paginacao){
-        $view = new ViewModel(array('paginacao'=>$paginacao));
-        $view->setTemplate('application/bairro/partials/paginacao.phtml');
-        return $view;
-    }
     
     public function proximaPaginaAction(){
         //somente requisições ajax        
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $bairrosList = $BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
+        $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
         $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->listarBairrosAction($bairrosList);
+        $viewModelListar= $this->criarTabelaAction($bairrosList);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -78,10 +75,9 @@ class BairroController extends \Base\Controller\BaseController {
     public function paginaAnteriorAction(){
         //somente requisições ajax
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $bairrosList = $BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $bairrosList = $this->BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
         $paginacao = $this->paginador->paginarDados($bairrosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->listarBairrosAction($bairrosList);
+        $viewModelListar= $this->criarTabelaAction($bairrosList);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -98,14 +94,13 @@ class BairroController extends \Base\Controller\BaseController {
                 $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
                 $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
                 if($form->isValid()){//validação do formulario
-                    $dados=(array)$this->getRequest()->getPost();
-                    $bairroDAO = \Base\Model\daoFactory::factory('Bairro');
+                    $dados=(array)$this->getRequest()->getPost();                    
                     $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
                     $cidadeOBJ = $cidadeDAO->recuperar($dados['cidade']);        
-                    $bairroOBJ = $bairroDAO->criarNovo();
+                    $bairroOBJ = $this->BairroDao->criarNovo();
                     $bairroOBJ->setCidade($cidadeOBJ);
                     $bairroOBJ->setNome($dados['nome']);
-                    $resposta = $bairroDAO->inserir($bairroOBJ);
+                    $resposta = $this->BairroDao->inserir($bairroOBJ);
                     $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
                     $this->redirect()->toRoute('gerenciar_bairro');
                 }else{  
@@ -117,20 +112,6 @@ class BairroController extends \Base\Controller\BaseController {
         $view = new ViewModel(array('criar'   =>  $form));
         return $view;
     }
-    
-    
-    public function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
-        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
-        $Array_estado = $estadoDAO->recuperarTodos(null, null);
-        $dados_select = array();
-        foreach ($Array_estado as $row){
-            $dados_select[$row->getId()] = $row->getUf();
-        }
-        $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
-        $form->get('uf')->setAttribute('options', $dados_select);
-        return $form;
-    }
-    
     
     public function getCidadesAction(){//funçao que preenche o select-box de cidades        
         $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
@@ -151,4 +132,44 @@ class BairroController extends \Base\Controller\BaseController {
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
+    public function getEstadosAction(){
+        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
+        $Array_estado = $estadoDAO->recuperarTodos(null, null);
+        $dados_select = array();
+        foreach ($Array_estado as $row){
+            $dados_select[$row->getId()] = $row->getUf();
+        }
+        return $dados_select;
+    }
+    
+    
+    
+    //formularios
+    private function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
+        $dados_select = $this->getEstadosAction();
+        $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
+        $form->get('uf')->setAttribute('options', $dados_select);
+        return $form;
+    }
+    
+    private function criarTabelaAction($bairrosList){
+        $lista = new ViewModel(array('bairrosList'=>$bairrosList));
+        $lista->setTemplate('application/bairro/partials/listar.phtml');
+        return $lista;
+    }
+    
+    private function criarBarraPaginacaoAction($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'gerenciar_bairro'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
+        return $view;
+    }
+    
+    private function criarBarraDeBuscaAction($rota,$estados){
+        $busca = new form_busca();//1- primeiro eu instancio o formulario
+        $busca->get('filtro')->setAttribute('options',array('selecione','nome','cidade'));
+        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca, 'listaEstados' => $estados));
+        $view->setTemplate('application/bairro/partials/busca.phtml');
+        return $view;
+    }
+    //formularios
 }
