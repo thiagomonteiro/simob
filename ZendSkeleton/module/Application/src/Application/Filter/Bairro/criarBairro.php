@@ -34,6 +34,7 @@ class criarBairro implements InputFilterAwareInterface {
                     'validators' => array(
                         array('name' => '\Zend\I18n\Validator\Alnum',
                             'options' => array(
+                                    'allowWhiteSpace' => true,
                                     'messages' => array(\Zend\I18n\Validator\Alnum::NOT_ALNUM=> 'Informe apenas letras ou numeros')
                                 ),
                             ),

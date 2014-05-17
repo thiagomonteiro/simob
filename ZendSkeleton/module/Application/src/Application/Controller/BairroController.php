@@ -33,21 +33,24 @@ class BairroController extends \Base\Controller\BaseController {
     
  
     
-    public function gerenciarBairroAction($filtro = null, $param = null){                
+    public function gerenciarBairroAction(){  
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        
         if($filtro == null){
             $result = $this->BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
         }else{
             $result = $this->BairroDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
-        }        
+        }
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
-        }
+        }        
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
         $estados = $this->getEstadosAction();
-        $partialBusca = $this->criarBarraDeBuscaAction('gerenciar_bairro',$estados);
+        $partialBusca = $this->criarBarraDeBuscaAction('crud_bairro/gerenciarBairro',$estados,$filtro,$param);
         $partialListarBairros = $this->criarTabelaAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
@@ -61,8 +64,14 @@ class BairroController extends \Base\Controller\BaseController {
     
     public function proximaPaginaAction(){
         //somente requisições ajax        
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
+        if($filtro == null){
+            $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+        }else{
+            $bairrosList = $this->BairroDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+        }
         $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
         $viewModelListar= $this->criarTabelaAction($bairrosList);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
@@ -74,8 +83,14 @@ class BairroController extends \Base\Controller\BaseController {
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $bairrosList = $this->BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        if($filtro == null){
+            $bairrosList = $this->BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        }else{
+            $bairrosList = $this->BairroDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+        }
         $paginacao = $this->paginador->paginarDados($bairrosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
         $viewModelListar= $this->criarTabelaAction($bairrosList);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
@@ -102,7 +117,7 @@ class BairroController extends \Base\Controller\BaseController {
                     $bairroOBJ->setNome($dados['nome']);
                     $resposta = $this->BairroDao->inserir($bairroOBJ);
                     $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
-                    $this->redirect()->toRoute('gerenciar_bairro');
+                    $this->redirect()->toRoute('crud_bairro/gerenciarBairro');
                 }else{  
                    //se der alguma errro 
                 }
@@ -159,13 +174,13 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     private function criarBarraPaginacaoAction($paginacao){
-        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'gerenciar_bairro'));//na view $rota.'proximaPagina'
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_bairro'));//na view $rota.'proximaPagina'
         $view->setTemplate('application/partials/paginacao.phtml');
         return $view;
     }
     
-    private function criarBarraDeBuscaAction($rota,$estados){
-        $busca = new form_busca();//1- primeiro eu instancio o formulario
+    private function criarBarraDeBuscaAction($rota,$estados,$filtro,$param){//passando os params para o application/src/form
+        $busca = new form_busca(null,array(),$filtro,$param);//1- primeiro eu instancio o formulario
         $busca->get('filtro')->setAttribute('options',array('selecione','nome','cidade'));
         $view = new ViewModel(array('rota' => $rota, 'busca' => $busca, 'listaEstados' => $estados));
         $view->setTemplate('application/bairro/partials/busca.phtml');

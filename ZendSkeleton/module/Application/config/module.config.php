@@ -45,30 +45,52 @@ $rota_home = array(
     ),
 ); 
 
-$rota_gerenciar_bairro = array(
-    'type' => 'segment',
-    'options' => array(
-        'route'    => '/bairro',
-        'defaults' => array(
-            'controller' => 'Application\Controller\Bairro',
-            'action'     => 'gerenciarBairro',
-        ),
-    ),
+
+
+$rota_bairro = array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/bairro',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Bairro',                        
+                    ),
+                ),
+    
     'may_terminate' => true,
     'child_routes' => array(
+        'criarBairro' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/criarBairro',
+                    'defaults' => array(
+                        'action' => 'criarBairro',
+                    ),
+                ),
+            ),   
+        'gerenciarBairro' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/gerenciarBairro[/:filtro][/:param]',
+                'constraints' => array(
+                    'filtro'  => '[a-zA-Z]*',
+                    'param'   => '[0-9]+'
+                ),
+                'defaults' => array(
+                  'action' => 'gerenciarBairro',
+                ),
+            ),
+        ),
         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
                 'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]',
-                    'param' => '[a-zA-Z]'
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[0-9]+'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
-                  'filtro'  => null,
-                  'param'   => null
                 ),
             ),
         ),
@@ -78,33 +100,17 @@ $rota_gerenciar_bairro = array(
                 'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]',
-                    'param' => '[a-zA-Z]'
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[0-9]+'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
-                  'filtro'  => null,
-                  'param'   => null
                 ),
             ),
         ),
-        
     ),
+    
 ); 
-
-$rota_criar_bairro = array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/bairro/criarBairro',
-                    'constraints' => array(
-                    'pagina' => '[0-9]+'
-                     ),
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Bairro',
-                        'action'     => 'criarBairro',
-                    ),
-                ),
-            ); 
 
 $rota_get_cidade = array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
@@ -131,8 +137,7 @@ return array(
             'login_admin' => $rota_login,
             'home_admin'    =>  $rota_adm_home,
             'home'  => $rota_home,
-            'gerenciar_bairro' =>    $rota_gerenciar_bairro,
-            'criar_bairro'  => $rota_criar_bairro,
+            'crud_bairro'  => $rota_bairro,
             'get_cidades' =>    $rota_get_cidade,
         ),
             

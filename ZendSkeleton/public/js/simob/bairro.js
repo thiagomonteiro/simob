@@ -11,29 +11,56 @@ $(document).ready(function() {
     /*****************************paginação***************************************/
     
     var content = $(document);//o metodo live foi descontinuado
-
+    
     content.delegate(".proxima-pagina","click",function(){
         var url = $(this).attr('url');
         var pagina = $(this).attr('data-proxima');
-        $.get(url+'/'+pagina, function(data){
-            var res = jQuery.parseJSON(data);
-            if(res.success===true){
-                $("#tabela-bairros").children('tbody').replaceWith(res.html);                
-                $("#barra-paginacao").replaceWith(res.barrapaginacao);
-            }
-        });
+        var filtro = $("#hidden-filtro").val();
+        var param = $("#hidden-param").val();
+        if(filtro.length == 0){
+                $.get(url+'/'+pagina, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+        }else{
+             $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+        }
+        
+        
     });
     
     content.delegate(".pagina-anterior","click",function(){
        var url = $(this).attr('url');
        var pagina = $(this).attr('data-anterior');
-       $.get(url+'/'+pagina, function(data){
-           var res = jQuery.parseJSON(data);
-           if(res.success === true){
-               $("#tabela-bairros").children('tbody').replaceWith(res.html);
-               $("#barra-paginacao").replaceWith(res.barrapaginacao);
-           }
-       });
+       var filtro = $("#hidden-filtro").val();
+       var param = $("#hidden-param").val();
+       if(filtro.length == 0){
+           $.get(url+'/'+pagina, function(data){
+                var res = jQuery.parseJSON(data);
+                if(res.success === true){
+                    $("#tabela-bairros").children('tbody').replaceWith(res.html);
+                    $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                }
+            });
+       }else{
+           $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+       }
+       
     });
     /********************************************************paginacao*******************/
     
@@ -71,9 +98,10 @@ $(document).ready(function() {
                             "Selecionar": function () {
                                 var cidade = $("#cidade-select option:selected");
                                 if(cidade.val()!="selecione um estado"){
+                                    $('#hidden-param').val(cidade.val());
                                     $('#param').val(cidade.text());
                                 }else{
-                                    $("#filtro").val('0');
+                                    $('#filtro').val('0');
                                 }
                                 $(this).dialog("close");
                               },
@@ -93,7 +121,7 @@ $(document).ready(function() {
                 e.preventDefault();
                 var form = $("#form-busca"); 
                 var rota = form.attr('action');
-                var param = $("#param").val();
+                var param = $("#hidden-param").val();
                 var filtro = $("#filtro option:selected").text();
                 var url= rota+'/'+filtro+'/'+param;
                 window.location.replace(url);
@@ -101,22 +129,6 @@ $(document).ready(function() {
     );
     
     
-   /* $(".proxima-pagina-bairro").on("click",function(e){
-        alert('teste');
-        var url = $(this).attr('url');
-        var pagina = $(this).attr('data-proxima');
-        $.get(url+'/'+pagina, function(data){
-            var res = jQuery.parseJSON(data);
-            if(res.success===true){
-                $("#tabela-bairros").children('tbody').replaceWith(res.html);                
-                $("#barra-paginacao").replaceWith(res.barrapaginacao);
-            }
-        });
-    });*/
-    
-    
-   
-   
     
 });
 

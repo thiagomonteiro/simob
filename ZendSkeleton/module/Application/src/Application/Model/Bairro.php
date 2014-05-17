@@ -82,20 +82,7 @@ class Bairro extends \Base\Model\AbstractModel {
         return $bairros_list;
     }
     
-    public function recuperarPaginacao($de=null,$qtd=null,$filtro=null,$param=null){
-        if($de == null and $qtd == null){
-            $adapter = $this->getAdapter();
-            if($filtro==null){
-                $sql = "SELECT * FROM Bairro";
-            }else{
-                $sql = "SELECT * FROM Bairro WHERE(".$filtro."=".$param.")"; 
-            }
-            $statement = $adapter->query($sql);
-            $results = $statement->execute();            
-            $bairros_list = $this->criarVarios($results, null);
-        }
-        return $bairros_list;
-    }
+    
     
     public function recuperarPorParametro($de=null,$qtd=null,$filtro=null,$param=null){
         if($de == null){
@@ -104,8 +91,9 @@ class Bairro extends \Base\Model\AbstractModel {
         if($qtd == null){
             $qtd=5;
         }
+        $cidade = $this->_cidadeDao->recuperar($param);
         $adapter = $this->getAdapter();
-        $sql = "SELECT * FROM Bairro WHERE(".$filtro."=".$param.") LIMIT ".$de.", ".($qtd+1)."";
+        $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$cidade->getId()."') LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
         $bairros_list = $this->criarVarios($results, null);

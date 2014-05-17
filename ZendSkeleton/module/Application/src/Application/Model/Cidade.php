@@ -78,5 +78,13 @@ class Cidade extends \Base\Model\AbstractModel{
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
         return $this->criarVarios($results,$estado);
-    }    
+    }
+    
+    public function recuperarPorNome($nome){
+        $adapter = $this->getAdapter();
+        $sql = "select * from cidade where(nome ='".$nome."')";
+        $statement = $adapter->query($sql);
+        $results =  $statement->execute();
+        return $this->criarVarios($results);
+    }
 }
