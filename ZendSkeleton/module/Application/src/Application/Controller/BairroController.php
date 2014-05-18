@@ -36,7 +36,6 @@ class BairroController extends \Base\Controller\BaseController {
     public function gerenciarBairroAction(){  
         $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
         $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        
         if($filtro == null){
             $result = $this->BairroDao->recuperarTodos(null,self::$_qtd_por_pagina);
         }else{
@@ -128,6 +127,17 @@ class BairroController extends \Base\Controller\BaseController {
         return $view;
     }
     
+    public function deletarBairroAction(){
+        try{
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->BairroDao->remover($id);
+            $data = array('success' => true);
+        } catch (Exception $ex) {
+            $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
+        }
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
     public function getCidadesAction(){//funçao que preenche o select-box de cidades        
         $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
         $estadoDAO = \Base\Model\daoFactory::factory('Estado');
@@ -181,7 +191,7 @@ class BairroController extends \Base\Controller\BaseController {
     
     private function criarBarraDeBuscaAction($rota,$estados,$filtro,$param){//passando os params para o application/src/form
         $busca = new form_busca(null,array(),$filtro,$param);//1- primeiro eu instancio o formulario
-        $busca->get('filtro')->setAttribute('options',array('selecione','nome','cidade'));
+        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','id' => 'nome','cidade' => 'cidade'));
         $view = new ViewModel(array('rota' => $rota, 'busca' => $busca, 'listaEstados' => $estados));
         $view->setTemplate('application/bairro/partials/busca.phtml');
         return $view;

@@ -67,13 +67,25 @@ $rota_bairro = array(
                     ),
                 ),
             ),   
+        'deletarBairro' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/deletarBairro[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'deletarBairro',
+                    ),
+                ),
+            ),   
         'gerenciarBairro' => array(
             'type' => 'segment',
             'options' => array(
                 'route' => '/gerenciarBairro[/:filtro][/:param]',
                 'constraints' => array(
                     'filtro'  => '[a-zA-Z]*',
-                    'param'   => '[0-9]+'
+                    'param'   => '[a-zA-Z0-9_-]+',
                 ),
                 'defaults' => array(
                   'action' => 'gerenciarBairro',

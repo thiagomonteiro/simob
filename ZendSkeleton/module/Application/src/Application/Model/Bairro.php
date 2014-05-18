@@ -63,8 +63,12 @@ class Bairro extends \Base\Model\AbstractModel {
         
     }
     
-    public function remover($obj){
-        
+    public function remover($id){
+        $adapter = $this->getAdapter();
+        $sql = "DELETE FROM Bairro WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return true;
     }
     
     public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){
@@ -91,12 +95,19 @@ class Bairro extends \Base\Model\AbstractModel {
         if($qtd == null){
             $qtd=5;
         }
-        $cidade = $this->_cidadeDao->recuperar($param);
         $adapter = $this->getAdapter();
-        $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$cidade->getId()."') LIMIT ".$de.", ".($qtd+1)."";
+        if($filtro == "cidade"){
+            $cidade = $this->_cidadeDao->recuperar($param);
+            $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$cidade->getId()."') LIMIT ".$de.", ".($qtd+1)."";
+        }
+        if($filtro == "nome"){
+           $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$param."') LIMIT ".$de.", ".($qtd+1).""; 
+        }
         $statement = $adapter->query($sql);
         $results = $statement->execute();
         $bairros_list = $this->criarVarios($results, null);
         return $bairros_list;
+       
+       
     }
 }

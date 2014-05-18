@@ -101,18 +101,18 @@ $(document).ready(function() {
                                     $('#hidden-param').val(cidade.val());
                                     $('#param').val(cidade.text());
                                 }else{
-                                    $('#filtro').val('0');
+                                    $('#filtro').val('selecione');
                                 }
                                 $(this).dialog("close");
                               },
                             "Cancelar": function () {
-                                $("#filtro").val('0');
+                                $("#filtro").val('selecione');
                                 $(this).dialog("close");
                               }
                           }
                         });
                       });
-                }       
+                }
             }
     );
     
@@ -121,14 +121,54 @@ $(document).ready(function() {
                 e.preventDefault();
                 var form = $("#form-busca"); 
                 var rota = form.attr('action');
-                var param = $("#hidden-param").val();
+                var param;
                 var filtro = $("#filtro option:selected").text();
+                if(filtro == "cidade"){
+                    param = $("#hidden-param").val();
+                }else if(filtro == "nome"){
+                    var param = $("#param").val();
+                }else{
+                    alert('selecione um filtro');
+                    exit();
+                }
                 var url= rota+'/'+filtro+'/'+param;
                 window.location.replace(url);
             }
     );
     
+    content.delegate(".deletar-bairro","click",function(){
+        var linha = $(this).closest('tr');
+        var id = $(this).closest('tr').find(".id-bairro").val();//retorna o elemento mais proximo
+        //var id = $(this).parents('tr').find(".id-bairro").val();//retorna todos os ascendentes que sejam ul
+        //var id = $(this).parent('tr').find(".id-bairro").val();//retorna o mais proximo
+        $("#dialog-mensagem").find("p").text("Você esta prestes a excluir permanentemente este bairro, deseja continuar");
+        $("#dialog-mensagem").dialog({
+                    height: 200,
+                    width:400,
+                    modal: true,
+                    buttons:{
+                        "Confirmar": function(){
+                            $.get("/bairro/deletarBairro/"+id,function(data){
+                                var res = jQuery.parseJSON(data);
+                                if(res.success == true){
+                                    $(linha).remove();
+                                }else{
+                                   $("#dialog-mensagem").find("p").text(res.mensagem);
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "Cancelar": function(){
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+    });
     
+    content.delegate(".alterar-bairro","click",function(){
+        var id = $(this).closest('tr').find(".id-bairro").val();
+        alert("transformar em text e selects ou abrir uma dialog com os dados");
+    });
     
 });
 
