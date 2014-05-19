@@ -89,6 +89,7 @@ $(document).ready(function() {
     $("#filtro").change(
             function(){
                 var filtro = $("#filtro option:selected").text();
+                $("#hidden-filtro").val(filtro);
                 if(filtro == "cidade"){
                     $(function() {
                         $( "#dialog-busca").dialog({
@@ -113,7 +114,7 @@ $(document).ready(function() {
                           }
                         });
                       });
-                }
+                }                
             }
     );
     
@@ -129,15 +130,36 @@ $(document).ready(function() {
                 }else if(filtro == "nome"){
                     var param = $("#param").val();
                 }else{
-                    alert('selecione um filtro');
+                    $("#dialog-mensagem").find("p").text("selecione um filtro");
+                    $("#dialog-mensagem").dialog({
+                        modal: true,
+                        buttons:{
+                            ok : function(){
+                                $(this).dialog('close');
+                            }
+                        }
+                    });
                     exit();
                 }
                 if($("#param").val()==""){
-                    alert('preencha o campo')
-                    exit();
+                    $("#dialog-mensagem").find("p").text("informe um valor para a busca");
+                     $("#dialog-mensagem").dialog({
+                        modal: true,
+                        buttons:{
+                            ok : function(){
+                                $(this).dialog('close');
+                            }
+                        }
+                     });
+                     exit();
                 }
-                var url= rota+'/'+filtro+'/'+param;
-                window.location.replace(url);
+                $.post( rota, $(form).serialize(),function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success == true){
+                        $("#tabela-bairros").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
             }
     );
     
@@ -226,5 +248,7 @@ $(document).ready(function() {
     });
     //////////////////////////**********alterar**********//////////////////
 });
+
+
 
 

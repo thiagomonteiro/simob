@@ -134,6 +134,15 @@ $rota_bairro = array(
                 ),
             ),
         ),
+        'buscaBairro' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/buscaBairro',
+                'defaults' => array(
+                  'action' => 'buscaBairro',
+                ),
+            ),
+        ),
     ),
     
 ); 

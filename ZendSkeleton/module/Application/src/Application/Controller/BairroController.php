@@ -49,7 +49,7 @@ class BairroController extends \Base\Controller\BaseController {
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
         $estados = $this->getEstadosAction();
-        $partialBusca = $this->criarBarraDeBuscaAction('crud_bairro/gerenciarBairro',$estados,$filtro,$param);
+        $partialBusca = $this->criarBarraDeBuscaAction('crud_bairro/buscaBairro',$estados,$filtro,$param);
         $partialListarBairros = $this->criarTabelaAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
@@ -57,6 +57,23 @@ class BairroController extends \Base\Controller\BaseController {
         $view->addChild($partialListarBairros ,'partialListarBairros');
         $view->addChild($partialBarraPaginacao ,'paginacao');
         return $view;
+    }
+    
+    public function buscaBairroAction(){
+            $request = $this->getRequest();//2- pego a requisiçao
+            if($request->isPost()){//3-verifico se é um post se for:
+                $params = $request->getPost()->toArray();
+            }
+            $param = $params['hidden-param'];
+            $filtro = $params['hidden-filtro'];
+            $bairrosList = $this->BairroDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
+            $paginacao = $this->paginador->paginarDados($bairrosList,null,self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($bairrosList);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
     }
     
     
@@ -68,7 +85,7 @@ class BairroController extends \Base\Controller\BaseController {
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
         if($filtro == null){
             $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
-        }else{
+        }else{            
             $bairrosList = $this->BairroDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
         }
         $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
@@ -208,7 +225,7 @@ class BairroController extends \Base\Controller\BaseController {
     
     private function criarBarraDeBuscaAction($rota,$estados,$filtro,$param){//passando os params para o application/src/form
         $busca = new form_busca(null,array(),$filtro,$param);//1- primeiro eu instancio o formulario
-        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','id' => 'nome','cidade' => 'cidade'));
+        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','nome' => 'nome','cidade' => 'cidade'));
         $view = new ViewModel(array('rota' => $rota, 'busca' => $busca, 'listaEstados' => $estados));
         $view->setTemplate('application/bairro/partials/busca.phtml');
         return $view;
