@@ -11,16 +11,16 @@
 </html>
 <div id="dialog-busca" title="selecão de cidade" style="display: none;">
     
-    <p>
+    <section>
         <label>UF</label>
-        <select id="uf-select">
+        <select class="uf-select">
             <?php foreach($listaEstados as $row):?>
                 <option><?php echo $row; ?></option>
             <?php endforeach;?>
         </select>
         <label>Cidade</label>
-        <select id="cidade-select">
+        <select class="cidade-select">
             <option>selecione um estado</option>
         </select>
-    </p>
+    </section>
 </div>

@@ -78,7 +78,21 @@ $rota_bairro = array(
                         'action' => 'deletarBairro',
                     ),
                 ),
-            ),   
+            ),  
+        'alterarBairro' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/alterarBairro[/:id][/:nome][/:cidade]',
+                    'constraints' => array(
+                        'id' => '[0-9]+',
+                        'nome' => '[a-zA-Z]*',
+                        'cidade' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'alterarBairro',
+                    ),
+                ),
+            ), 
         'gerenciarBairro' => array(
             'type' => 'segment',
             'options' => array(
@@ -138,6 +152,17 @@ $rota_get_cidade = array(
                 ),
             ); 
 
+$rota_get_estado = array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
+                'options' => array(
+                    'route'    => '/bairro/getEstados',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Bairro',
+                        'action'     => 'getEstados',
+                    ),
+                ),
+            ); 
+
 
 
 
@@ -151,6 +176,7 @@ return array(
             'home'  => $rota_home,
             'crud_bairro'  => $rota_bairro,
             'get_cidades' =>    $rota_get_cidade,
+            'get_estados' =>    $rota_get_estado,
         ),
             
   

@@ -20,13 +20,11 @@ class criarBairro extends Form{
         $nome = new \Zend\Form\Element\Text('nome');
         $nome->setLabel('Nome');
         $uf = new \Zend\Form\Element\Select('uf');
-        $uf->setAttribute('id', 'uf-select');
-        $uf->setEmptyOption('selecione');
+        $uf->setAttribute('class', 'uf-select');
         $uf->setLabel('Uf');
         $uf->setDisableInArrayValidator(true);
         $cidade = new \Zend\Form\Element\Select('cidade');
-        $cidade->setAttribute('id', 'cidade-select');
-        $cidade->setEmptyOption('selecione');
+        $cidade->setAttribute('class', 'cidade-select');
         $cidade->setLabel('Cidade');
         $cidade->setDisableInArrayValidator(true);
         $submit = new \Zend\Form\Element\Submit('enviar');

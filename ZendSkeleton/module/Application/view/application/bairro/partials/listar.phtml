@@ -3,9 +3,9 @@
             <?php foreach ($this->bairrosList as $row):?>
             <tr>
                 <input type="hidden" class="id-bairro" value="<?php echo $row->getId(); ?>">
-                <td><?php echo $row->getNome();?></td>
-                <td><?php echo $row->getCidade()->getNome();?></td>
-                <td><?php echo $row->getCidade()->getEstado()->getUf();?></td>
+                <td class="nome"><?php echo $row->getNome();?></td>
+                <td class="cidade"><?php echo $row->getCidade()->getNome();?></td>
+                <td class="estado"><?php echo $row->getCidade()->getEstado()->getUf();?></td>
                 <td><button class="alterar-bairro">Alterar</button></td>
                 <td><button class="deletar-bairro">Deletar</button></td>
             </tr>

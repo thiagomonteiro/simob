@@ -114,7 +114,7 @@ class BairroController extends \Base\Controller\BaseController {
                     $bairroOBJ = $this->BairroDao->criarNovo();
                     $bairroOBJ->setCidade($cidadeOBJ);
                     $bairroOBJ->setNome($dados['nome']);
-                    $resposta = $this->BairroDao->inserir($bairroOBJ);
+                    $resposta = $this->BairroDao->salvar($bairroOBJ);
                     $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
                     $this->redirect()->toRoute('crud_bairro/gerenciarBairro');
                 }else{  
@@ -127,12 +127,27 @@ class BairroController extends \Base\Controller\BaseController {
         return $view;
     }
     
+    public function alterarBairroAction(){
+        try{
+            $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
+            $params = $this->getEvent()->getRouteMatch()->getParams();
+            $params['cidade'] = $cidadeDAO->recuperar($params['cidade']);
+            $bairroObj = $this->BairroDao->criarNovo($params);
+            $bairroObj->setPersistido(true);
+            $response = $this->BairroDao->salvar($bairroObj);
+            $data = array('success' => true);
+        }catch (Exception $e){
+            $data = array('success' => false, 'mensagem' =>'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
+        }
+        return $this->getResponse()->setContent(json_encode($data));
+    }
+    
     public function deletarBairroAction(){
         try{
             $id = $this->getEvent()->getRouteMatch()->getParam('id');
             $response = $this->BairroDao->remover($id);
             $data = array('success' => true);
-        } catch (Exception $ex) {
+        } catch (Exception $e) {
             $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
         }
         return $this->getResponse()->setContent(Json_encode($data));
@@ -144,7 +159,7 @@ class BairroController extends \Base\Controller\BaseController {
         $estado = $estadoDAO->recuperarPorUf($uf);
         $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
         $cidades = $cidadeDAO->recuperarPorEstado($estado);
-        $selectCidades = '<select name="cidade" id="cidade-select">';
+        $selectCidades = '<select name="cidade" class="cidade-select">';
         if(count($cidades)>1){
             foreach ($cidades as $row){
                 $selectCidades.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
@@ -158,15 +173,16 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function getEstadosAction(){
+        $request = $this->getRequest();//1 pego a requisicao
         $estadoDAO = \Base\Model\daoFactory::factory('Estado');
         $Array_estado = $estadoDAO->recuperarTodos(null, null);
-        $dados_select = array();
+        $dados_select = array('selecione' => 'selecione');
         foreach ($Array_estado as $row){
             $dados_select[$row->getId()] = $row->getUf();
         }
         return $dados_select;
+            
     }
-    
     
     
     //formularios
@@ -174,6 +190,7 @@ class BairroController extends \Base\Controller\BaseController {
         $dados_select = $this->getEstadosAction();
         $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
         $form->get('uf')->setAttribute('options', $dados_select);
+        $form->get('cidade')->setAttribute('options', array('selecione'=>'selecione'));
         return $form;
     }
     

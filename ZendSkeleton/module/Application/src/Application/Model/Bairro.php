@@ -55,8 +55,20 @@ class Bairro extends \Base\Model\AbstractModel {
         return true;
     }
     
-    public function atualizar($obj){
-        
+    public function atualizar($obj){        
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE Bairro SET nome ='".$obj->getNome()."',cidade='".$obj->getCidade()->getId()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
+    }
+    
+    public function salvar($obj){
+        if($obj->isPersistido()){
+            return $this->atualizar($obj);
+        }else{
+            return $this->inserir($obj);
+        }
     }
     
     public function recuperar($obj){

@@ -14,10 +14,8 @@ class login extends Form{
         parent::__construct($name, $options);
         $email = new \Zend\Form\Element\Text('email');
         $email->setLabel('Email');
-        $email->setLabelAttributes(array('class'=>'simob-input'));
         $senha = new \Zend\Form\Element\Password('senha');
         $senha->setLabel('Senha');
-        $senha->setLabelAttributes(array('class'=>'simob-input'));
         $submit = new \Zend\Form\Element\Submit('enviar');
         $submit->setAttribute('value','ok');
         $this->setAttribute('class', 'formulario');
