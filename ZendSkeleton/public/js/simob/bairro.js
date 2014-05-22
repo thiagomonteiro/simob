@@ -81,7 +81,18 @@ $(document).ready(function() {
     /*******************************************criar***********************/
     
     
-    
+    /******************************************alterar**************************/
+     content.delegate(".uf-upd-select","change",function(){
+        //e.preventDefault();
+        var uf = $(".uf-upd-select option:selected").text();
+        $.get("/bairro/getCidades/"+uf,function(data){
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+                $(".uf-upd-select").closest('section').find(".cidade-select").replaceWith(res.cidades);//o uf select e o uf cidade da view criar precisam estar dentro de uma section 
+            }
+        });
+    });
+    /*********************************************alterar***********************/
     
     
     /************************************busca********************************/
@@ -195,57 +206,49 @@ $(document).ready(function() {
                 });
     });
     
-    var clone;
+   
     content.delegate(".alterar-bairro","click",function(){
-        if (typeof clone != "undefined") {
-            $("#linha-edicao").replaceWith(clone);
-        }
-        clone =$(this).closest('tr').clone();   
-        var linha = $(this).closest('tr'); 
-        var selectUF = '<select class="uf-select-update">'+$(".uf-select").html()+'</select'
-        var form = '<tr id="linha-edicao"><input type="hidden" class="id-bairro" value="'+$(linha).find('.id-bairro').val()+'">'+
-                     '<td class="upd-nome"><input type="text" required></td>'+
-                     '<td><select class="cidade-select"><option>selecione UF</option></select></td>'+
-                      '<td>'+selectUF+'</td>'+
-                      '<td><button id="salvar-alteracao">salvar</button>'+
-                      '<button id="cancelar-alteracao">cancelar</button></td>'+
-                      '<td><button class="deletar-bairro">Deletar</button></td>';
-        $(linha).replaceWith(form);
+        $(this).closest('tr').addClass('tr-edit');        
+        var id = $(this).closest('tr').find('.id-bairro').val();
+        $.get("/bairro/alterarBairro",function(data){//recupero o formulario
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+               var form=res.html;
+               $("#dialog-mensagem").find('p').replaceWith(form);//adiciono o formulairo a minha dialog
+               $("#dialog-mensagem").find(".upd-id").val(id);//seto o id
+                $("#dialog-mensagem").dialog({
+                            height: 250,
+                            width:400,
+                            modal: true,
+                            buttons:{
+                                Salvar:function(){
+                                    $.post("/bairro/salvarAlteracoes",$("#dialog-mensagem").find("#form-alterar-bairro").serialize(),function(data){
+                                         var res = jQuery.parseJSON(data);
+                                         if(res.success==true){                       
+                                             $(".tr-edit").find(".nome").text(res.nome);
+                                             $(".tr-edit").find(".cidade").text(res.cidade);
+                                             $(".tr-edit").find(".estado").text(res.estado);
+                                             $("#dialog-mensagem").dialog('close');
+                                         }else{
+                                             exibir_erros(res.erros,$("#dialog-mensagem").find("#form-alterar-bairro"));//passo o formulario por referencia para a funcao exibir_erros
+                                         }
+                                    });
+                                    
+                                },
+                                Cancelar:function(){
+                                    $("#dialog-mensagem").dialog("close");    
+                                }
+                            }
+                        });
+                    }
+                });
     });
     
     
      content.delegate(".uf-select-update","change",function(){
-        var aux = $(this);
-        var uf = $(".uf-select-update option:selected").text();
-        $.get("/bairro/getCidades/"+uf,function(data){
-            var res = jQuery.parseJSON(data);
-            if(res.success == true){
-                $(aux).closest("tr").find(".cidade-select").replaceWith(res.cidades);
-            }
-        });
-    });
+     });
     
-    content.delegate("#cancelar-alteracao","click",function(){
-        $(this).closest('tr').replaceWith(clone);
-    });
-    
-    content.delegate("#salvar-alteracao","click" , function(){
-           var id = $(this).closest("tr").find(".id-bairro").val();
-           var nome = $(this).closest("tr").find(".upd-nome").children('input').val();
-           var cidade = $(this).closest("tr").find(".cidade-select option:selected");
-           var uf = $(this).closest("tr").find(".uf-select-update option:selected");
-            $.get("/bairro/alterarBairro/"+id+'/'+nome+'/'+cidade.val(),function(data){
-                                var res = jQuery.parseJSON(data);
-                                if(res.success == true){
-                                   $(clone).find('.nome').text(nome); 
-                                   $(clone).find('.cidade').text(cidade.text());
-                                   $(clone).find('.estado').text(uf.text());
-                                   $("#linha-edicao").replaceWith(clone);
-                                }else{
-                                   $("#dialog-mensagem").find("p").text(res.mensagem);
-                                }
-                            });
-    });
+   
     //////////////////////////**********alterar**********//////////////////
 });
 

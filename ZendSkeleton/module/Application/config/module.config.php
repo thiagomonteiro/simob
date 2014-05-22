@@ -82,17 +82,21 @@ $rota_bairro = array(
         'alterarBairro' => array(
             'type' => 'segment',
             'options' => array(
-                    'route' => '/alterarBairro[/:id][/:nome][/:cidade]',
-                    'constraints' => array(
-                        'id' => '[0-9]+',
-                        'nome' => '[a-zA-Z]*',
-                        'cidade' => '[0-9]+'
-                    ),
+                    'route' => '/alterarBairro',
                     'defaults' => array(
                         'action' => 'alterarBairro',
                     ),
                 ),
             ), 
+        'salvarAlteracoes' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/salvarAlteracoes',
+                'defaults' => array(
+                    'action' => 'salvarAlteracoes',
+                ),
+            ),
+        ),
         'gerenciarBairro' => array(
             'type' => 'segment',
             'options' => array(

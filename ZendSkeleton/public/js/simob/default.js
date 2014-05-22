@@ -19,3 +19,23 @@ $(document).ready(
             }
         }
         );
+
+
+
+function exibir_erros(erros,form) {
+    
+    var vetor=[];
+       $.each(erros, function(index, value) {
+            $.each(value,function(chave,valor){
+               vetor[index]=valor;
+            });
+        }); 
+        
+        for (var key in vetor){
+            if (vetor.hasOwnProperty(key)){
+                 $(form).find('input[name='+key+']').after(vetor[key]);
+                 $(form).find('select[name='+key+']').after(vetor[key]);
+                 $(form).find('textarea[name='+key+']').after(vetor[key]);
+            }
+        }
+}
