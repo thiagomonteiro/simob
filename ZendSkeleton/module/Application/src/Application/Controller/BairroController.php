@@ -12,7 +12,7 @@ use Zend\Json\Json;
 use Application\Form\Bairro\criarBairro as form_criar_bairro;
 use Application\Form\Bairro\alterarBairro as form_alterar_bairro;
 use Application\Filter\Bairro\criarBairro as criar_bairro_filter;
-use Application\Form\busca as form_busca;
+use Application\Form\Bairro\busca as form_busca;
 
 
 use Zend\InputFilter\Factory;
@@ -69,13 +69,13 @@ class BairroController extends \Base\Controller\BaseController {
             }
             $param = $params['hidden-param'];
             $filtro = $params['hidden-filtro'];
-            $bairrosList = $this->BairroDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
-            $paginacao = $this->paginador->paginarDados($bairrosList,null,self::$_qtd_por_pagina);
-            $viewModelListar= $this->criarTabelaAction($bairrosList);
+            $result = $this->BairroDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
+            $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($result);
             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
             $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            $data = array('success' => true,'haDados' => empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
             return $this->getResponse()->setContent(Json_encode($data));
     }
     
@@ -155,25 +155,6 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function salvarAlteracoesAction(){        
-        /*$request = $this->getRequest();
-        if($request->isPost()){
-            $dados=(array)$request->getPost();  
-            $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
-            $cidadeOBJ = $cidadeDAO->recuperar($dados['cidade']);        
-            $bairroOBJ = $this->BairroDao->criarNovo();
-            $bairroOBJ->setId($dados['id']);
-            $bairroOBJ->setCidade($cidadeOBJ);
-            $bairroOBJ->setNome($dados['nome']);
-            $bairroOBJ->setPersistido(true);
-            $resposta = $this->BairroDao->salvar($bairroOBJ);
-            $data = array('success' => true,'id' => $bairroOBJ->getId(),
-                           'nome' => $bairroOBJ->getNome(),'cidade' => $bairroOBJ->getCidade()->getNome(),
-                            'estado' => $bairroOBJ->getCidade()->getEstado()->getUf());
-        }else{
-            $data = array('success' => false);
-        }
-        return $this->getResponse()->setContent(Json_encode($data)); */
-        
         $request = $this->getRequest();
         if($request->isPost()){
             $dados = (array)$request->getPost();

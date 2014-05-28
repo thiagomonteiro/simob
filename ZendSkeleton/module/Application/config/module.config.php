@@ -151,6 +151,66 @@ $rota_bairro = array(
     
 ); 
 
+$rota_comodo = array(
+    'type' => 'Zend\Mvc\Router\Http\Literal',
+    'options' => array(
+        'route'    => '/comodo',
+        'defaults' => array(
+            'controller' => 'Application\Controller\Comodo',
+        ),
+    ),
+    'may_terminate' => true,
+    'child_routes' => array(
+        'index' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/index',
+                'defaults' => array(
+                    'action' => 'index',
+                ),
+            ),
+        ),
+        'proximaPagina' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[0-9]+'
+                ),
+                'defaults' => array(
+                  'action' => 'proximaPagina',
+                ),
+            ),
+        ),
+        'paginaAnterior' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[0-9]+'
+                ),
+                'defaults' => array(
+                  'action' => 'paginaAnterior',
+                ),
+            ),
+        ),
+        'buscarComodo' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/buscarComodo',
+                'defaults' => array(
+                    'action' => 'buscarComodo',
+                ),
+            ),
+        ),
+    ),
+    
+); 
+
 $rota_get_cidade = array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
                 'options' => array(
@@ -188,6 +248,7 @@ return array(
             'home_admin'    =>  $rota_adm_home,
             'home'  => $rota_home,
             'crud_bairro'  => $rota_bairro,
+            'crud_comodo' => $rota_comodo,
             'get_cidades' =>    $rota_get_cidade,
             'get_estados' =>    $rota_get_estado,
         ),
@@ -256,6 +317,7 @@ return array(
             'Application\Controller\Admin' => 'Application\Controller\AdminController',
             'Application\Controller\Imovel' =>  'Application\Controller\ImovelController',
             'Application\Controller\Bairro' =>  'Application\Controller\BairroController',
+            'Application\Controller\Comodo' => 'Application\Controller\ComodoController',
         ),
     ),
     'view_manager' => array(
@@ -271,6 +333,7 @@ return array(
             'application/admin/index' => __DIR__ . '/../view/application/admin/index.phtml',
             'application/bairro/gerenciarBairro' =>    __DIR__ . '/../view/application/bairro/gerenciar-bairro.phtml',
             'application/bairro/criarBairro' =>    __DIR__ . '/../view/application/bairro/criar-bairro.phtml',
+            'application/comodo/index' => __DIR__.'/../view/application/comodo/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

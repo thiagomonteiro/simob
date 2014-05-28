@@ -1,0 +1,26 @@
+<header>
+    Gerenciamento de Comodos
+</header>
+<section class="buscar">
+    <?php echo $this->busca; ?>
+</section>
+<section class="listar">
+    <h4>Tipos de Comodo Cadastrados</h4>
+    <?php if($this->haDados):?>
+                <table id="tabela-comodos" class="default-table">
+                    <thead>
+                        <tr>
+                            <th>Tipos de Cômodos</th>
+                            <th>Edicao</th>
+                        </tr>
+                    </thead>
+                    <?php echo $this->tableList; ?>
+                 </table>
+                 <?php echo $this->paginacao; ?>
+    <?php else:?>
+        <h1>Nenhum registro encontrado</h1>
+    <?php endif;?>
+</section>
+<div id="dialog-mensagem" title="Aviso" style="display: none;">
+    <p id="mensagem"></p>
+</div>

@@ -138,9 +138,12 @@ $(document).ready(function() {
                 var filtro = $("#filtro option:selected").text();
                 if(filtro == "cidade"){
                     param = $("#hidden-param").val();
-                }else if(filtro == "nome"){
+                }
+                if(filtro == "nome"){
                     var param = $("#param").val();
-                }else{
+                    $("#hidden-param").val(param);
+                }
+                if(filtro == "selecione"){
                     $("#dialog-mensagem").find("p").text("selecione um filtro");
                     $("#dialog-mensagem").dialog({
                         modal: true,
@@ -167,8 +170,17 @@ $(document).ready(function() {
                 $.post( rota, $(form).serialize(),function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success == true){
-                        $("#tabela-bairros").children('tbody').replaceWith(res.html);                
-                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                        if(res.haDados){//se for vazio sem dados
+                            $("#tabela-bairros").hide();
+                            $("#barra-paginacao").hide();
+                            $("#tabela-bairros").after('<h1>Nenhum registro encontrado</h1>');
+                        }else{
+                            $(".listar").find('h1').remove();
+                            $("#tabela-bairros").children('tbody').replaceWith(res.html);  
+                            $("#tabela-bairros").show();
+                            $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                            $("#barra-paginacao").show();
+                        }
                     }
                 });
             }

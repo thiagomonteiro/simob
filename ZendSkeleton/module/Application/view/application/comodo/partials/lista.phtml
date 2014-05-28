@@ -1,0 +1,13 @@
+    <tbody>
+    <?php foreach($comodos as $comodo):?>
+    <tr>
+        <td>
+            <?php echo $comodo->getDescricao();?>
+        </td>
+        <td>
+            <button>Alterar</button>
+            <button class="deletar">Deletar</button>
+        </td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
