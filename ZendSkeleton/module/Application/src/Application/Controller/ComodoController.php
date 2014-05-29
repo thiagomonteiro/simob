@@ -71,17 +71,52 @@ class ComodoController extends \Base\Controller\BaseController{
             $request = $this->getRequest();//2- pego a requisiçao
             if($request->isPost()){//3-verifico se é um post se for:
                 $params = $request->getPost()->toArray();
-            }
-            print_r($params);
+            }           
             $param = $params['param'];
             $result = $this->ComodoDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$param);
             $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-            $viewModelListar= $this->criarTabelaAction($result);
+            $viewModelListar= $this->GetViewLIsta($result);
             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
             $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
             $data = array('success' => true,'haDados' => empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
             return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+     public function proximaPaginaAction(){
+        //somente requisições ajax        
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        if($param == null){
+            $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+        }else{
+            $result = $this->ComodoDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($result,$pagina,self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLIsta($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function paginaAnteriorAction(){
+        //somente requisições ajax
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        if($param == null){
+            $result = $this->ComodoDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        }else{
+            $result = $this->ComodoDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLIsta($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     

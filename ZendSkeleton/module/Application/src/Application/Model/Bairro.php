@@ -113,7 +113,7 @@ class Bairro extends \Base\Model\AbstractModel {
             $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$cidade->getId()."') LIMIT ".$de.", ".($qtd+1)."";
         }
         if($filtro == "nome"){
-           $sql = "SELECT * FROM Bairro WHERE (".$filtro."='".$param."') LIMIT ".$de.", ".($qtd+1).""; 
+           $sql = "SELECT * FROM Bairro WHERE (".$filtro." like '%".$param."%') LIMIT ".$de.", ".($qtd+1).""; 
         }        
         $statement = $adapter->query($sql);
         $results = $statement->execute();         

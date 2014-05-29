@@ -117,7 +117,7 @@ $rota_bairro = array(
                 'constraints' => array(
                     'pagina' => '[0-9]+',
                     'filtro' => '[a-zA-Z]*',
-                    'param' => '[0-9]+'
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -131,7 +131,7 @@ $rota_bairro = array(
                 'constraints' => array(
                     'pagina' => '[0-9]+',
                     'filtro' => '[a-zA-Z]*',
-                    'param' => '[0-9]+'
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
@@ -173,11 +173,10 @@ $rota_comodo = array(
         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
+                'route' => '/proximaPagina[/:pagina][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]*',
-                    'param' => '[0-9]+'
+                    'param' => '[a-zA-Z]*'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -187,11 +186,10 @@ $rota_comodo = array(
         'paginaAnterior' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
+                'route' => '/paginaAnterior[/:pagina][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]*',
-                    'param' => '[0-9]+'
+                    'param' => '[a-zA-Z]*'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',

@@ -16,9 +16,6 @@ use \Application\Entity\TipoComodo as ComodoEntity;
 
 class Comodo extends \Base\Model\AbstractModel {
     
-    private $_comodoDao;
-    
-    
     public function __construct() {
         
     }
@@ -32,7 +29,6 @@ class Comodo extends \Base\Model\AbstractModel {
         foreach ($results as $row){
             $lista_comodos[] = $this->criarNovo($row);
         }
-        
         return $lista_comodos;
     }
     
@@ -60,6 +56,21 @@ class Comodo extends \Base\Model\AbstractModel {
         $statement = $adapter->query($sql);
         $results = $statement->execute();
         $comodos_list = $this->criarVarios($results);
+        return $comodos_list;
+    }
+    
+    public function recuperarPorParametro($de=null,$qtd=null,$param=null){ 
+        if($de == null){
+            $de=0;
+        }
+        if($qtd == null){
+            $qtd=5;
+        }
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM TipoComodo WHERE (descricao like '%".$param."%') LIMIT ".$de.", ".($qtd+1)."";      
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();         
+        $comodos_list = $this->criarVarios($results, null);
         return $comodos_list;
     }
 }
