@@ -7,7 +7,7 @@
 
 $(document).ready(
         function(){
-            var mensagem=$('.response-error');            
+            var mensagem=$('.response-notify');            
             if(mensagem.length){//verifica se existe alguma mensagem de erro
                 notif({
                     msg: mensagem.text(),

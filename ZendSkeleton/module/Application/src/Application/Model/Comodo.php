@@ -32,17 +32,34 @@ class Comodo extends \Base\Model\AbstractModel {
         return $lista_comodos;
     }
     
+    
+    public function salvar($obj){
+        if($obj->isPersistido()){
+            return $this->atualizar($obj);
+        }else{
+            return $this->inserir($obj);
+        }
+    }
+    
     public function inserir($obj){
         
     }
     public function atualizar($obj){
-        
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE TipoComodo SET descricao ='".$obj->getDescricao()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
     public function recuperar($obj){
         
     }
-    public function remover($obj){
-        
+    public function remover($id){
+        $adapter = $this->getAdapter();
+        $sql = "DELETE FROM TipoComodo WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return true;
     }
     public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){  
          if($de == null){

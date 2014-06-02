@@ -148,10 +148,10 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function alterarBairroAction(){
-            $form = $this->formAlterarBairroAction();
-            $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
-            $data = array('success' => true,'html'=>$viewModel);
-            return $this->getResponse()->setContent(Json_encode($data));     
+        $form = $this->formAlterarBairroAction();
+        $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
+        $data = array('success' => true,'html'=>$viewModel);
+        return $this->getResponse()->setContent(Json_encode($data));     
     }
     
     public function salvarAlteracoesAction(){        
@@ -170,7 +170,7 @@ class BairroController extends \Base\Controller\BaseController {
                 $bairroOBJ->setNome($dados['nome']);
                 $bairroOBJ->setPersistido(true);
                 $resposta = $this->BairroDao->salvar($bairroOBJ);
-                $data = array('success' => true,'id' => $bairroOBJ->getId(),
+                $data = array('success' => true,'menssagem'=>'Dados alterados com sucesso','id' => $bairroOBJ->getId(),
                            'nome' => $bairroOBJ->getNome(),'cidade' => $bairroOBJ->getCidade()->getNome(),
                             'estado' => $bairroOBJ->getCidade()->getEstado()->getUf());
             }else{
@@ -187,7 +187,7 @@ class BairroController extends \Base\Controller\BaseController {
         try{
             $id = $this->getEvent()->getRouteMatch()->getParam('id');
             $response = $this->BairroDao->remover($id);
-            $data = array('success' => true);
+            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
         } catch (Exception $e) {
             $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
         }

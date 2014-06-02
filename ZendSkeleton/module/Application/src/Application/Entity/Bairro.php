@@ -27,11 +27,11 @@ class Bairro extends \Base\Entity\AbstractEntity {
     }
     
     public function setNome($nome){
-        $this->_nome = $nome;
+        $this->_nome = utf8_encode($nome);
     }
     
     public function getNome(){
-        return $this->_nome;
+        return utf8_decode($this->_nome);
     }
     
     public function setCidade(\Application\Entity\Cidade $cidade){

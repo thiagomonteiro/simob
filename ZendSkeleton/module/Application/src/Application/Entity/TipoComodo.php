@@ -27,11 +27,11 @@ class TipoComodo extends \Base\Entity\AbstractEntity{
     }
     
     public function setDescricao($descricao){
-        $this->_descricao = $descricao;
+        $this->_descricao = utf8_encode($descricao);
     }
     
     public function getDescricao(){
-        return utf8_encode($this->_descricao);
+        return utf8_decode($this->_descricao);
     }
     
 }

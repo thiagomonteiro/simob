@@ -57,7 +57,7 @@ footer, hr{
     position : relative;
     top: 3px;
 }
-.response-error{
+.response-notify{
     position: fixed;
     width: 100%;
     top:0px;

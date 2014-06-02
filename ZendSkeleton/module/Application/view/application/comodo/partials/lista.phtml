@@ -1,11 +1,12 @@
     <tbody>
     <?php foreach($comodos as $comodo):?>
     <tr>
-        <td>
+    <input type="hidden" class="id-comodo" value="<?php echo $comodo->getId();?>">
+        <td class="descricao">
             <?php echo $comodo->getDescricao();?>
         </td>
         <td>
-            <button>Alterar</button>
+            <button class="alterar">Alterar</button>
             <button class="deletar">Deletar</button>
         </td>
     </tr>

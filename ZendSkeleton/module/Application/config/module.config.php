@@ -196,12 +196,42 @@ $rota_comodo = array(
                 ),
             ),
         ),
-        'buscarComodo' => array(
+        'buscar' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/buscarComodo',
+                'route' => '/buscar',
                 'defaults' => array(
-                    'action' => 'buscarComodo',
+                    'action' => 'buscar',
+                ),
+            ),
+        ),
+        'deletar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/deletar[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'deletar',
+                    ),
+                ),
+            ),  
+        'alterar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/alterar',
+                    'defaults' => array(
+                        'action' => 'alterar',
+                    ),
+                ),
+            ), 
+        'salvarAlteracoes' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/salvarAlteracoes',
+                'defaults' => array(
+                    'action' => 'salvarAlteracoes',
                 ),
             ),
         ),

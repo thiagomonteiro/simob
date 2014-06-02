@@ -96,5 +96,86 @@ $(document).ready(
                }
 
             });
+            
+  /*******************************deletar/alterar*************************/
+    content.delegate(".deletar","click",function(){
+        var linha = $(this).closest('tr');
+        var id = $(this).closest('tr').find(".id-comodo").val();//retorna o elemento mais proximo
+        $("#dialog-mensagem").find("p").html("Você esta prestes a excluir permanentemente este tipo de comodo, deseja continuar");
+        $("#dialog-mensagem").dialog({
+                    height: 200,
+                    width:400,
+                    modal: true,
+                    buttons:{
+                        "Confirmar": function(){
+                            $.get("/comodo/deletar/"+id,function(data){
+                                var res = jQuery.parseJSON(data);
+                                if(res.success == true){
+                                    $(linha).remove();
+                                    notif({
+                                        msg: res.menssagem,
+                                        type: 'success',
+                                        width: "all",
+                                        opacity: 0.8,
+                                        position: "center",
+                                    });
+                                }else{
+                                   $("#dialog-mensagem").find("p").text(res.mensagem);
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "Cancelar": function(){
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+    });
+    
+   
+    content.delegate(".alterar","click",function(){
+        $(this).closest('tr').addClass('tr-edit');        
+        var id = $(this).closest('tr').find('.id-comodo').val();
+        $.get("/comodo/alterar",function(data){//recupero o formulario
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+               var form=res.html;
+               $("#dialog-mensagem").find('p').html(form);//adiciono o formulairo a minha dialog
+               $("#dialog-mensagem").find(".upd-id").val(id);//seto o id
+                $("#dialog-mensagem").dialog({
+                            height: 250,
+                            width:400,
+                            modal: true,
+                            buttons:{
+                                Salvar:function(){
+                                    $.post("/comodo/salvarAlteracoes",$(this).find("#form-alterar").serialize(),function(data){
+                                         var res = jQuery.parseJSON(data);
+                                         if(res.success==true){                  
+                                             var descricao = $('input[name="descricao"]').val();
+                                             $(".tr-edit").find(".descricao").text(descricao);
+                                             $("#dialog-mensagem").dialog('close');
+                                             notif({
+                                                  msg: res.menssagem,
+                                                  type: 'success',
+                                                  width: "all",
+                                                  opacity: 0.8,
+                                                  position: "center",
+                                              });
+                                         }else{
+                                             exibir_erros(res.erros,$("#dialog-mensagem").find("#form-alterar"));//passo o formulario por referencia para a funcao exibir_erros
+                                         }
+                                    });
+                                    
+                                },
+                                Cancelar:function(){
+                                    $("#dialog-mensagem").dialog("close");    
+                                }
+                            }
+                        });
+                    }
+                });
+    });
+    //////////////////////////**********deletar/alterar**********//////////////////
+
     
 });

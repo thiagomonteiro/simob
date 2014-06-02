@@ -194,7 +194,7 @@ $(document).ready(function() {
         var id = $(this).closest('tr').find(".id-bairro").val();//retorna o elemento mais proximo
         //var id = $(this).parents('tr').find(".id-bairro").val();//retorna todos os ascendentes que sejam ul
         //var id = $(this).parent('tr').find(".id-bairro").val();//retorna o mais proximo
-        $("#dialog-mensagem").find("p").text("Você esta prestes a excluir permanentemente este bairro, deseja continuar");
+        $("#dialog-mensagem").find("p").html("Você esta prestes a excluir permanentemente este bairro, deseja continuar");
         $("#dialog-mensagem").dialog({
                     height: 200,
                     width:400,
@@ -205,6 +205,13 @@ $(document).ready(function() {
                                 var res = jQuery.parseJSON(data);
                                 if(res.success == true){
                                     $(linha).remove();
+                                    notif({
+                                        msg: res.menssagem,
+                                        type: 'success',
+                                        width: "all",
+                                        opacity: 0.8,
+                                        position: "center",
+                                    });
                                 }else{
                                    $("#dialog-mensagem").find("p").text(res.mensagem);
                                 }
@@ -226,7 +233,7 @@ $(document).ready(function() {
             var res = jQuery.parseJSON(data);
             if(res.success == true){
                var form=res.html;
-               $("#dialog-mensagem").find('p').replaceWith(form);//adiciono o formulairo a minha dialog
+               $("#dialog-mensagem").find('p').html(form);//adiciono o formulairo a minha dialog
                $("#dialog-mensagem").find(".upd-id").val(id);//seto o id
                 $("#dialog-mensagem").dialog({
                             height: 250,
@@ -241,6 +248,13 @@ $(document).ready(function() {
                                              $(".tr-edit").find(".cidade").text(res.cidade);
                                              $(".tr-edit").find(".estado").text(res.estado);
                                              $("#dialog-mensagem").dialog('close');
+                                             notif({
+                                                  msg: res.menssagem,
+                                                  type: 'success',
+                                                  width: "all",
+                                                  opacity: 0.8,
+                                                  position: "center",
+                                              });
                                          }else{
                                              exibir_erros(res.erros,$("#dialog-mensagem").find("#form-alterar-bairro"));//passo o formulario por referencia para a funcao exibir_erros
                                          }
@@ -256,10 +270,7 @@ $(document).ready(function() {
                 });
     });
     
-    
-     content.delegate(".uf-select-update","change",function(){
-     });
-    
+   
    
     //////////////////////////**********alterar**********//////////////////
 });
