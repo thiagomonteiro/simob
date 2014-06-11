@@ -42,7 +42,11 @@ class Comodo extends \Base\Model\AbstractModel {
     }
     
     public function inserir($obj){
-        
+        $adapter = $this->getAdapter();
+        $sql = "INSERT INTO TipoComodo (descricao) VALUES ('".$obj->getDescricao()."')";
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
     public function atualizar($obj){
         $adapter = $this->getAdapter();

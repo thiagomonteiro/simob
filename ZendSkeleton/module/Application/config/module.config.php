@@ -235,6 +235,15 @@ $rota_comodo = array(
                 ),
             ),
         ),
+        'criar' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/criar',
+                'defaults' => array(
+                    'action' => 'criar',
+                ),
+            ),
+        ),
     ),
     
 ); 

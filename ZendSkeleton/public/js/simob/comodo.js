@@ -98,7 +98,7 @@ $(document).ready(
             });
             
   /*******************************deletar/alterar*************************/
-    content.delegate(".deletar","click",function(){
+    content.delegate(".deletar-comodo","click",function(){
         var linha = $(this).closest('tr');
         var id = $(this).closest('tr').find(".id-comodo").val();//retorna o elemento mais proximo
         $("#dialog-mensagem").find("p").html("Você esta prestes a excluir permanentemente este tipo de comodo, deseja continuar");
@@ -133,7 +133,7 @@ $(document).ready(
     });
     
    
-    content.delegate(".alterar","click",function(){
+    content.delegate(".alterar-comodo","click",function(){
         $(this).closest('tr').addClass('tr-edit');        
         var id = $(this).closest('tr').find('.id-comodo').val();
         $.get("/comodo/alterar",function(data){//recupero o formulario

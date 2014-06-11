@@ -16,7 +16,8 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Application\Form\Comodo\busca as form_busca;
 use Application\Form\Comodo\alterar as form_alterar;
-use Application\Filter\Comodo\criarComodo as criar_comodo_filter;
+use Application\Form\Comodo\criar as form_criar;
+use Application\Filter\Comodo\criarComodo as comodo_filter;
 
 class ComodoController extends \Base\Controller\BaseController{
     private $ComodoDao;
@@ -30,6 +31,10 @@ class ComodoController extends \Base\Controller\BaseController{
     }
     
     public function indexAction(){    
+        $mensagem = $this->flashMessenger()->getSuccessMessages();
+        if(count($mensagem)){
+                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+        }        
         $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
         $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         if($filtro == null){
@@ -69,7 +74,7 @@ class ComodoController extends \Base\Controller\BaseController{
         return $view;
     }
     
-    public function GetFormUpdate(){
+    public function GetFormAlterar(){
         $form = new form_alterar();//1- primeiro eu instancio o formulario
         $view = new ViewModel(array('alterar'   =>  $form));
         $view->setTemplate('application/comodo/alterar.phtml');
@@ -140,7 +145,7 @@ class ComodoController extends \Base\Controller\BaseController{
     }
     
     public function alterarAction(){
-        $form = $this->GetFormUpdate();
+        $form = $this->GetFormAlterar();
         $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
         $data = array('success' => true,'html'=>$viewModel);
         return $this->getResponse()->setContent(Json_encode($data));     
@@ -150,7 +155,7 @@ class ComodoController extends \Base\Controller\BaseController{
         $request = $this->getRequest();
         if($request->isPost()){
             $dados = (array)$request->getPost();
-            $validador = new criar_comodo_filter();
+            $validador = new comodo_filter();
             $inputFilter = $validador->getInputFilter();
             $inputFilter->setData($dados);
             if($inputFilter->isValid()){
@@ -166,5 +171,29 @@ class ComodoController extends \Base\Controller\BaseController{
             }
         }
         return $this->getResponse()->setContent(json_encode($data));
+    }
+    
+    public function criarAction(){
+        $form = new form_criar();
+        $request = $this->getRequest();//2- pego a requisiçao
+            if($request->isPost()){//3-verifico se é um post se for:
+                $Filter = new comodo_filter();//4- instancio os filtros
+                $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
+                $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
+                $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
+                if($form->isValid()){//validação do formulario
+                    $dados=(array)$this->getRequest()->getPost();                    
+                    $comodoObj = $this->ComodoDao->criarNovo($dados);
+                    $response = $this->ComodoDao->salvar($comodoObj);
+                    $this->flashMessenger()->addSuccessMessage('comodo cadastrado com sucesso!');
+                    $this->redirect()->toRoute('crud_comodo/index');
+                }else{  
+                   //se der alguma errro 
+                }
+            }
+        $this->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/comodo.js');
+        $view = new ViewModel(array('criar'   =>  $form));
+        return $view;
     }
 }
