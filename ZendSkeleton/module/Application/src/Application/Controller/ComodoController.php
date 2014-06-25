@@ -30,7 +30,7 @@ class ComodoController extends \Base\Controller\BaseController{
         $this->ComodoDao=\Base\Model\daoFactory::factory('Comodo');
     }
     
-    public function indexAction(){    
+    public function indexAction(){ 
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
@@ -43,7 +43,7 @@ class ComodoController extends \Base\Controller\BaseController{
             $result = $this->ComodoDao->recuperarTodos(null,  self::$_qtd_por_pagina,$filtro,$param);
         }
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-        $partialLista = $this->GetViewLIsta($result);
+        $partialLista = $this->GetViewLista($result);
         $partialPaginacao = $this->GetViewBarraPaginacao($paginacao);
         $partialBusca = $this->GetViewBarraDeBusca('crud_comodo/buscar',$param);
         $this->setTemplate('layout/admin');
@@ -55,7 +55,7 @@ class ComodoController extends \Base\Controller\BaseController{
         return $view;
     }
     
-    private function GetViewLIsta($comodosList){
+    private function GetViewLista($comodosList){
         $view= new ViewModel(array('comodos'=>$comodosList));
         $view->setTemplate('application/comodo/partials/lista.phtml');
         return $view;
@@ -89,7 +89,7 @@ class ComodoController extends \Base\Controller\BaseController{
             $param = $params['param'];
             $result = $this->ComodoDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$param);
             $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-            $viewModelListar= $this->GetViewLIsta($result);
+            $viewModelListar= $this->GetViewLista($result);
             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
             $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -99,37 +99,37 @@ class ComodoController extends \Base\Controller\BaseController{
     
      public function proximaPaginaAction(){
         //somente requisições ajax        
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         if($param == null){
-            $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+            $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina); 
         }else{
             $result = $this->ComodoDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$param);
         }
         $paginacao = $this->paginador->paginarDados($result,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLIsta($result);
+        $viewModelListar= $this->GetViewLista($result);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         if($param == null){
             $result = $this->ComodoDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
         }else{
             $result = $this->ComodoDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$param);
         }
         $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLIsta($result);
+        $viewModelListar= $this->GetViewLista($result);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        $data = array("success" => true,"barrapaginacao" => $barraPaginacao,"html" => $html);
         return $this->getResponse()->setContent(Json_encode($data));
     }
     

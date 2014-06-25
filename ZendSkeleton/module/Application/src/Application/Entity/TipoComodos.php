@@ -13,7 +13,7 @@
  */
 namespace Application\Entity;
 
-class TipoComodo extends \Base\Entity\AbstractEntity{
+class TipoComodos extends \Base\Entity\AbstractEntity{
     //put your code here
     private $_id;
     private $_descricao;

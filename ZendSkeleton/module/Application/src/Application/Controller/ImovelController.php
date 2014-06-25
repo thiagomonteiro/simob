@@ -6,72 +6,118 @@
  * and open the template in the editor.
  */
 
-namespace Application\Controller;
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
-use Application\Form\criarBairro as form_criar_bairro;
-use Application\Filter\criarBairro as criar_bairro_filter;
-
 /**
- * Description of ImovelController
+ * Description of ComodoController
  *
  * @author thiago
  */
-class ImovelController extends \Base\Controller\BaseController {
+namespace Application\Controller;
+use Zend\View\Model\ViewModel;
+use Zend\Json\Json;
+use Application\Form\Comodo\busca as form_busca;
+use Application\Form\Comodo\alterar as form_alterar;
+use Application\Form\Comodo\criar as form_criar;
+use Application\Filter\Comodo\criarComodo as comodo_filter;
+
+class ImovelController extends \Base\Controller\BaseController{
+    private $ImovelDao;
+    private $EstadoDao;
+    private $CidadeDao;
+    private $BairroDao;
+    private $TipoImovelDao;
+    private $SubTipoImovelDao;
+    private $TipoComodosDao;
+    private $TipoTransacaoDao;
     
     private static $_qtd_por_pagina=5;
-    
+    /**
+     * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
+     */
     public function __construct() {
         parent::__construct();
+        $this->ComodoDao=\Base\Model\daoFactory::factory('Comodo');
     }
     
-    public function indexAction() {
-        parent::indexAction();
-    }
-    
- 
-    
-    public function gerenciarBairroAction(){
-        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $result = $BairroDao->recuperarTodos(5,self::$_qtd_por_pagina);
-        $paginacao = $this->paginador->paginarDados($result,5,self::$_qtd_por_pagina);
-        print_r($paginacao);
+    public function indexAction(){    
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+        }        
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        if($filtro == null){
+            $result = $this->ComodoDao->recuperarTodos(null,  self::$_qtd_por_pagina);
+        }else{
+            $result = $this->ComodoDao->recuperarTodos(null,  self::$_qtd_por_pagina,$filtro,$param);
         }
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/admin');
-        $this->appendJavaScript('simob/imovel.js');
-        $partialListarBairros = $this->listarBairrosAction($result);
-        $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
-        $view = new ViewModel();
-        $view->addChild($partialListarBairros,'partialListarBairros');
-        $view->addChild($partialBarraPaginacao,'paginacao');
+        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+        $partialLista = $this->GetViewLIsta($result);
+        $partialPaginacao = $this->GetViewBarraPaginacao($paginacao);
+        $partialBusca = $this->GetViewBarraDeBusca('crud_comodo/buscar',$param);
+        $this->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/comodo.js');
+        $view = new ViewModel(array('haDados' => empty($result)? false:true));
+        $view->addChild($partialLista , 'tableList');
+        $view->addChild($partialPaginacao,'paginacao');
+        $view->addChild($partialBusca,'busca');
         return $view;
     }
     
-    public function listarBairrosAction($bairrosList){
-        $lista = new ViewModel(array('bairrosList'=>$bairrosList));
-        $lista->setTemplate('application/imovel/partials/listar.phtml');
-        return $lista;
-    }
-    
-    public function criarBarraPaginacaoAction($paginacao){
-        $view = new ViewModel(array('paginacao'=>$paginacao));
-        $view->setTemplate('application/imovel/partials/paginacao.phtml');
+    private function GetViewLIsta($comodosList){
+        $view= new ViewModel(array('comodos'=>$comodosList));
+        $view->setTemplate('application/comodo/partials/lista.phtml');
         return $view;
     }
     
-    public function proximaPaginaAction(){
+    private function GetViewBarraPaginacao($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_comodo'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
+        return $view;
+    }
+    
+    private function GetViewBarraDeBusca($rota,$param){//passando os params para o application/src/form
+        $busca = new form_busca(null,array(),$param);//1- primeiro eu instancio o formulario
+        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca));
+        $view->setTemplate('application/comodo/partials/busca.phtml');
+        return $view;
+    }
+    
+    public function GetFormAlterar(){
+        $form = new form_alterar();//1- primeiro eu instancio o formulario
+        $view = new ViewModel(array('alterar'   =>  $form));
+        $view->setTemplate('application/comodo/alterar.phtml');
+        return $view;
+    }
+    
+    public function buscarAction(){
+            $request = $this->getRequest();//2- pego a requisiçao
+            if($request->isPost()){//3-verifico se é um post se for:
+                $params = $request->getPost()->toArray();
+            }           
+            $param = $params['param'];
+            $result = $this->ComodoDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$param);
+            $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLIsta($result);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'haDados' => empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+     public function proximaPaginaAction(){
         //somente requisições ajax        
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
         $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $bairrosList = $BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
-        $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->listarBairrosAction($bairrosList);
+        if($param == null){
+            $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+        }else{
+            $result = $this->ComodoDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($result,$pagina,self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLIsta($result);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
         $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
         return $this->getResponse()->setContent(Json_encode($data));
@@ -79,70 +125,65 @@ class ImovelController extends \Base\Controller\BaseController {
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
-        echo 'anterior';
-    }
-    
-    public function criarBairroAction(){
-        $form = $this->formCriarBairroAction(); 
-        $request = $this->getRequest();//2- pego a requisiçao
-            if($request->isPost()){//3-verifico se é um post se for:
-                $Filter = new criar_bairro_filter();//4- instancio os filtros
-                $params = $request->getPost()->toArray();//5- recupero os paramentros que vieram do post
-                $form->setData($params);//6a- seto o formulario com os parametros que vieram do post
-                $form->setInputFilter($Filter->getInputFilter());//6b- e seto o formulario com o filtro que eu instanciei
-                if($form->isValid()){//validação do formulario
-                    $dados=(array)$this->getRequest()->getPost();
-                    $bairroDAO = \Base\Model\daoFactory::factory('Bairro');
-                    $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
-                    $cidadeOBJ = $cidadeDAO->recuperar($dados['cidade']);        
-                    $bairroOBJ = $bairroDAO->criarNovo();
-                    $bairroOBJ->setCidade($cidadeOBJ);
-                    $bairroOBJ->setNome($dados['nome']);
-                    $resposta = $bairroDAO->inserir($bairroOBJ);
-                    $this->flashMessenger()->addSuccessMessage('bairro cadastrado com sucesso!');
-                    $this->redirect()->toRoute('gerenciar_bairro');
-                }else{  
-                   //se der alguma errro 
-                }
-            }
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('layout/admin');
-        $this->appendJavaScript('simob/imovel.js');
-        $view = new ViewModel(array('criar'   =>  $form));
-        return $view;
-    }
-    
-    
-    public function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
-        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
-        $Array_estado = $estadoDAO->recuperarTodos(null, null);
-        $dados_select = array();
-        foreach ($Array_estado as $row){
-            $dados_select[$row->getId()] = $row->getUf();
-        }
-        $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
-        $form->get('uf')->setAttribute('options', $dados_select);
-        return $form;
-    }
-    
-    
-    public function getCidadesAction(){//funçao que preenche o select-box de cidades        
-        $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
-        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
-        $estado = $estadoDAO->recuperarPorUf($uf);
-        $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
-        $cidades = $cidadeDAO->recuperarPorEstado($estado);
-        $selectCidades = '<select name="cidade" id="cidade-select">';
-        if(count($cidades)>1){
-            foreach ($cidades as $row){
-                $selectCidades.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
-            }
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        if($param == null){
+            $result = $this->ComodoDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
         }else{
-            $selectCidades.='<option value="'.$cidades->getId().'">'.  $cidades->getNome().'</option>';
+            $result = $this->ComodoDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$param);
         }
-        $selectCidades.='</select>'; 
-        $data = array('success' => true,'cidades' => $selectCidades);
+        $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLIsta($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
+    public function deletarAction(){
+        try{
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->ComodoDao->remover($id);
+            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
+        } catch (Exception $e) {
+            $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
+        }
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function alterarAction(){
+        $form = $this->GetFormAlterar();
+        $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
+        $data = array('success' => true,'html'=>$viewModel);
+        return $this->getResponse()->setContent(Json_encode($data));     
+    }
+    
+    public function salvarAlteracoesAction(){
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $dados = (array)$request->getPost();
+            $validador = new comodo_filter();
+            $inputFilter = $validador->getInputFilter();
+            $inputFilter->setData($dados);
+            if($inputFilter->isValid()){
+                $comodoOBJ = $this->ComodoDao->criarNovo();
+                $comodoOBJ->setId($dados['id']);
+                $comodoOBJ->setDescricao($dados['descricao']);
+                $comodoOBJ->setPersistido(true);
+                $resposta = $this->ComodoDao->salvar($comodoOBJ);
+                $data = array('success' => true,'menssagem'=>'Dados alterados com sucesso');
+            }else{
+                $data = array('success'=>false,'erros'=>$inputFilter->getMessages());
+
+            }
+        }
+        return $this->getResponse()->setContent(json_encode($data));
+    }
+    
+    public function criarAction(){
+       
+        $view = new ViewModel(array('mensagem' => 'pagina de cadastro'));
+        return $view;
+    }
 }

@@ -176,7 +176,7 @@ $rota_comodo = array(
                 'route' => '/proximaPagina[/:pagina][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -189,7 +189,7 @@ $rota_comodo = array(
                 'route' => '/paginaAnterior[/:pagina][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
@@ -274,6 +274,103 @@ $rota_get_estado = array(
             ); 
 
 
+/*$rota_imovel = array(
+    'type' => 'Zend\Mvc\Router\Http\Literal',
+    'options' => array(
+        'route'    => '/imovel',
+        'defaults' => array(
+            'controller' => 'Application\Controller\Imovel',
+        ),
+    ),
+    'may_terminate' => true,
+    'child_routes' => array(
+        'index' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/index',
+                'defaults' => array(
+                    'action' => 'index',
+                ),
+            ),
+        ),
+        'proximaPagina' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/proximaPagina[/:pagina][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'param' => '[a-zA-Z]*'
+                ),
+                'defaults' => array(
+                  'action' => 'proximaPagina',
+                ),
+            ),
+        ),
+        'paginaAnterior' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/paginaAnterior[/:pagina][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'param' => '[a-zA-Z]*'
+                ),
+                'defaults' => array(
+                  'action' => 'paginaAnterior',
+                ),
+            ),
+        ),
+        'buscar' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/buscar',
+                'defaults' => array(
+                    'action' => 'buscar',
+                ),
+            ),
+        ),
+        'deletar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/deletar[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'deletar',
+                    ),
+                ),
+            ),  
+        'alterar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/alterar',
+                    'defaults' => array(
+                        'action' => 'alterar',
+                    ),
+                ),
+            ), 
+        'salvarAlteracoes' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/salvarAlteracoes',
+                'defaults' => array(
+                    'action' => 'salvarAlteracoes',
+                ),
+            ),
+        ),
+        'criar' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/criar',
+                'defaults' => array(
+                    'action' => 'criar',
+                ),
+            ),
+        ),
+    ),
+    
+);*/ 
+
 
 
 
@@ -285,9 +382,10 @@ return array(
             'home_admin'    =>  $rota_adm_home,
             'home'  => $rota_home,
             'crud_bairro'  => $rota_bairro,
-            'crud_comodo' => $rota_comodo,
+            'crud_comodo' => $rota_comodo,//esta funcional mas nao sera implementado por enquanto
             'get_cidades' =>    $rota_get_cidade,
             'get_estados' =>    $rota_get_estado,
+            //'crud_imoveis' => $rota_imovel,
         ),
             
   
@@ -355,6 +453,7 @@ return array(
             'Application\Controller\Imovel' =>  'Application\Controller\ImovelController',
             'Application\Controller\Bairro' =>  'Application\Controller\BairroController',
             'Application\Controller\Comodo' => 'Application\Controller\ComodoController',
+            //'Application\Controller\Imovel'  => ''
         ),
     ),
     'view_manager' => array(

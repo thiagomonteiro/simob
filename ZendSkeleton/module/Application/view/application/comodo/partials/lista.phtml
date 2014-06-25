@@ -1,14 +1,14 @@
-    <tbody>
-    <?php foreach($comodos as $comodo):?>
-    <tr>
-    <input type="hidden" class="id-comodo" value="<?php echo $comodo->getId();?>">
-        <td class="descricao">
-            <?php echo $comodo->getDescricao();?>
-        </td>
-        <td>
-            <button class="alterar-comodo">Alterar</button>
-            <button class="deletar-comodo">Deletar</button>
-        </td>
-    </tr>
+    <tbody>       
+    <?php foreach($this->comodos as $comodo):?>
+            <tr>
+            <input type="hidden" class="id-comodo" value="<?php echo $comodo->getId();?>">
+                <td class="descricao">
+                    <?php echo $comodo->getDescricao();?>
+                </td>
+                <td>
+                    <button class="alterar-comodo">Alterar</button>
+                    <button class="deletar-comodo">Deletar</button>
+                </td>
+            </tr>
     <?php endforeach;?>
     </tbody>

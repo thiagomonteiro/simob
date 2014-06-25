@@ -20,36 +20,34 @@ body {
     width: 100%;
 }
 
-footer, hr{
+/*footer, hr{
     position: fixed;
     bottom: 2px;
     float: left;
-}
+}*/
 
 /****posicionamento*****/
 
 
 
 /*formularios*/
-.criar form{
-    
+.formulario label{
+    display: block;
 }
 
 
 
 .formulario ul{
-    list-style: none;
-    display:inline;
-    position:relative;
-    left:-40px;
+    list-style: none;  
+    color: #c85305;
+    font-size: 86%;
 }
 
 .formulario ul li{
-    width: 200px;
-    color: white;
-    background-color: #FFBABA;
-    border-radius: 1em;
-    display:inherit;
+    background-color: #FFFFE0;
+    display: inline-block;
+    height: 30px;
+    border-radius: 5px;
 }
 
 .formulario ul li:before{
@@ -57,6 +55,7 @@ footer, hr{
     position : relative;
     top: 3px;
 }
+
 .response-notify{
     position: fixed;
     width: 100%;
