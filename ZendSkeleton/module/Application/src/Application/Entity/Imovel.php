@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace Application\Entity;
+
+/**
+ * Description of Imovel
+ *
+ * @author thiago
+ */
+class Imovel extends \Base\Entity\AbstractEntity {
+    private $_id;
+    private $_descricao;
+    /*
+     * @var Application\Entity\Bairro
+     */
+    private $_bairro;
+    private $_endereco;
+    private $_numero;
+    private $_areaTotal;
+    private $_areaConstruida;
+    private $_valorIptu;
+    private $_valor;
+    /*
+     * @var Application\Entity\Proprietario
+     */
+    private $_proprietario;
+    /*
+     * @var Application\Entity\SubTipoImovel
+     */
+    private $_subTipoImovel;
+    private $_comodosList;// Array
+    private $_tipoTransacao;
+}

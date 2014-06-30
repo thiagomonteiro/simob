@@ -51,7 +51,7 @@
                 <ul>
                    <li class='has-sub'><a href='#'><span>Imoveis</span></a>
                       <ul>
-                         <li class='last'><a href='#'><span>Adicionar</span></a>
+                         <li class='last'><a href="<?php echo $this->url('crud_imovel/criar') ?>"><span>Adicionar</span></a>
                          </li>
                          <li class='last'><a href='#'><span>Gerenciar</span></a>
                          </li>
@@ -85,10 +85,10 @@
                             <li class='last'><a href="#">Gerenciar</a></li>
                        </ul>
                    </li>
-                   <li class='has-sub'><a href='#'><span>Clientes</span></a> <!-- comercial, residencial, etc -->
+                   <li class='has-sub'><a href='#'><span>Proprietarios</span></a> <!-- comercial, residencial, etc -->
                        <ul>
-                            <li class='last'><a href="#">Adicionar</a></li>
-                            <li class='last'><a href="#">Gerenciar</a></li>
+                            <li class='last'><a href="<?php echo $this->url('crud_proprietario/criar');?>">Adicionar</a></li>
+                            <li class='last'><a href="<?php echo $this->url('crud_proprietario/index');?>">Gerenciar</a></li>
                        </ul>
                    </li>
                    
