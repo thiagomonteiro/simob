@@ -18,7 +18,7 @@ class Proprietario extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_nome;
     private $_bairro;
-    private $_endereco;
+    private $_logradouro;
     private $_numero;
     private $_telefone;
     private $_celular=array();// array
@@ -33,13 +33,14 @@ class Proprietario extends \Base\Entity\AbstractEntity {
     public function getNome() {
         return utf8_decode($this->_nome);
     }
+    
 
     public function getBairro() {
-        return utf8_decode($this->_bairro);
+        return $this->_bairro;
     }
 
-    public function getEndereco() {
-        return utf8_decode($this->_endereco);
+    public function getLogradouro() {
+        return utf8_decode($this->_logradouro);
     }
 
     public function getNumero() {
@@ -73,13 +74,13 @@ class Proprietario extends \Base\Entity\AbstractEntity {
     public function setNome($nome) {
         $this->_nome = utf8_encode($nome);
     }
-
-    public function setBairro($bairro) {
-        $this->_bairro = utf8_encode($bairro);
+    
+    public function setBairro(\Application\Entity\Bairro $bairro) {
+        $this->_bairro = $bairro;
     }
 
-    public function setEndereco($endereco) {
-        $this->_endereco = utf8_encode($endereco);
+    public function setLogradouro($logradouro) {
+        $this->_endereco = utf8_encode($logradouro);
     }
 
     public function setNumero($numero) {

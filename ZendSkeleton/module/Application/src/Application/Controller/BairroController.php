@@ -51,7 +51,7 @@ class BairroController extends \Base\Controller\BaseController {
         }        
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');
-        $estados = $this->getEstadosAction();
+        $estados = $this->Localidades()->getEstados();
         $partialBusca = $this->criarBarraDeBuscaAction('crud_bairro/buscaBairro',$estados,$filtro,$param);
         $partialListarBairros = $this->criarTabelaAction($result);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
@@ -213,22 +213,31 @@ class BairroController extends \Base\Controller\BaseController {
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
-    public function getEstadosAction(){
-        $request = $this->getRequest();//1 pego a requisicao
-        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
-        $Array_estado = $estadoDAO->recuperarTodos(null, null);
-        $dados_select = array('' => 'selecione');
-        foreach ($Array_estado as $row){
-            $dados_select[$row->getId()] = $row->getUf();
+    public function getBairrosAction(){
+        $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
+        $bairros = $this->BairroDao->recuperarPorParametro(null,null,'cidade',$cidade);
+        if(empty($bairros)){
+           $selectBairros = '<select name="bairro" class="bairro-select"><option value=0>Nenhum bairro cadastrado</option></select>'; 
+        }else{
+            $selectBairros = '<select name="bairro" class="bairro-select">';
+            if(count($bairros)>1){
+                foreach ($bairros as $row){
+                    $selectBairros.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
+                }
+            }else{
+                $selectBairros.='<option value="'.$bairros->getId().'">'.  $bairros->getNome().'</option>';
+            }
+            $selectBairros.='</select>'; 
         }
-        return $dados_select;
-            
+        
+         $data = array('success' => true,'bairros' => $selectBairros);
+        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     
     //formularios
     private function formCriarBairroAction(){//funcao que exibe o formulario e carrega os estados
-        $dados_select = $this->getEstadosAction();
+        $dados_select = $this->Localidades()->getEstados();
         $form = new form_criar_bairro();//1- primeiro eu instancio o formulario
         $form->get('uf')->setAttribute('options', $dados_select);
         $form->get('cidade')->setAttribute('options', array(''=>'selecione'));
@@ -236,7 +245,7 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function formAlterarBairroAction(){
-        $dados_select = $this->getEstadosAction();
+        $dados_select = $this->Localidades()->getEstados();
         $form = new form_alterar_bairro();//1- primeiro eu instancio o formulario
         $form->get('uf')->setAttribute('options', $dados_select);
         $form->get('cidade')->setAttribute('options', array(''=>'selecione'));     

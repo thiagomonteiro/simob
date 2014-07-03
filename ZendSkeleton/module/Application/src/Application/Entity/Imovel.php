@@ -25,6 +25,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     private $_areaTotal;
     private $_areaConstruida;
     private $_valorIptu;
+    private $_valorCondominio;
     private $_valor;
     /*
      * @var Application\Entity\Proprietario

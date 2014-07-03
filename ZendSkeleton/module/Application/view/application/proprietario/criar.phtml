@@ -1,0 +1,14 @@
+<header>
+    Criar Proprietário
+</header>
+<section class="criar">
+    <?php
+    $form = $this->criar;
+    $form->setAttribute('action', $this->url('crud_proprietario/criar'));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+
+    ?>
+</section>

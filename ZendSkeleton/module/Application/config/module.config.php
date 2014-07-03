@@ -272,6 +272,19 @@ $rota_get_estado = array(
                     ),
                 ),
             ); 
+$rota_get_bairros = array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',  //usar quando for uma requisição que necessite de parametros dinamicos
+                'options' => array(
+                    'route'    => '/bairro/getBairros[/:cidade]',
+                    'constraints' => array(
+                        'cidade'     => '[a-zA-Z0-9_-]*'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Bairro',
+                        'action'     => 'getBairros',
+                    ),
+                ),
+            ); 
 
 $rota_proprietario = array(
     'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -478,6 +491,7 @@ return array(
             'crud_comodo' => $rota_comodo,//esta funcional mas nao sera implementado por enquanto
             'get_cidades' =>    $rota_get_cidade,
             'get_estados' =>    $rota_get_estado,
+            'get_bairros' => $rota_get_bairros,
             'crud_proprietario' => $rota_proprietario,
             'crud_imovel' => $rota_imovel,
             
@@ -579,5 +593,11 @@ return array(
             'routes' => array(
             ),
         ),
+    ),
+    
+    'controller_plugins' => array(
+        'invokables' => array(
+            'Localidades' => 'Application\Plugin\Localidades',
+        )
     ),
 );
