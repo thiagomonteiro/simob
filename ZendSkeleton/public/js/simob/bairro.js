@@ -97,12 +97,13 @@ $(document).ready(function() {
     
     /************************************busca********************************/
     //'EXIBIR UMA MODAL PARA SELECIONAR A CIDADE. A CIDADE SELECIONADA SERA COLOCADO DENTRO DO CAMPOS PARAMETRO QUE FICARÁ DESATIVADO PARA EDICAO SO SENDO REABILITADO CASO O USUARIO SELECIONE O CAMPO NOME'
-    $("#filtro").change(
+    /*$("#filtro").change(
             function(){
                 var filtro = $("#filtro option:selected").text();
                 $("#hidden-filtro").val(filtro);
                 if(filtro == "cidade"){
                     $(function() {
+                        $("#param").attr('disabled', true);
                         $( "#dialog-busca").dialog({
                           height: 200,
                           width:400,
@@ -120,14 +121,60 @@ $(document).ready(function() {
                               },
                             "Cancelar": function () {
                                 $("#filtro").val('selecione');
+                                $("#param").attr('disabled', false); 
                                 $(this).dialog("close");
                               }
                           }
                         });
                       });
-                }                
+                }else{
+                   $("#param").attr('disabled', false);   
+                   if(filtro == "nome"){
+                       $("#param").attr('placeholder','informe nome do bairro')
+                   }
+                }               
             }
-    );
+    );*/
+    
+    /*gamb  caso o usuario */
+    $("#filtro").click(function(){
+        var filtro = $("#filtro option:selected").text();
+        $("#hidden-filtro").val(filtro);
+        if(filtro == "cidade"){
+            $(function() {
+                $("#param").attr('disabled', true);
+                $( "#dialog-busca").dialog({
+                  height: 300,
+                  width:400,
+                  modal: true,
+                  buttons: {
+                    "Selecionar": function () {
+                        var cidade = $(this).find(".cidade-select option:selected");//aki e tive que especificar o seletor pai do select cidade para evitar o coflito com o select cidade do form alterar
+                        if(cidade.val()!="selecione um estado"){
+                            $('#hidden-param').val(cidade.val());
+                            $('#param').val(cidade.text());
+                        }else{
+                            $('#filtro').val('selecione');
+                        }
+                        $(this).dialog("close");
+                      },
+                    "Cancelar": function () {
+                        $("#filtro").val('selecione');
+                        $("#param").attr('disabled', false); 
+                        $(this).dialog("close");
+                      }
+                  }
+                });
+              });
+        }
+        else{
+            $("#param").val("");
+            $("#param").attr('disabled', false); 
+            if(filtro === "nome"){
+                $("#param").attr('placeholder','informe nome do bairro')
+            }
+        }  
+    });
     
     $("#busca-submit").click(     
             function(e){

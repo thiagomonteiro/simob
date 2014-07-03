@@ -72,13 +72,18 @@ class ProprietarioController extends \Base\Controller\BaseController{
             $form->get('cidade')->setAttribute('options', $optionsCidade);           
             $form->get('bairro')->setAttribute('options', $optionsBairro);
         }else{
-            print_r($dadosPost);
-            if($dadosPost['bairro']==0){
-               echo 'vazio bairro';
-            }
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_criar(null,array(),$dadosPost);
             $form->get('uf')->setAttribute('options', $dados_uf);
+            if(!empty($dadosPost['uf'])){
+                $form->get('uf')->setAttribute('selected', $dadosPost['uf']);
+            }
+            if(!empty($dadosPost['cidade'])){
+                $estado = $this->_EstadoDao->recuperar($dadosPost['uf']);
+                $dadosCidade = $this->Localidades()->getCidades($estado->getUf());
+                $form->get('cidade')->setAttribute('options', $dadosCidade);
+                $form->get('cidade')->setAttribute('selected', $dadosPost['cidade']);
+            }
         }
         return $form;
     }

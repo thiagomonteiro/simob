@@ -10,13 +10,17 @@
     ?>
 </html>
 <div id="dialog-busca" title="selecão de cidade" style="display: none;">
-    
     <section>
         <label>UF</label>
         <select class="uf-select">
-            <?php foreach($listaEstados as $row):?>
-                <option><?php echo $row; ?></option>
-            <?php endforeach;?>
+            <?php foreach($listaEstados as $row){
+                    if($row['selected']){
+                        echo '<option value="'.$row['value'].'" selected ="selected" disabled = "disabled">'.$row['label'].'</option>';
+                    }else{
+                        echo '<option value="'.$row['value'].'">'.$row['label'].'</option>';
+                    }
+                }
+                ?>   
         </select>
         <label>Cidade</label>
         <select class="cidade-select">

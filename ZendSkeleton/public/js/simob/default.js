@@ -23,19 +23,22 @@ $(document).ready(
 
 
 function exibir_erros(erros,form) {
-    
+    limpar_erros();
     var vetor=[];
        $.each(erros, function(index, value) {
             $.each(value,function(chave,valor){
                vetor[index]=valor;
             });
         }); 
-        
         for (var key in vetor){
             if (vetor.hasOwnProperty(key)){
-                 $(form).find('input[name='+key+']').after(vetor[key]);
-                 $(form).find('select[name='+key+']').after(vetor[key]);
-                 $(form).find('textarea[name='+key+']').after(vetor[key]);
+                $(form).find('input[name='+key+']').after('<ul class="error-validator"><li>'+vetor[key]+'</li></ul>');                
+                $(form).find('select[name='+key+']').after('<ul class="error-validator"><li>'+vetor[key]+'</li></ul>');
+                $(form).find('textarea[name='+key+']').after('<ul class="error-validator"><li>'+vetor[key]+'</li></ul>');        
             }
         }
+}
+
+function limpar_erros(){
+    $(".error-validator").remove();
 }

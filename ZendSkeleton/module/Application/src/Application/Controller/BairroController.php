@@ -201,6 +201,7 @@ class BairroController extends \Base\Controller\BaseController {
         $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
         $cidades = $cidadeDAO->recuperarPorEstado($estado);
         $selectCidades = '<select name="cidade" class="cidade-select">';
+        $selectCidades.='<option selected="selected" disabled="disabled" value="0" >Selecione uma Cidade</option>';
         if(count($cidades)>1){
             foreach ($cidades as $row){
                 $selectCidades.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
