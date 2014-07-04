@@ -1,5 +1,5 @@
 <?php
-namespace Teste;
+namespace Site;
 
 class Module
 {

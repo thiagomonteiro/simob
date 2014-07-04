@@ -1,15 +1,11 @@
 <?php
 
-$rota_paginacao=array(
+$rota_default=array(
     'type'    => 'segment',
     'options' => array(
-        'route'    => '/teste/index[:action]',
-        'constraints' => array(
-            'action' => '[a-zA-Z0-9_-]+',//valores de possiveis parametros
-
-        ),
+        'route'    => '/site',
         'defaults' => array(
-            'controller' => 'Teste\Controller\Teste',// localizaçao do controlher
+            'controller' => 'Site\Controller\Site',// localizaçao do controlher
             'action'     => 'index',//action da rota
         ),
     ),
@@ -22,14 +18,14 @@ return array(
     
     'router' => array(
         'routes' => array(
-            'paginacao' => $rota_paginacao,
+            'rota_teste' => $rota_default,
         ),
     ),
     
     
     'controllers' => array(
         'invokables' => array(
-            'Teste\Controller\Index' => 'Teste\Controller\TesteController',            
+            'Site\Controller\Site' => 'Site\Controller\SiteController',            
         ),
     ),
     
@@ -40,8 +36,8 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/teste/layout/layout.phtml',
-            'teste/teste/index' => __DIR__ . '/../view/teste/index/index.phtml',
+            'layout/layout'           => __DIR__ . '/../view/site/layout/layout.phtml',
+            'site/site/index' => __DIR__ . '/../view/site/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),
@@ -54,6 +50,9 @@ return array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
+        ),
+        'factories' => array(
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
@@ -70,6 +69,34 @@ return array(
         ),
     ),
     
-    
+    'navigation' => array(
+    'default' => array(
+        array(
+            'label' => 'Home',
+            'route' => 'home',
+        ),
+        array(
+            'label' => 'Album',
+            'route' => 'album',
+            'pages' => array(
+                array(
+                    'label' => 'Add',
+                    'route' => 'album',
+                    'action' => 'add',
+                ),
+                array(
+                    'label' => 'Edit',
+                    'route' => 'album',
+                    'action' => 'edit',
+                ),
+                array(
+                    'label' => 'Delete',
+                    'route' => 'album',
+                    'action' => 'delete',
+                ),
+            ),
+        ),
+    ),
+),
           
 );

@@ -9,7 +9,7 @@ return array(
     'modules' => array(
         'Application',
         'Base',
-        //'Teste'
+        'Site'
     ),
     'module_listener_options' => array(
         'module_paths' => array(
