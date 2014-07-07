@@ -6,12 +6,14 @@
  * Time: 00:21
  * To change this template use File | Settings | File Templates.
  */
+namespace Base\Entity;
 
-class PropriedadeInvalidaException
+class PropriedadeInvalidaException extends \Exception
 {
     public function __construct($propriedade, $code = 0, Exception $previous = null)
     {
         $msg = 'A propriedade "' . $propriedade . '" é inválida no objeto que está tentando acessá-la.';
-        parent::__construct($msg, $code, $previous);
+        echo $msg;
+        //parent::__construct($msg, $code, $previous);
     }
 }

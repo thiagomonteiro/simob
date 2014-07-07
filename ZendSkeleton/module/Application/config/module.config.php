@@ -580,8 +580,8 @@ return array(
             'application/bairro/gerenciarBairro' =>    __DIR__ . '/../view/application/bairro/gerenciar-bairro.phtml',
             'application/bairro/criarBairro' =>    __DIR__ . '/../view/application/bairro/criar-bairro.phtml',
             'application/comodo/index' => __DIR__.'/../view/application/comodo/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'error/404'               => __DIR__ . '/../view/application/error/404.phtml',
+            'error/index'             => __DIR__ . '/../view/application/error/index.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

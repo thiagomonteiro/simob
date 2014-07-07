@@ -28,10 +28,12 @@ class Bairro extends \Base\Model\AbstractModel {
     
     
     public function criarNovo($params = null){
-      return $this->_bairroObj = new BairroEntity($params);
+        
+        return $this->_bairroObj = new BairroEntity($params);
+        
     }
     
-    public function criarVarios($results,$cidade){
+    public function criarVarios($results,$cidade = null){
         $lista_bairros = array();
         foreach($results as $result){
             if(is_null($cidade)){
@@ -71,8 +73,13 @@ class Bairro extends \Base\Model\AbstractModel {
         }
     }
     
-    public function recuperar($obj){
-        
+    public function recuperar($id){
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Bairro WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $result = $statement->execute();      
+        $bairro = $this->criarVarios($result);
+        return $bairro[0];
     }
     
     public function remover($id){
@@ -98,8 +105,17 @@ class Bairro extends \Base\Model\AbstractModel {
         return $bairros_list;
     }
     
+    public function recuperarPorCidade($cidade){
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Bairro WHERE (cidade ='".$cidade->getId()."')";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();         
+        $bairros_list = $this->criarVarios($results, null);
+        return $bairros_list;
+        
+    }
     
-    
+    //manter essa por causa das requisicoes
     public function recuperarPorParametro($de=null,$qtd=null,$filtro=null,$param=null){    
         if($de == null){
             $de=0;

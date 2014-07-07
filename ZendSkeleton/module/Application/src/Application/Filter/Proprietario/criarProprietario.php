@@ -144,6 +144,15 @@ class criarProprietario implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
+                    'validators' => array(
+                       
+                        array('name' => 'Application\Validator\CpfValidator',
+                              'options' => array(
+                                  'messages' => array(\Application\Validator\CpfValidator::INVALID => 'cpf inválido'),
+                              ),
+                        ),
+
+                    ),
                 )
             )
         );
@@ -183,5 +192,6 @@ class criarProprietario implements InputFilterAwareInterface {
     {
 
     }
-
+      
 }
+

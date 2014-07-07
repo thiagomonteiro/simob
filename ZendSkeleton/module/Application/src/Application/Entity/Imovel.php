@@ -14,11 +14,9 @@ namespace Application\Entity;
  * @author thiago
  */
 class Imovel extends \Base\Entity\AbstractEntity {
-    private $_id;
+    /*private $_id;
     private $_descricao;
-    /*
-     * @var Application\Entity\Bairro
-     */
+    
     private $_bairro;
     private $_endereco;
     private $_numero;
@@ -27,14 +25,10 @@ class Imovel extends \Base\Entity\AbstractEntity {
     private $_valorIptu;
     private $_valorCondominio;
     private $_valor;
-    /*
-     * @var Application\Entity\Proprietario
-     */
+    
     private $_proprietario;
-    /*
-     * @var Application\Entity\SubTipoImovel
-     */
+    
     private $_subTipoImovel;
     private $_comodosList;// Array
-    private $_tipoTransacao;
+    private $_tipoTransacao;*/
 }

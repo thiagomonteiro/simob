@@ -1,9 +1,9 @@
 <?php
 
-$rota_default=array(
+$rota_frontEnd=array(
     'type'    => 'segment',
     'options' => array(
-        'route'    => '/site',
+        'route'    => '/',
         'defaults' => array(
             'controller' => 'Site\Controller\Site',// localizaçao do controlher
             'action'     => 'index',//action da rota
@@ -18,7 +18,7 @@ return array(
     
     'router' => array(
         'routes' => array(
-            'rota_teste' => $rota_default,
+            'rota_front_end' => $rota_frontEnd,
         ),
     ),
     

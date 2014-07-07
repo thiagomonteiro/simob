@@ -49,7 +49,9 @@ class ProprietarioController extends \Base\Controller\BaseController{
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
-
+               $params['bairro']=$this->_BairroDao->recuperar($params['bairro']);
+               $proprietario_dto = $this->_ProprietarioDao->criarNovo($params);
+               $response = $this->_ProprietarioDao->salvar($proprietario_dto);
             }else{  
                //se der alguma errro 
             }
@@ -67,23 +69,29 @@ class ProprietarioController extends \Base\Controller\BaseController{
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_criar();
             $form->get('uf')->setAttribute('options', $dados_uf);
-            $optionsCidade = array(array('value' => '0', 'label' => 'Selecione um Estado', 'disabled' => 'disabled'));
-            $optionsBairro = array(array('value' => '0', 'label' => 'Selecione uma Cidade', 'disabled' => 'disabled'));
+            $optionsCidade = array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled'));
+            $optionsBairro = array(array( 'label' => 'Selecione uma Cidade','selected' => 'selected', 'disabled' => 'disabled'));
             $form->get('cidade')->setAttribute('options', $optionsCidade);           
             $form->get('bairro')->setAttribute('options', $optionsBairro);
         }else{
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_criar(null,array(),$dadosPost);
             $form->get('uf')->setAttribute('options', $dados_uf);
-            if(!empty($dadosPost['uf'])){
+            if(empty($dadosPost['uf']) != true){
                 $form->get('uf')->setAttribute('selected', $dadosPost['uf']);
-            }
-            if(!empty($dadosPost['cidade'])){
                 $estado = $this->_EstadoDao->recuperar($dadosPost['uf']);
                 $dadosCidade = $this->Localidades()->getCidades($estado->getUf());
                 $form->get('cidade')->setAttribute('options', $dadosCidade);
-                $form->get('cidade')->setAttribute('selected', $dadosPost['cidade']);
-            }
+                if(empty($dadosPost['cidade']) != true){
+                    $form->get('cidade')->setAttribute('selected', $dadosPost['cidade']);
+                    $cidade = $this->_CidadeDao->recuperar($dadosPost['cidade']);
+                    $dadosBairro = $this->Localidades()->getBairros($cidade);
+                    $form->get('bairro')->setAttribute('options', $dadosBairro);
+                    if(empty($dadosPost['bairro']) != true){
+                        $form->get('bairro')->setAttribute('selected',$dadosPost['bairro']);
+                    }
+                }
+            }                        
         }
         return $form;
     }

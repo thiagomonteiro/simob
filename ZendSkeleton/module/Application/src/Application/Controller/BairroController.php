@@ -218,7 +218,7 @@ class BairroController extends \Base\Controller\BaseController {
         $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
         $bairros = $this->BairroDao->recuperarPorParametro(null,null,'cidade',$cidade);
         if(empty($bairros)){
-           $selectBairros = '<select name="bairro" class="bairro-select"><option value=0>Nenhum bairro cadastrado</option></select>'; 
+           $selectBairros = '<select name="bairro" class="bairro-select"><option disabled = "disabled">Nenhum bairro cadastrado</option></select>'; 
         }else{
             $selectBairros = '<select name="bairro" class="bairro-select">';
             if(count($bairros)>1){
@@ -226,7 +226,7 @@ class BairroController extends \Base\Controller\BaseController {
                     $selectBairros.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
                 }
             }else{
-                $selectBairros.='<option value="'.$bairros->getId().'">'.  $bairros->getNome().'</option>';
+                $selectBairros.='<option value="'.$bairros[0]->getId().'">'.  $bairros[0]->getNome().'</option>';
             }
             $selectBairros.='</select>'; 
         }

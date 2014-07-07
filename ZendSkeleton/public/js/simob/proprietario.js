@@ -15,7 +15,8 @@ $(document).ready(function(){
             var res = jQuery.parseJSON(data);
             if(res.success == true){
                 $(".uf-select").closest('section').find(".cidade-select").replaceWith(res.cidades);//o uf select e o uf cidade da view criar precisam estar dentro de uma section 
-                $(".bairro-select Option").each(function(){$(this).remove();});
+                $(".bairro-select Option").each(function(){$(this).remove();});//limpo os bairros
+                $(".bairro-select").append('<option>Selecione uma Cidade</option>');
             }
         });
     });
