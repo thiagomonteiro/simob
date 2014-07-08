@@ -6,8 +6,8 @@
 
 
 $(document).ready(function(){
+    mascarar();
     var content = $(document);//o metodo live foi descontinuado
-    
     content.delegate(".uf-select","change",function(){
         //e.preventDefault();
         var uf = $(".uf-select option:selected").text();
@@ -32,3 +32,9 @@ $(document).ready(function(){
     });
     
 });
+
+function mascarar(){
+    $(".cpf").mask("999.999.999-99",{placeholder : "_"});
+    $(".telefone").mask("(99)9999-9999");
+    $(".celular").mask("(99)99999-9999");
+}

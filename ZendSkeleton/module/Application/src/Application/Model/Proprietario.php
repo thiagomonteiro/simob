@@ -53,8 +53,9 @@ class Proprietario extends \Base\Model\AbstractModel{
         
     }
 
-    protected function recuperarTodos($de, $qtd, $filtro, $param) {
-        
+    protected function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null) {
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Proprietario LIMIT".$de.", ".($qtd+1).")";
     }
 
     protected function remover($obj) {

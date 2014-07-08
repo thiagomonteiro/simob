@@ -32,9 +32,13 @@ class ProprietarioController extends \Base\Controller\BaseController{
     
    
     public function indexAction() {
+        $mensagem = $this->flashMessenger()->getSuccessMessages();
+        if(count($mensagem)){
+                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+        }
+        $listaProprietarios = $this->_ProprietarioDao->recuperarTodos();
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/proprietario.js');
-        
         $view = new ViewModel();
         return $view;
     }
@@ -52,6 +56,8 @@ class ProprietarioController extends \Base\Controller\BaseController{
                $params['bairro']=$this->_BairroDao->recuperar($params['bairro']);
                $proprietario_dto = $this->_ProprietarioDao->criarNovo($params);
                $response = $this->_ProprietarioDao->salvar($proprietario_dto);
+               $this->flashMessenger()->addSuccessMessage('Proprietario cadastrado com sucesso!');
+               $this->redirect()->toRoute('crud_proprietario/index');
             }else{  
                //se der alguma errro 
             }
@@ -60,6 +66,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
         }
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/proprietario.js');
+        $this->appendJavaScript('libs/maskedinput.js');
         $view = new ViewModel(array('criar'   =>  $form));
         return $view;
     }

@@ -35,10 +35,13 @@ class criar extends Form{
         $numero->setLabel('Numero');
         $telefone = new \Zend\Form\Element\Text('telefone');
         $telefone->setLabel('Tel Fixo');
+        $telefone->setAttribute('class','telefone');
         $celular = new \Zend\Form\Element\Text('celular');
         $celular->setLabel('Celular');
+        $celular->setAttribute('class', 'celular');
         $cpf = new \Zend\Form\Element\Text('cpf');
         $cpf->setLabel('CPF');
+        $cpf->setAttribute('class', 'cpf');
         $rg = new \Zend\Form\Element\Text('rg');
         $rg->setLabel('RG');
         $profissao = new \Zend\Form\Element\Text('profissao');

@@ -88,14 +88,17 @@ class Proprietario extends \Base\Entity\AbstractEntity {
     }
 
     public function setTelefone($telefone) {
+        $telefone = str_replace(array("(",")","-"), "", $telefone);
         $this->_telefone = utf8_encode($telefone);
     }
 
     public function setCelular($celular) {
+        $celular = str_replace(array("(",")","-"), "", $celular);
         $this->_celular = utf8_encode($celular);
     }
 
     public function setCpf($cpf) {
+        $cpf = str_replace(array(".","-"),"", $cpf);
         $this->_cpf = utf8_encode($cpf);
     }
 
@@ -105,5 +108,29 @@ class Proprietario extends \Base\Entity\AbstractEntity {
 
     public function setProfissao($profissao) {
         $this->_profissao = utf8_encode($profissao);
+    }
+    
+    public function mascaraCpf(){
+        $a= substr($this->_cpf, 0,3); 
+        $b= substr($this->_cpf, 3,3); 
+        $c= substr($this->_cpf,6,3); 
+        $d= substr($this->_cpf,9,2); 
+        $cpf_formatado = $a.'.'.$b.'.'.$c.'-'.$d; 
+        return $cpf_formatado; 
+    }
+    public function mascaraTel(){
+        $a = sbstr($this->_telefone, 0,2);
+        $b = sbstr($this->_telefone, 2,4);
+        $c = sbstr($this->_telefone, 6,4);
+        $tel_formatado = "(".$a.")".$b."-".$c;
+        return $tel_formatado;
+    }
+    
+    public function mascaraCel(){
+        $a = sbstr($this->_celular, 0,2);
+        $b = sbstr($this->_celular, 2,5);
+        $c = sbstr($this->_celular, 7,4);
+        $cel_formatado = "(".$a.")".$b."-".$c;
+        return $cel_formatado;
     }
 }
