@@ -305,13 +305,14 @@ $rota_proprietario = array(
                 ),
             ),
         ),
-        'proximaPagina' => array(
+         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina[/:pagina][/:param]',
+                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -321,10 +322,11 @@ $rota_proprietario = array(
         'paginaAnterior' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/paginaAnterior[/:pagina][/:param]',
+                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[a-zA-Z0-9_-]+'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',

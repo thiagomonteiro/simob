@@ -23,7 +23,6 @@ use Zend\InputFilter\Factory;
  */
 class BairroController extends \Base\Controller\BaseController {
     private $BairroDao;
-    private static $_qtd_por_pagina=5;
     
     public function __construct() {
         parent::__construct();

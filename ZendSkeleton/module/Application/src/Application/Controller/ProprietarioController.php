@@ -8,6 +8,7 @@
 namespace Application\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
+use Application\Form\Proprietario\busca as form_busca;
 use Application\Form\Proprietario\criar as form_criar;
 use Application\Filter\Proprietario\criarProprietario as filter;
 
@@ -16,11 +17,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
     private $_CidadeDao;
     private $_BairroDao;
     private $_ProprietarioDao;
-    
-   
-    
-    private static $_qtd_por_pagina=5;
-    
+
     
     public function __construct() {
         parent::__construct();
@@ -36,10 +33,77 @@ class ProprietarioController extends \Base\Controller\BaseController{
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
         }
-        $listaProprietarios = $this->_ProprietarioDao->recuperarTodos();
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');
+        $result = $this->_ProprietarioDao->recuperarTodos(null,  self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+        $partialLista = $this->GetViewLista($result);
+        $partialPaginacao = $this->GetViewBarraPaginacao($paginacao);
+        $partialBusca = $this->GetViewBarraDeBusca('crud_proprietario/buscar',$param);
+        $view = new ViewModel(array('haDados' => empty($result)? false:true));
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/proprietario.js');
-        $view = new ViewModel();
+        $view->addChild($partialLista , 'tableList');
+        $view->addChild($partialPaginacao,'paginacao');
+        $view->addChild($partialBusca, 'busca');
+        return $view;
+    }
+    
+     public function proximaPaginaAction(){
+        //somente requisições ajax        
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        if($filtro == null){
+            $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+        }else{            
+            $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina,self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLista($proprietariosList);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function paginaAnteriorAction(){
+        //somente requisições ajax
+        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+        if($filtro == null){
+            $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        }else{
+            $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLista($proprietariosList);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    private function GetViewLista($proprietariosList){
+        $view= new ViewModel(array('proprietarios'=>$proprietariosList));
+        $view->setTemplate('application/proprietario/partials/lista.phtml');
+        return $view;
+    }
+    
+    private function GetViewBarraPaginacao($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_proprietario'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
+        return $view;
+    }
+    
+     private function GetViewBarraDeBusca($rota,$param){//passando os params para o application/src/form
+        $busca = new form_busca(null,array(),$param);//1- primeiro eu instancio o formulario
+        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','nome' => 'nome','cpf' => 'cpf'));
+        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca));
+        $view->setTemplate('application/proprietario/partials/busca.phtml');
         return $view;
     }
 

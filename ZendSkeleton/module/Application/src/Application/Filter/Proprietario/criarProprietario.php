@@ -148,7 +148,13 @@ class criarProprietario implements InputFilterAwareInterface {
                        
                         array('name' => 'Application\Validator\CpfValidator',
                               'options' => array(
-                                  'messages' => array(\Application\Validator\CpfValidator::INVALID => 'cpf inválido'),
+                                  'messages' => array(\Application\Validator\CpfValidator::INVALID => 'CPF inválido'),
+                              ),
+                        ),
+                        
+                         array('name' => 'Application\Validator\CpfUnique',
+                              'options' => array(
+                                  'messages' => array(\Application\Validator\CpfUnique::INVALID => 'Duplicidade de CPF(este cpf já se encontra em uso)'),
                               ),
                         ),
 

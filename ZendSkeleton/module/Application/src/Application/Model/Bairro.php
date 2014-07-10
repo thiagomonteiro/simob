@@ -95,7 +95,7 @@ class Bairro extends \Base\Model\AbstractModel {
             $de=0;
         }
         if($qtd == null){
-            $qtd=5;
+            $qtd=  self::$_qtd_por_pagina;
         }
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Bairro LIMIT ".$de.", ".($qtd+1)."";
@@ -121,7 +121,7 @@ class Bairro extends \Base\Model\AbstractModel {
             $de=0;
         }
         if($qtd == null){
-            $qtd=5;
+            $qtd= self::$_qtd_por_pagina;
         }
         $adapter = $this->getAdapter();
         if($filtro == "cidade"){

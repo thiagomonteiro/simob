@@ -1,0 +1,11 @@
+<html>
+        <?php
+        $form = $this->busca;
+        $form->setAttribute('action', $this->url($this->rota));
+        $form->setAttribute('method', 'post');
+        echo $this->form()->openTag($form),
+        $this->formCollection($form),
+        $this->form()->closeTag();
+
+    ?>
+</html>

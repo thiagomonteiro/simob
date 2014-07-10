@@ -13,8 +13,8 @@ use Zend\Db\Sql\Sql;  //classe que executa query
 use Zend\Db\Adapter\Adapter; // classe que conecta ao banco de dados
 
 abstract class AbstractModel {
-
-
+    
+    protected static $_qtd_por_pagina=5;
 
     protected  $config = array(
         "driver" => "Mysqli",

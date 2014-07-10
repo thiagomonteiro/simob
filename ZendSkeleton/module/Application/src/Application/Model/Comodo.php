@@ -72,7 +72,7 @@ class Comodo extends \Base\Model\AbstractModel {
             $de=0;
         }
         if($qtd == null){
-            $qtd=5;
+            $qtd = self::$_qtd_por_pagina;
         }
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM TipoComodos LIMIT ".$de.", ".($qtd+1)."";
@@ -88,7 +88,7 @@ class Comodo extends \Base\Model\AbstractModel {
             $de=0;
         }
         if($qtd == null){
-            $qtd=5;
+            $qtd= self::$_qtd_por_pagina;
         }
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM TipoComodos WHERE (descricao like '%".$param."%') LIMIT ".$de.", ".($qtd+1)."";      

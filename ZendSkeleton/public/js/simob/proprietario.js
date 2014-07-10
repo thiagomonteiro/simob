@@ -6,8 +6,8 @@
 
 
 $(document).ready(function(){
-    mascarar();
     var content = $(document);//o metodo live foi descontinuado
+    mascarar();
     content.delegate(".uf-select","change",function(){
         //e.preventDefault();
         var uf = $(".uf-select option:selected").text();
@@ -31,10 +31,66 @@ $(document).ready(function(){
         });
     });
     
+     content.delegate(".proxima-pagina","click",function(){
+        var url = $(this).attr('url');
+        var pagina = $(this).attr('data-proxima');
+        var filtro = $("#hidden-filtro").val();
+        var param = $("#hidden-param").val();
+        if(filtro.length == 0){
+                $.get(url+'/'+pagina, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+        }else{
+             $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+        }
+    });
+    
+    content.delegate(".pagina-anterior","click",function(){
+       var url = $(this).attr('url');
+       var pagina = $(this).attr('data-anterior');
+       var filtro = $("#hidden-filtro").val();
+       var param = $("#hidden-param").val();
+       if(filtro.length == 0){
+           $.get(url+'/'+pagina, function(data){
+                var res = jQuery.parseJSON(data);
+                if(res.success === true){
+                    $("#tabela-proprietarios").children('tbody').replaceWith(res.html);
+                    $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                }
+            });
+       }else{
+           $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success===true){
+                        $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                        $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                    }
+                });
+       }
+    });
+    
+    
 });
 
 function mascarar(){
-    $(".cpf").mask("999.999.999-99",{placeholder : "_"});
-    $(".telefone").mask("(99)9999-9999");
-    $(".celular").mask("(99)99999-9999");
+    if($(".cpf").length){
+        $(".cpf").mask("999.999.999-99",{placeholder : "_"});
+    }
+    if($(".telefone").length){
+        $(".telefone").mask("(99)9999-9999");
+    }
+    if($(".celular").length){
+        $(".celular").mask("(99)99999-9999");
+    }
+    
 }

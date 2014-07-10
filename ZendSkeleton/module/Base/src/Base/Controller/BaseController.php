@@ -22,6 +22,7 @@ use Base\Paginador\Paginador;
 class BaseController extends AbstractActionController{
     protected $sessao;
     protected $paginador;
+    protected static $_qtd_por_pagina=5;
 
     public function __construct() {
         $this->sessao = new BaseSession();//verificar se ha um jeito de tirar da inicialização        

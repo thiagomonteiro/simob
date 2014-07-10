@@ -21,7 +21,6 @@ use Application\Filter\Comodo\criarComodo as comodo_filter;
 
 class ComodoController extends \Base\Controller\BaseController{
     private $ComodoDao;
-    private static $_qtd_por_pagina=5;
     /**
      * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
      */

@@ -1,0 +1,17 @@
+  <tbody>       
+    <?php foreach($this->proprietarios as $proprietario):?>
+            <tr>
+            <input type="hidden" class="id-proprietario" value="<?php echo $proprietario->getId();?>">
+                <td class="nome">
+                    <?php echo $proprietario->getNome();?>
+                </td>
+                <td>
+                    <?php echo $proprietario->mascaraCpf($proprietario->getCpf());?>
+                </td>
+                <td>
+                    <button class="alterar-proprietario">Alterar</button>
+                    <button class="deletar-proprietario">Deletar</button>
+                </td>
+            </tr>
+    <?php endforeach;?>
+    </tbody>
