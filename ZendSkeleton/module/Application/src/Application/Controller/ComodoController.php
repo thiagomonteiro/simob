@@ -73,7 +73,7 @@ class ComodoController extends \Base\Controller\BaseController{
         return $view;
     }
     
-    public function GetFormAlterar(){
+    private function GetFormAlterar(){
         $form = new form_alterar();//1- primeiro eu instancio o formulario
         $view = new ViewModel(array('alterar'   =>  $form));
         $view->setTemplate('application/comodo/alterar.phtml');
@@ -92,7 +92,7 @@ class ComodoController extends \Base\Controller\BaseController{
             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
             $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-            $data = array('success' => true,'haDados' => empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
             return $this->getResponse()->setContent(Json_encode($data));
     }
     

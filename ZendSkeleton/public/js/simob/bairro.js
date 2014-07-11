@@ -217,16 +217,17 @@ $(document).ready(function() {
                 $.post( rota, $(form).serialize(),function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success == true){
-                        if(res.haDados){//se for vazio sem dados
-                            $("#tabela-bairros").hide();
-                            $("#barra-paginacao").hide();
-                            $("#tabela-bairros").after('<h1>Nenhum registro encontrado</h1>');
-                        }else{
+                        if(res.haDados){
                             $(".listar").find('h1').remove();
                             $("#tabela-bairros").children('tbody').replaceWith(res.html);  
                             $("#tabela-bairros").show();
                             $("#barra-paginacao").replaceWith(res.barrapaginacao);
                             $("#barra-paginacao").show();
+                        }else{
+                            $("#tabela-bairros").hide();
+                            $("#barra-paginacao").hide();
+                            $("#tabela-bairros").next('h1').remove();
+                            $("#tabela-bairros").after('<h1>Nenhum registro encontrado</h1>'); 
                         }
                     }
                 });

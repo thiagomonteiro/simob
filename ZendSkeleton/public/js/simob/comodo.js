@@ -23,16 +23,17 @@ $(document).ready(
                             $.post(url,$(form).serialize(),function(data){
                                 var res = jQuery.parseJSON(data);
                                 if(res.success == true){
-                                    if(res.haDados){//se for vazio sem dados
-                                        $("#tabela-comodos").hide();
-                                        $("#barra-paginacao").hide();
-                                        $("#tabela-comodos").after('<h1>Nenhum registro encontrado</h1>');
-                                    }else{
+                                    if(res.haDados){
                                         $(".listar").find('h1').remove();
                                         $("#tabela-comodos").children('tbody').replaceWith(res.html);  
                                         $("#tabela-comodos").show();
                                         $("#barra-paginacao").replaceWith(res.barrapaginacao);
                                         $("#barra-paginacao").show();
+                                    }else{
+                                        $("#tabela-comodos").hide();
+                                        $("#barra-paginacao").hide();
+                                        $("#tabela-comodos").next('h1').remove();
+                                        $("#tabela-comodos").after('<h1>Nenhum registro encontrado</h1>');
                                     }
                                 }
                             });

@@ -80,6 +80,143 @@ $(document).ready(function(){
     });
     
     
+    /* busca */
+    $("#busca-submit").click(     
+            function(e){
+                e.preventDefault();
+                var form = $("#form-busca"); 
+                var rota = form.attr('action');
+                var filtro = $("#filtro option:selected").text();
+                if(filtro == "selecione"){
+                    $("#dialog-mensagem").find("p").text("selecione um filtro");
+                    $("#dialog-mensagem").dialog({
+                        modal: true,
+                        buttons:{
+                            ok : function(){
+                                $(this).dialog('close');
+                            }
+                        }
+                    });
+                    exit();
+                }
+                if(filtro == "cpf" || filtro == "nome"){
+                    $("#hidden-filtro").val(filtro);
+                }
+                if($("#param").val()==""){
+                    $("#dialog-mensagem").find("p").text("informe um valor para a busca");
+                     $("#dialog-mensagem").dialog({
+                        modal: true,
+                        buttons:{
+                            ok : function(){
+                                $(this).dialog('close');
+                            }
+                        }
+                     });
+                     exit();
+                }else{
+                    $("#hidden-param").val($("#param").val());
+                }
+                
+                $.post( rota, $(form).serialize(),function(data){
+                    var res = jQuery.parseJSON(data);
+                    if(res.success == true){
+                        if(res.haDados){
+                            $(".listar").find('h1').remove();
+                            $("#tabela-proprietarios").children('tbody').replaceWith(res.html);  
+                            $("#tabela-proprietarios").show();
+                            $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                            $("#barra-paginacao").show();
+                        }else{
+                            $("#tabela-proprietarios").hide();
+                            $("#barra-paginacao").hide();
+                            $("#tabela-proprietarios").next('h1').remove();
+                            $("#tabela-proprietarios").after('<h1>Nenhum registro encontrado</h1>');
+                        }
+                    }
+                });
+            }
+    );
+    
+    content.delegate(".deletar-proprietario","click",function(){
+        var linha = $(this).closest('tr');
+        var id = $(this).closest('tr').find(".id-proprietario").val();//retorna o elemento mais proximo
+        $("#dialog-mensagem").find("p").html("Você esta prestes a excluir permanentemente este proprietário, deseja continuar?");
+        $("#dialog-mensagem").dialog({
+                    height: 200,
+                    width:400,
+                    modal: true,
+                    buttons:{
+                        "Confirmar": function(){
+                            $.get("/proprietario/deletar/"+id,function(data){
+                                var res = jQuery.parseJSON(data);
+                                if(res.success == true){
+                                    $(linha).remove();
+                                    notif({
+                                        msg: res.menssagem,
+                                        type: 'success',
+                                        width: "all",
+                                        opacity: 0.8,
+                                        position: "center",
+                                    });
+                                }else{
+                                   $("#dialog-mensagem").find("p").text(res.mensagem);
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "Cancelar": function(){
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+    });
+    
+   
+    content.delegate(".alterar-proprietario","click",function(){
+        $(this).closest('tr').addClass('tr-edit');        
+        var id = $(this).closest('tr').find('.id-proprietario').val();
+        $.get("/proprietario/alterar/"+id,function(data){//recupero o formulario
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+               var form=res.html;
+               $("#dialog-mensagem").find('p').html(form);//adiciono o formulairo a minha dialog
+                $("#dialog-mensagem").dialog({
+                            height: 250,
+                            width:400,
+                            modal: true,
+                            buttons:{
+                                Salvar:function(){
+                                    $.post("/proprietario/salvarAlteracoes",$(this).find("#form-alterar").serialize(),function(data){
+                                         var res = jQuery.parseJSON(data);
+                                         if(res.success==true){                  
+                                             var nome = $('input[name="nome"]').val();
+                                             var cpf = $('input[name="cpf"]').val();
+                                             $(".tr-edit").find(".nome").text(nome);
+                                             $(".tr-edit").find(".CPF").text(cpf);
+                                             $("#dialog-mensagem").dialog('close');
+                                             notif({
+                                                  msg: res.menssagem,
+                                                  type: 'success',
+                                                  width: "all",
+                                                  opacity: 0.8,
+                                                  position: "center",
+                                              });
+                                         }else{
+                                             exibir_erros(res.erros,$("#dialog-mensagem").find("#form-alterar"));//passo o formulario por referencia para a funcao exibir_erros
+                                         }
+                                    });
+                                    
+                                },
+                                Cancelar:function(){
+                                    $("#dialog-mensagem").dialog("close");    
+                                }
+                            }
+                        });
+                    }
+                });
+    });
+    
+    
 });
 
 function mascarar(){

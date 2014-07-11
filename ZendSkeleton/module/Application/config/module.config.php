@@ -357,7 +357,10 @@ $rota_proprietario = array(
         'alterar' => array(
             'type' => 'segment',
             'options' => array(
-                    'route' => '/alterar',
+                    'route' => '/alterar[/:id]',
+                    'constraints' => array(
+                            'id' => '[0-9]+'
+                        ),
                     'defaults' => array(
                         'action' => 'alterar',
                     ),

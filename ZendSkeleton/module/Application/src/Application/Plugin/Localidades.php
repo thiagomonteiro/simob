@@ -40,7 +40,7 @@ class Localidades extends AbstractPlugin {
         $dados_select =  array();
         $dados_select[] =  array('value' => "",'label' => 'Selecione uma Cidade','disabled' => 'disabled');
         foreach ($Array_cidades as $row){
-            $dados_select[] = array('value' => $row->getId(), 'label' => $row->getNome());
+            $dados_select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getNome());
         }
         return $dados_select;
     }
@@ -53,7 +53,7 @@ class Localidades extends AbstractPlugin {
       }else{
           $dados_select[] = array('value' => "", 'label' => 'Selecione um Bairro' , 'disabled' => 'disabled');  
           foreach ($Array_bairros as $row){
-                $dados_select[] = array('value' => $row->getId(), 'label' => $row->getNome());
+                $dados_select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getNome());
           }
       }
       

@@ -38,7 +38,15 @@ class Proprietario extends \Base\Model\AbstractModel{
     
     
     protected function atualizar($obj) {
-        
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE Proprietario SET nome ='".$obj->getNome()."', "
+                ."bairro ='".$obj->getBairro()->getId()."', logradouro = '".$obj->getLogradouro()
+                ."', numero = '".$obj->getNumero()."' , telefone = '".$obj->getTelefone()."',"
+                . "celular= '".$obj->getCelular()."', rg = '".$obj->getRg()."',"
+                ."profissao = '".$obj->getProfissao()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
 
     protected function inserir($obj) {
@@ -60,8 +68,13 @@ class Proprietario extends \Base\Model\AbstractModel{
         }
     }
 
-    public function recuperar($obj) {
-        
+    public function recuperar($id) {
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Proprietario WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $result = $statement->execute();      
+        $proprietario = $this->criarVarios($result);
+        return $proprietario[0]; 
     }
 
     public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null) {
@@ -87,15 +100,34 @@ class Proprietario extends \Base\Model\AbstractModel{
             $qtd = self::$_qtd_por_pagina;
         } 
         $adapter = $this->getAdapter();
-        $sql = "SELECT * FROM Proprietario WHERE(cpf ='".$cpf."') LIMIT ".$de.", ".($qtd+1)."";
+        $sql = "SELECT * FROM Proprietario WHERE (cpf =".$cpf.") LIMIT ".$de.", ".($qtd+1)."";
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        $lista = $this->criarVarios($results);
+        return $lista;
+    }
+    
+    public function recuperarPorParametro($de = null, $qtd = null, $filtro, $param){
+        if($de == null){
+            $de = 0;
+        }
+        if($qtd == null){
+            $qtd = self::$_qtd_por_pagina;
+        } 
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Proprietario WHERE (".$filtro." like '%".$param."%') LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         $lista = $this->criarVarios($results);
         return $lista;
     }
 
-    public function remover($obj) {
-        
+    public function remover($id){
+        $adapter = $this->getAdapter();
+        $sql = "DELETE FROM Proprietario WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        return true;
     }
 
 }

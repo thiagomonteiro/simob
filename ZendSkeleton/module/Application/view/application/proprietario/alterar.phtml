@@ -1,0 +1,20 @@
+<header>
+    Alterar Proprietario
+</header>
+<section class="alterar">
+    <?php
+    $form = $this->alterar;
+    $form->setAttribute('action', $this->url('crud_proprietario/alterar'));
+    $form->setAttribute('method', 'post');
+
+    /*
+     * To change this template, choose Tools | Templates
+     * and open the template in the editor
+     */
+
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+
+    ?>
+</section>

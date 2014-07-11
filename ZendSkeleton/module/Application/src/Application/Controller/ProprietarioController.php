@@ -10,7 +10,9 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Application\Form\Proprietario\busca as form_busca;
 use Application\Form\Proprietario\criar as form_criar;
-use Application\Filter\Proprietario\criarProprietario as filter;
+use Application\Form\Proprietario\alterar as form_alterar;
+use Application\Filter\Proprietario\criarProprietario as filter_criar;
+use Application\Filter\Proprietario\alterarProprietario as filter_alterar;
 
 class ProprietarioController extends \Base\Controller\BaseController{
     private $_EstadoDao;
@@ -87,33 +89,97 @@ class ProprietarioController extends \Base\Controller\BaseController{
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
-    private function GetViewLista($proprietariosList){
-        $view= new ViewModel(array('proprietarios'=>$proprietariosList));
-        $view->setTemplate('application/proprietario/partials/lista.phtml');
+    public function buscarAction(){
+        $request = $this->getRequest();//2- pego a requisiçao
+        if($request->isPost()){//3-verifico se é um post se for:
+            $params = $request->getPost()->toArray();
+        }
+        $param = $params['hidden-param'];
+        $filtro = $params['hidden-filtro'];
+        $result = $this->_ProprietarioDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
+        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+        $viewModelListar= $this->GetViewLista($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+        $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function deletarAction(){
+        try{
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->_ProprietarioDao->remover($id);
+            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
+        } catch (Exception $e) {
+            $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
+        }
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+    public function alterarAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $form = $this->GetFormAlterar($id);
+        $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
+        $data = array('success' => true,'html'=>$viewModel);
+        return $this->getResponse()->setContent(Json_encode($data));     
+    }
+    
+    public function salvarAlteracoesAction(){
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $dados = (array)$request->getPost();
+            $validador = new filter_alterar();
+            $inputFilter = $validador->getInputFilter();
+            $inputFilter->setData($dados);
+            if($inputFilter->isValid()){
+                $dados['bairro']=$this->_BairroDao->recuperar($dados['bairro']);
+                $proprietarioOBJ = $this->_ProprietarioDao->criarNovo($dados);
+                $proprietarioOBJ->setPersistido(true);
+                $resposta = $this->_ProprietarioDao->salvar($proprietarioOBJ);
+                $data = array('success' => true,'menssagem'=>'Dados alterados com sucesso');
+            }else{
+                $data = array('success'=>false,'erros'=>$inputFilter->getMessages());
+            }
+        }
+        return $this->getResponse()->setContent(json_encode($data));
+    }
+    
+    private function GetFormAlterar($id){
+        $proprietarioObj = $this->_ProprietarioDao->recuperar($id);
+        $uf =  $proprietarioObj->getBairro()->getCidade()->getEstado(); 
+        $dados_uf = $this->Localidades()->getEstados();
+        unset($dados_uf[0]);
+        $dados_uf[$uf->getId()]["selected"]="selected";
+        $cidade = $proprietarioObj->getBairro()->getCidade();
+        $dados_cidade = $this->Localidades()->getCidades($uf->getUf());        
+        $dados_cidade[$cidade->getId()]["selected"]="selected";
+        $bairro = $proprietarioObj->getBairro();
+        $dados_bairro = $this->Localidades()->getBairros($cidade);
+        $dados_bairro[$bairro->getId()]["selected"]="selected";
+        $form = new form_alterar();
+        $form->get('id')->setAttribute('value', $id);       
+        $form->get('nome')->setAttribute('value', $proprietarioObj->getNome());
+        $form->get('uf')->setAttribute('options', $dados_uf);
+        $form->get('cidade')->setAttribute('options', $dados_cidade);
+        $form->get('bairro')->setAttribute('options', $dados_bairro);
+        $form->get('logradouro')->setAttribute('value', $proprietarioObj->getLogradouro());
+        $form->get('numero')->setAttribute('value', $proprietarioObj->getNumero());
+        $form->get('telefone')->setAttribute('value', $proprietarioObj->getTelefone());
+        $form->get('celular')->setAttribute('value', $proprietarioObj->getCelular());        
+        $form->get('rg')->setAttribute('value', $proprietarioObj->getRg());
+        $form->get('profissao')->setAttribute('value', $proprietarioObj->getProfissao());
+        $view = new ViewModel(array('alterar'   =>  $form));
+        $view->setTemplate('application/proprietario/alterar.phtml');
         return $view;
     }
     
-    private function GetViewBarraPaginacao($paginacao){
-        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_proprietario'));//na view $rota.'proximaPagina'
-        $view->setTemplate('application/partials/paginacao.phtml');
-        return $view;
-    }
-    
-     private function GetViewBarraDeBusca($rota,$param){//passando os params para o application/src/form
-        $busca = new form_busca(null,array(),$param);//1- primeiro eu instancio o formulario
-        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','nome' => 'nome','cpf' => 'cpf'));
-        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca));
-        $view->setTemplate('application/proprietario/partials/busca.phtml');
-        return $view;
-    }
-
-
     public function criarAction(){
         $request = $this->getRequest();
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
             $form = $this->formCriarProprietarioAction($params); 
-            $Filter = new filter();
+            $Filter = new filter_criar();
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
@@ -167,6 +233,25 @@ class ProprietarioController extends \Base\Controller\BaseController{
         return $form;
     }
     
+    private function GetViewLista($proprietariosList){
+        $view= new ViewModel(array('proprietarios'=>$proprietariosList));
+        $view->setTemplate('application/proprietario/partials/lista.phtml');
+        return $view;
+    }
+    
+    private function GetViewBarraPaginacao($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_proprietario'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
+        return $view;
+    }
+    
+     private function GetViewBarraDeBusca($rota,$param){//passando os params para o application/src/form
+        $busca = new form_busca(null,array(),$param);//1- primeiro eu instancio o formulario
+        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','nome' => 'nome','cpf' => 'cpf'));
+        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca));
+        $view->setTemplate('application/proprietario/partials/busca.phtml');
+        return $view;
+    } 
     
     }
 
