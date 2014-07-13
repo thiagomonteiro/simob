@@ -82,12 +82,17 @@ class Bairro extends \Base\Model\AbstractModel {
         return $bairro[0];
     }
     
-    public function remover($id){
+    public function remover($id)
+    {
+       try{
         $adapter = $this->getAdapter();
         $sql = "DELETE FROM Bairro WHERE(id =".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
-        return true;
+        return "ok";
+       }catch(\Zend\Db\Adapter\Exception\RuntimeException $e){
+           return "Não foi possível excluir, este Bairro faz referência a um imóvel ou proprietario";
+       }
     }
     
     public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){

@@ -261,7 +261,14 @@ $(document).ready(function() {
                                         position: "center",
                                     });
                                 }else{
-                                   $("#dialog-mensagem").find("p").text(res.mensagem);
+                                   notif({
+                                        msg: res.menssagem,
+                                        type: 'error',
+                                        width: "all",
+                                        opacity: 0.8,
+                                        autohide: false,
+                                        position: "center",
+                                    });
                                 }
                             });
                             $(this).dialog("close");

@@ -181,15 +181,14 @@ class BairroController extends \Base\Controller\BaseController {
         
     }
     
-    
     public function deletarBairroAction(){
-        try{
-            $id = $this->getEvent()->getRouteMatch()->getParam('id');
-            $response = $this->BairroDao->remover($id);
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $response = $this->BairroDao->remover($id);
+        if($response == "ok"){
             $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
-        } catch (Exception $e) {
-            $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
-        }
+        }else{
+            $data = array('success' => false,'menssagem' => $response);
+        }                 
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
