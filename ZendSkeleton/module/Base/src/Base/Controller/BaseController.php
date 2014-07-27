@@ -41,6 +41,15 @@ class BaseController extends AbstractActionController{
                 array('noescape' => true)); // Disable CDATA comments
     }
     
+    public function appendCss($css){
+        $script = $this->getServiceLocator()->get('viewhelpermanager')
+                ->get('headLink');
+        $script->appendStylesheet(
+                '/css/'.$css,
+                'screen',
+                array('noescape' => true));
+    }
+    
     public function criarNotificacao($mensagem,$tipo){
         //implementar if para array
         if(is_array($mensagem)){

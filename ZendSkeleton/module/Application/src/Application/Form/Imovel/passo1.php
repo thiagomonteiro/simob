@@ -3,51 +3,25 @@
 namespace Application\Form\Imovel;
 use Zend\Form\Form;
 class passo1 extends Form{
-    public function __construct($name = null, $options = array()) {
+    public function __construct($name = null, $options = array(),$dados = array()) {
         parent::__construct($name, $options);
-        $this->setAttributes(array('class' => 'formulario-passo1', 'id' => 'form-passo1'));
-        $submit = new \Zend\Form\Element\Submit('enviar');
-        $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit'));
-        $this->add($this->getSelectsFieldSet());
-        $this->add($this->getEnderecoFieldSet());
-        $this->add($this->getMedidasFieldSet());
-        $this->add($this->getFinanceiroFieldSet());
-        $this->add($submit);
-    }
-    
-    private function getSelectsFieldSet(){
-        $selects_field = new \Zend\Form\Fieldset('selects-fieldSet');
-        $selects_field->setLabel("Localizacao");
-        $estado = new \Zend\Form\Element\Select('select-imovel-uf');
+        $this->setAttributes(array('class' => 'formulario', 'id' => 'form-passo1'));
+        $estado = new \Zend\Form\Element\Select('uf-imovel');
         $estado->setLabel('Estado');
-        $cidade = new \Zend\Form\Element\Select('select-imovel-cidade');
+        $estado->setDisableInArrayValidator(true);
+        $cidade = new \Zend\Form\Element\Select('cidade-imovel');
         $cidade->setLabel('Cidade');
-        $bairro = new \Zend\Form\Element\Select('select-imovel-bairro');
-        $bairro->setLabel('bairro');
-        $selects_field->add($estado);
-        $selects_field->add($cidade);
-        $selects_field->add($bairro);
-        return $selects_field;
-    }
-    
-    private function getEnderecoFieldSet(){
-        $endereco_field = new \Zend\Form\Fieldset('endereco-fieldSet');
-        $endereco_field->setLabel("Logradouro");
+        $cidade->setDisableInArrayValidator(true);
+        $bairro = new \Zend\Form\Element\Select('bairro-imovel');
+        $bairro->setLabel('Bairro');
+        $bairro->setDisableInArrayValidator(true);
         $endereco = new \Zend\Form\Element\Text('rua');
         $endereco->setLabel('Endereço');
         $numero = new \Zend\Form\Element\Text('numero');
         $numero->setLabel('Número');
         $descricao = new \Zend\Form\Element\Textarea('descricao');
         $descricao->setLabel('Descrição');
-        $endereco_field->add($endereco);
-        $endereco_field->add($numero);
-        $endereco_field->add($descricao);
-        return $endereco_field;
-    }
-    
-    private function getMedidasFieldSet(){
-        $medidas_field = new \Zend\Form\Fieldset('medidas-fieldSet');
-        $medidas_field->setLabel("Sobre o Imovel");
+        $submit = new \Zend\Form\Element\Submit('enviar');
         $area_total = new \Zend\Form\Element\Number('area-total');
         $area_total->setAttribute('value', 0);
         $area_total->setLabel('Área Total');
@@ -56,21 +30,24 @@ class passo1 extends Form{
         $area_construida->setLabel('Área Construída');
         $iptu = new \Zend\Form\Element\Text('valor-iptu');
         $iptu->setLabel('IPTU');
-        $medidas_field->add($area_total);
-        $medidas_field->add($area_construida);
-        $medidas_field->add($iptu); 
-        return $medidas_field;
-    }
-    
-    private function getFinanceiroFieldSet(){
-        $financeiro_field = new \Zend\Form\Fieldset('transacao-fieldSet');
-        $financeiro_field->setLabel('Informações Financeiras');
+        $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit'));
         $tipo_operacao = new \Zend\Form\Element\Select('tipo-operacao');
         $tipo_operacao->setLabel('Tipo de Operação');
         $preco = new \Zend\Form\Element\Text('valor-operacao');
         $preco->setLabel('Valor da Operação');
-        $financeiro_field->add($tipo_operacao);
-        $financeiro_field->add($preco);
-        return $financeiro_field;
+        $this->add($estado);
+        $this->add($cidade);
+        $this->add($bairro);
+        $this->add($endereco);
+        $this->add($numero);
+        $this->add($descricao);
+        $this->add($area_total);
+        $this->add($area_construida);
+        $this->add($iptu); 
+        $this->add($tipo_operacao);
+        $this->add($preco);
+        
+        
+        $this->add($submit);
     }
 }

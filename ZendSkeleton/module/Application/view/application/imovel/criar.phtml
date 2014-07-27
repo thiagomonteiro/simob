@@ -1,7 +1,11 @@
-<header>
-    Cadastro de Imoveis
-</header>
+<section class="criar">
+    <?php
+    $form = $this->partialCadastro1;
+    $form->setAttribute('action', $this->url('crud_imovel/criar'));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
 
-<?php
-    echo $this->partialCadastro1;
-?>
+    ?>
+</section>

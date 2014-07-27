@@ -14,7 +14,7 @@ namespace Application\Entity;
  * @author thiago
  */
 class Imovel extends \Base\Entity\AbstractEntity {
-    /*private $_id;
+    private $_id;
     private $_descricao;
     
     private $_bairro;
@@ -30,5 +30,5 @@ class Imovel extends \Base\Entity\AbstractEntity {
     
     private $_subTipoImovel;
     private $_comodosList;// Array
-    private $_tipoTransacao;*/
+    private $_tipoTransacao;
 }

@@ -1,0 +1,57 @@
+.formulario-imovel > label,select,input,textarea,number{
+    float: left;
+}
+
+select[name="uf-imovel"]{
+    position: relative;
+    left: 100px;
+}
+
+select[name="cidade-imovel"]{
+    background-color: blue;
+    position: relative;
+    left: 150px;
+}
+
+select[name="bairro-imovel"]{
+    background-color: blue;
+    position: relative;
+    left: 200px;
+}
+
+input[name="rua"]{
+    position : relative;
+    top: 50px;
+    left: 100px;
+}
+/////
+
+.formulario-imovel ul{
+    list-style: none;  
+    color: #c85305;
+    font-size: 86%;
+}
+
+.formulario-imovel ul li{
+    background-color: #FFFFE0;
+    display: inline-block;
+    height: 30px;
+    border-radius: 5px;
+    position:relative;
+    left:50px;
+}
+
+.formulario-imovel ul li:before{
+    content:url("/img/erro.png");
+    position : relative;
+    left:50px;
+}
+
+.response-notify{
+    position: fixed;
+    width: 100%;
+    top:0px;
+    display: none;
+    background-color: red;
+    text-align: center;
+}
