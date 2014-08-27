@@ -13,10 +13,12 @@
  */
 namespace Application\Controller;
 
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Application\Form\Imovel\passo1 as form_passo1; 
 use Application\Filter\Imovel\criarImovel as filtro_criar;
+use Application\Session\defaultSession as imovel_session;
 class ImovelController extends \Base\Controller\BaseController{
     private $_ImovelDao;
     private $_EstadoDao;
@@ -26,17 +28,19 @@ class ImovelController extends \Base\Controller\BaseController{
     private $_SubTipoImovelDao;
     private $_TipoComodosDao;
     private $_TipoTransacaoDao;
-    
+    private $_imovel_session;
     /**
      * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
      */
     public function __construct() {
         parent::__construct();
+        $this->_imovel_session = new imovel_session('imovel');
         $this->_ImovelDao = \Base\Model\daoFactory::factory('Imovel');
         $this->_BairroDao = \Base\Model\daoFactory::factory('Bairro');
         $this->_CidadeDao = \Base\Model\daoFactory::factory('Cidade');
         $this->_EstadoDao = \Base\Model\daoFactory::factory('Estado');
         $this->_TipoTransacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
+        
     }
     
    
@@ -49,8 +53,11 @@ class ImovelController extends \Base\Controller\BaseController{
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
+               $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
+               $imovelObj = $this->_ImovelDao->criarNovo($params);
+               $this->_imovel_session->salvarObjeto('imovel', $imovelObj);
                $this->flashMessenger()->addSuccessMessage('Passo 1 concluído com sucesso!');
-               //$this->redirect()->toRoute('crud_proprietario/index');
+               $this->redirect()->toRoute('crud_imovel/passo2');
             }else{  
             }
         }else{
@@ -62,6 +69,10 @@ class ImovelController extends \Base\Controller\BaseController{
         return $view;
     }
     
+    public function passo2Action(){
+        
+    }
+    
     public function getFormPasso1($dadosPost=array()){
         $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
         $dados_select_operacao = $this->SelectHelper()->getArrayData('selecione uma operação',$operacoes); 
@@ -69,7 +80,7 @@ class ImovelController extends \Base\Controller\BaseController{
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_passo1();
             $form->get('uf')->setAttribute('options', $dados_uf);
-            $form->get('tipo-operacao')->setAttribute('options', $dados_select_operacao);
+            $form->get('tipoTransacao')->setAttribute('options', $dados_select_operacao);
             $optionsCidade = array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled'));
             $optionsBairro = array(array( 'label' => 'Selecione uma Cidade','selected' => 'selected', 'disabled' => 'disabled'));
             $form->get('cidade')->setAttribute('options', $optionsCidade);           
@@ -93,9 +104,9 @@ class ImovelController extends \Base\Controller\BaseController{
                     }
                 }
             } 
-            $form->get('tipo-operacao')->setAttribute('options', $dados_select_operacao);
-            if(empty($dadosPost['tipo-operacao']) != true){
-               $form->get('tipo-operacao')->setAttribute('selected',$dadosPost['tipo-operacao']); 
+            $form->get('tipoTransacao')->setAttribute('options', $dados_select_operacao);
+            if(empty($dadosPost['tipoTransacao']) != true){
+               $form->get('tipoTransacao')->setAttribute('selected',$dadosPost['tipoTransacao']); 
             }
         }
         return $form;

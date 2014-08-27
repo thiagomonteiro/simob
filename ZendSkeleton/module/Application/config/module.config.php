@@ -481,16 +481,17 @@ $rota_imovel = array(
                 ),
             ),
         ),
-    ),
-    'passo2' => array(
-      'type' => 'segment',
-      'options' => array(
-          'route' => '/passo2',
-          'defaults' => array(
-             'action' => 'passo2',  
+        'passo2' => array(
+          'type' => 'segment',
+          'options' => array(
+              'route' => '/passo2',
+              'defaults' => array(
+                 'action' => 'passo2',  
+              ),
           ),
-      ),
+        ),
     ),
+    
     
 );
 

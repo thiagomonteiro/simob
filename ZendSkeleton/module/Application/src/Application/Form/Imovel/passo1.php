@@ -34,22 +34,22 @@ class passo1 extends Form{
         $descricao = new \Zend\Form\Element\Textarea('descricao');
         $descricao->setLabel('Descrição');
         $submit = new \Zend\Form\Element\Submit('enviar');
-        $area_total = new \Zend\Form\Element\Number('area-total');
+        $area_total = new \Zend\Form\Element\Number('areaTotal');
         $area_total->setAttribute('value', 0);
         $area_total->setLabel('Área Total');
-        $area_construida = new \Zend\Form\Element\Number('area-construida');
+        $area_construida = new \Zend\Form\Element\Number('areaConstruida');
         $area_construida->setAttribute('value', 0);
         $area_construida->setLabel('Área Construída');
-        $iptu = new \Zend\Form\Element\Number('valor-iptu');
+        $iptu = new \Zend\Form\Element\Number('valorIptu');
         $iptu->setLabel('IPTU');
         $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit'));
-        $tipo_operacao = new \Zend\Form\Element\Select('tipo-operacao');
+        $tipo_operacao = new \Zend\Form\Element\Select('tipoTransacao');
         $tipo_operacao->setLabel('Tipo de Operação');
-        if (array_key_exists('tipo-operacao', $dados)) {
-            $estado->setAttribute('value', $dados['tipo-operacao']);
+        if (array_key_exists('tipoTransacao', $dados)) {
+            $estado->setAttribute('value', $dados['tipoTransacao']);
         }
         $tipo_operacao->setDisableInArrayValidator(true);
-        $preco = new \Zend\Form\Element\Text('valor-operacao');
+        $preco = new \Zend\Form\Element\Text('valorTransacao');
         $preco->setLabel('Valor da Operação');
         $this->add($estado);
         $this->add($cidade);

@@ -119,7 +119,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'area-total',
+                    'name' => 'areaTotal',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -141,7 +141,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'area-construida',
+                    'name' => 'areaConstruida',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -163,7 +163,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'valor-iptu',
+                    'name' => 'valorIptu',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -185,7 +185,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'tipo-operacao',
+                    'name' => 'tipoTransacao',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -205,7 +205,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'valor-operacao',
+                    'name' => 'valorTransacao',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),

@@ -7,12 +7,42 @@
  */
 
 namespace Application\Model;
-
+use Application\Entity\Imovel as ImovelEntity;
 /**
  * Description of Imovel
  *
  * @author thiago
  */
-class Imovel {
-    //put your code here
+class Imovel extends \Base\Model\AbstractModel {
+    private $_imovelObj;
+    
+    
+    public function __construct() {
+        
+    }
+    
+    public function criarNovo($params = null){
+        return $this->_imovelObj = new ImovelEntity($params);
+    }
+    
+    protected function atualizar($obj) {
+        
+    }
+
+    protected function inserir($obj) {
+        
+    }
+
+    protected function recuperar($obj) {
+        
+    }
+
+    protected function recuperarTodos($de, $qtd, $filtro, $param) {
+        
+    }
+
+    protected function remover($obj) {
+        
+    }
+
 }

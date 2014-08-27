@@ -36,7 +36,7 @@ class BaseSession {
         return unserialize($this->user_session->dados);
     }
     
-    public function limparSessao(){
+    public function limparSessaoUsuario(){
         $this->user_session->getManager()->getStorage()->clear('user');
         $this->_Autenticado = false;
     }

@@ -15,20 +15,99 @@ namespace Application\Entity;
  */
 class Imovel extends \Base\Entity\AbstractEntity {
     private $_id;
-    private $_descricao;
     
     private $_bairro;
-    private $_endereco;
+    private $_rua;
     private $_numero;
     private $_areaTotal;
     private $_areaConstruida;
     private $_valorIptu;
     private $_valorCondominio;
-    private $_valor;
-    
+    private $_valorTransacao;
+    private $_descricao;
+    private $_tipoTransacao;
     private $_proprietario;
-    
     private $_subTipoImovel;
     private $_comodosList;// Array
-    private $_tipoTransacao;
+    
+    public function setId($id){
+        $this->_id = $id;
+    }
+    
+    public function getId(){
+        return $this->_id;
+    }
+    
+    public function setBairro(\Application\Entity\Bairro $bairro){
+        $this->_bairro = $bairro;
+    }
+    
+    public function getBairro(){
+        return $this->_bairro;
+    }
+    
+    public function setRua($rua){
+        $this->_rua = $rua;
+    }
+    
+    public function getRua(){
+        return $this->_rua;
+    }
+    
+    public function setNumero($numero){
+        $this->_numero = $numero;
+    }
+    
+    public function getNumero(){
+       return $this->_numero; 
+    }
+    
+    public function setAreaTotal($total){
+        $this->_areaTotal = $total;
+    }
+    
+    public function getAreaTotal(){
+        return $this->_areaTotal;
+    }
+    
+    public function setAreaConstruida($construida){
+        $this->_areaConstruida = $construida;
+    }
+    
+    public function getAreaConstruida(){
+        return $this->_areaConstruida;
+    }
+    
+    public function setValorIptu($iptu){
+        $this->_valorIptu = $iptu; 
+    }
+    
+    public function getValorIptu(){
+        return $this->_valorIptu;
+    }
+    
+    public function setValorCondominio($condominio){
+        $this->_valorCondominio = $condominio;
+    }
+    
+    public function getValorCondominio(){
+       return $this->_valorCondominio;
+    }
+
+    public function setValorTransacao($valor){
+        $this->_valorTransacao = $valor;
+    }
+    
+    public function getValorTransacao(){
+        return $this->_valorTransacao;
+    }
+    
+    public function setDescricao($descricao){
+        $this->_descricao = $descricao;
+    }
+    
+    public function getDescricao(){
+        return $this->_descricao;
+    }
+    
 }
