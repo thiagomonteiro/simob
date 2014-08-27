@@ -472,12 +472,12 @@ $rota_imovel = array(
                 ),
             ),
         ),
-        'criar' => array(
+        'passo1' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/criar',
+                'route' => '/passo1',
                 'defaults' => array(
-                    'action' => 'criar',
+                    'action' => 'passo1',
                 ),
             ),
         ),

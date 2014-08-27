@@ -40,7 +40,7 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
    
-    public function criarAction(){
+    public function passo1Action(){
         $request = $this->getRequest();
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
@@ -99,5 +99,9 @@ class ImovelController extends \Base\Controller\BaseController{
             }
         }
         return $form;
+    }
+    
+    public function getFormPasso2(){
+        
     }
 }
