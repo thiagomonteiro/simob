@@ -482,6 +482,15 @@ $rota_imovel = array(
             ),
         ),
     ),
+    'passo2' => array(
+      'type' => 'segment',
+      'options' => array(
+          'route' => '/passo2',
+          'defaults' => array(
+             'action' => 'passo2',  
+          ),
+      ),
+    ),
     
 );
 
@@ -603,6 +612,7 @@ return array(
     'controller_plugins' => array(
         'invokables' => array(
             'Localidades' => 'Application\Plugin\Localidades',
+            'SelectHelper' => 'Application\Plugin\SelectHelper',
         )
     ),
 );

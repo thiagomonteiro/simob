@@ -35,9 +35,7 @@ footer, hr{
     display: block;
 }
 
-
-
-.formulario ul{
+.formulario ul{    
     list-style: none;  
     color: #c85305;
     font-size: 86%;

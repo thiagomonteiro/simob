@@ -32,16 +32,15 @@ class ImovelController extends \Base\Controller\BaseController{
      */
     public function __construct() {
         parent::__construct();
-        $this->_ImovelDao=\Base\Model\daoFactory::factory('Imovel');
-        $this->_BairroDao=\Base\Model\daoFactory::factory('Bairro');
-        $this->_CidadeDao=\Base\Model\daoFactory::factory('Cidade');
-        $this->_EstadoDao=\Base\Model\daoFactory::factory('Estado');
+        $this->_ImovelDao = \Base\Model\daoFactory::factory('Imovel');
+        $this->_BairroDao = \Base\Model\daoFactory::factory('Bairro');
+        $this->_CidadeDao = \Base\Model\daoFactory::factory('Cidade');
+        $this->_EstadoDao = \Base\Model\daoFactory::factory('Estado');
+        $this->_TipoTransacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
     }
     
    
     public function criarAction(){
-        $this->setTemplate('layout/admin');
-        $this->appendJavaScript('simob/imovel.js'); 
         $request = $this->getRequest();
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
@@ -50,9 +49,8 @@ class ImovelController extends \Base\Controller\BaseController{
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
-               $params['bairro-imovel']=$this->_BairroDao->recuperar($params['bairro-imovel']);
-               $this->flashMessenger()->addSuccessMessage('Proprietario cadastrado com sucesso!');
-               $this->redirect()->toRoute('crud_imovel/setComodos');
+               $this->flashMessenger()->addSuccessMessage('Passo 1 concluído com sucesso!');
+               //$this->redirect()->toRoute('crud_proprietario/index');
             }else{  
             }
         }else{
@@ -65,35 +63,41 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function getFormPasso1($dadosPost=array()){
-        //if(empty($dadosPost)){
+        $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
+        $dados_select_operacao = $this->SelectHelper()->getArrayData('selecione uma operação',$operacoes); 
+        if(empty($dadosPost)){
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_passo1();
-            $form->get('uf-imovel')->setAttribute('options', $dados_uf);
+            $form->get('uf')->setAttribute('options', $dados_uf);
+            $form->get('tipo-operacao')->setAttribute('options', $dados_select_operacao);
             $optionsCidade = array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled'));
             $optionsBairro = array(array( 'label' => 'Selecione uma Cidade','selected' => 'selected', 'disabled' => 'disabled'));
-            $form->get('cidade-imovel')->setAttribute('options', $optionsCidade);           
-            $form->get('bairro-imovel')->setAttribute('options', $optionsBairro);
-        //}else{
-            echo 'aki';
-            /*$dados_uf = $this->Localidades()->getEstados();
+            $form->get('cidade')->setAttribute('options', $optionsCidade);           
+            $form->get('bairro')->setAttribute('options', $optionsBairro);
+        }else{  
+            $dados_uf = $this->Localidades()->getEstados();
             $form = new form_passo1(null,array(),$dadosPost);
-            $form->get('selects-fieldSet')->get('uf-imovel')->setAttribute('options', $dados_uf);
-            if(empty($dadosPost['uf-imovel']) != true){
-                $form->get('selects-fieldSet')->get('uf-imovel')->setAttribute('selected', $dadosPost['uf']);
-                $estado = $this->_EstadoDao->recuperar($dadosPost['uf-imovel']);
+            $form->get('uf')->setAttribute('options', $dados_uf);
+            if(empty($dadosPost['uf']) != true){
+                $form->get('uf')->setAttribute('selected', $dadosPost['uf']);
+                $estado = $this->_EstadoDao->recuperar($dadosPost['uf']);
                 $dadosCidade = $this->Localidades()->getCidades($estado->getUf());
-                $form->get('selects-fieldSet')->get('cidade-imovel')->setAttribute('options', $dadosCidade);
-                if(empty($dadosPost['cidade-imovel']) != true){
-                    $form->get('selects-fieldSet')->get('cidade-imovel')->setAttribute('selected', $dadosPost['cidade-imovel']);
-                    $cidade = $this->_CidadeDao->recuperar($dadosPost['cidade-imovel']);
+                $form->get('cidade')->setAttribute('options', $dadosCidade);
+                if(empty($dadosPost['cidade']) != true){
+                    $form->get('cidade')->setAttribute('selected', $dadosPost['cidade']);
+                    $cidade = $this->_CidadeDao->recuperar($dadosPost['cidade']);
                     $dadosBairro = $this->Localidades()->getBairros($cidade);
-                    $form->get('selects-fieldSet')->get('bairro-imovel')->setAttribute('options', $dadosBairro);
-                    if(empty($dadosPost['bairro-imovel']) != true){
-                        $form->get('selects-fieldSet')->get('bairro-imovel')->setAttribute('selected',$dadosPost['bairro-imovel']);
+                    $form->get('bairro')->setAttribute('options', $dadosBairro);
+                    if(empty($dadosPost['bairro']) != true){
+                        $form->get('bairro')->setAttribute('selected',$dadosPost['bairro']);
                     }
                 }
-            }  */                      
-        //}
+            } 
+            $form->get('tipo-operacao')->setAttribute('options', $dados_select_operacao);
+            if(empty($dadosPost['tipo-operacao']) != true){
+               $form->get('tipo-operacao')->setAttribute('selected',$dadosPost['tipo-operacao']); 
+            }
+        }
         return $form;
     }
 }

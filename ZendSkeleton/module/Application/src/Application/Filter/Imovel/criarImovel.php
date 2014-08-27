@@ -18,7 +18,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'uf-imovel',
+                    'name' => 'uf',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -38,7 +38,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'cidade-imovel',
+                    'name' => 'cidade',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -58,7 +58,7 @@ class criarImovel implements InputFilterAwareInterface {
         $inputFilter->add(
             $factory->createInput(
                 array(
-                    'name' => 'bairro-imovel',
+                    'name' => 'bairro',
                     'required' => true,
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
@@ -125,6 +125,15 @@ class criarImovel implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\GreaterThan',
+                            'options' => array(
+                                'min' => 1,
+                                'inclusive' => true,
+                                'messages' => array(\Zend\Validator\GreaterThan::NOT_GREATER_INCLUSIVE=> 'Entre com um valor positivo'),
+                            ),
+                        ),
+                    ),
                 )
             )
         );
@@ -137,6 +146,15 @@ class criarImovel implements InputFilterAwareInterface {
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\GreaterThan',
+                            'options' => array(
+                                'min' => 1,
+                                'inclusive' => true,
+                                'messages' => array(\Zend\Validator\GreaterThan::NOT_GREATER_INCLUSIVE=> 'Entre com um valor positivo'),
+                            ),
+                        ),
                     ),
                 )
             )
@@ -151,6 +169,15 @@ class criarImovel implements InputFilterAwareInterface {
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
                     ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\GreaterThan',
+                            'options' => array(
+                                'min' => 1,
+                                'inclusive' => true,
+                                'messages' => array(\Zend\Validator\GreaterThan::NOT_GREATER_INCLUSIVE=> 'Entre com um valor positivo'),
+                            ),
+                        ),
+                    ),
                 )
             )
         );
@@ -163,6 +190,13 @@ class criarImovel implements InputFilterAwareInterface {
                     'filters' => array(
                         array('name' => 'Zend\Filter\StripTags'),
                         array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\NotEmpty',
+                            'options' => array(
+                                'messages' => array(NotEmpty::IS_EMPTY => 'Selecione uma operação'),
+                            ),
+                        ),
                     ),
                 )
             )
