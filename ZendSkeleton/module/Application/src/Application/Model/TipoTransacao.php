@@ -41,8 +41,13 @@ class TipoTransacao extends \Base\Model\AbstractModel {
         
     }
 
-    public function recuperar($obj) {
-        
+    public function recuperar($id) {
+       $adapter = $this->getAdapter();
+       $sql = "SELECT * FROM TipoTransacao WHERE(id=".$id.")";
+       $statement = $adapter->query($sql);
+       $result = $statement->execute();      
+       $tipo = $this->criarVarios($result);
+       return $tipo[0]; 
     }
 
     public function recuperarTodos($de = null, $qtd = null, $filtro = null, $param = null) {

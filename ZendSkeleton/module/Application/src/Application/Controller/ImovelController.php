@@ -18,7 +18,8 @@ use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Application\Form\Imovel\passo1 as form_passo1; 
 use Application\Filter\Imovel\criarImovel as filtro_criar;
-use Application\Session\defaultSession as imovel_session;
+use Application\Form\Imovel\passo2 as form_passo2;
+
 class ImovelController extends \Base\Controller\BaseController{
     private $_ImovelDao;
     private $_EstadoDao;
@@ -34,7 +35,6 @@ class ImovelController extends \Base\Controller\BaseController{
      */
     public function __construct() {
         parent::__construct();
-        $this->_imovel_session = new imovel_session('imovel');
         $this->_ImovelDao = \Base\Model\daoFactory::factory('Imovel');
         $this->_BairroDao = \Base\Model\daoFactory::factory('Bairro');
         $this->_CidadeDao = \Base\Model\daoFactory::factory('Cidade');
@@ -54,9 +54,10 @@ class ImovelController extends \Base\Controller\BaseController{
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
                $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
+               $params['tipoTransacao'] = $this->_TipoTransacaoDao->recuperar($params['tipoTransacao']);
                $imovelObj = $this->_ImovelDao->criarNovo($params);
-               $this->_imovel_session->salvarObjeto('imovel', $imovelObj);
-               $this->flashMessenger()->addSuccessMessage('Passo 1 concluído com sucesso!');
+               $this->SessionHelper()->salvarObjeto('imovel', $imovelObj);
+               $this->flashMessenger()->addSuccessMessage('Passo 1 concluído com sucesso! complete o cadastro');
                $this->redirect()->toRoute('crud_imovel/passo2');
             }else{  
             }
@@ -70,7 +71,16 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function passo2Action(){
-        
+        //$dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+        $mensagem = $this->flashMessenger()->getSuccessMessages();
+        if(count($mensagem)){
+                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+        }
+        $this->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/imovel.js');
+        $form = $this->getFormPasso2(); 
+        $view = new ViewModel(array('partialCadastro2'   => $form ));
+        return $view;
     }
     
     public function getFormPasso1($dadosPost=array()){
@@ -113,6 +123,7 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function getFormPasso2(){
-        
+        $form = new form_passo2();
+        return $form;
     }
 }

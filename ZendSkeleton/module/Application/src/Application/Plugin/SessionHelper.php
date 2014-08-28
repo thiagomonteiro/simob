@@ -1,17 +1,15 @@
 <?php
 
-namespace Application\Session;
+namespace Application\Plugin;
 use Zend\Session\Container;
+use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
-class defaultSession {
+class SessionHelper extends AbstractPlugin {
     private $_session;
     private $_hadados;
     
-    public function __construct($name){
+    public function definirSessao($name){
         $this->_session = new Container($name);
-        if(isset($this->_session->$name)){
-            $this->_hadados = true;
-        }
     }
     
     public function salvarObjeto($name,$obj){
@@ -20,6 +18,7 @@ class defaultSession {
     }
     
     public function recuperarObjeto($name){
+        $this->_session = new Container($name);
         return unserialize($this->_session->$name);
     }
     

@@ -1,0 +1,11 @@
+<section class="criar">
+    <?php
+    $form = $this->partialCadastro2;
+    $form->setAttribute('action', $this->url('crud_imovel/passo2'));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+
+    ?>
+</section>

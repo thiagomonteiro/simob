@@ -614,6 +614,7 @@ return array(
         'invokables' => array(
             'Localidades' => 'Application\Plugin\Localidades',
             'SelectHelper' => 'Application\Plugin\SelectHelper',
+            'SessionHelper' => 'Application\Plugin\SessionHelper',
         )
     ),
 );

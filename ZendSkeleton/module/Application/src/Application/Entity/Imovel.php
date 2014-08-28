@@ -93,6 +93,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     public function getValorCondominio(){
        return $this->_valorCondominio;
     }
+    
 
     public function setValorTransacao($valor){
         $this->_valorTransacao = $valor;
@@ -108,6 +109,14 @@ class Imovel extends \Base\Entity\AbstractEntity {
     
     public function getDescricao(){
         return $this->_descricao;
+    }
+    
+    public function setTipoTransacao($transacao){
+        $this->_tipoTransacao = $transacao;
+    }
+    
+    public function getTipoTransacao(){
+        return $this->_tipoTransacao;
     }
     
 }
