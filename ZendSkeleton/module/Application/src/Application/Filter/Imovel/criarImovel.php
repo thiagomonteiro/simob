@@ -214,6 +214,46 @@ class criarImovel implements InputFilterAwareInterface {
                 )
             )
         );
+        
+         $inputFilter->add(
+            $factory->createInput(
+                array(
+                    'name' => 'categoria',
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StripTags'),
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\NotEmpty',
+                            'options' => array(
+                                'messages' => array(NotEmpty::IS_EMPTY => 'Selecione uma categoria'),
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
+         
+          $inputFilter->add(
+            $factory->createInput(
+                array(
+                    'name' => 'subCategoria',
+                    'required' => true,
+                    'filters' => array(
+                        array('name' => 'Zend\Filter\StripTags'),
+                        array('name' => 'Zend\Filter\StringTrim'),
+                    ),
+                    'validators' => array(
+                        array('name' => 'Zend\Validator\NotEmpty',
+                            'options' => array(
+                                'messages' => array(NotEmpty::IS_EMPTY => 'Selecione uma sub categoria'),
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
 
 
         return $inputFilter;

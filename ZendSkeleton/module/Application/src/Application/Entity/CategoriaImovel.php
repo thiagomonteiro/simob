@@ -13,7 +13,7 @@ namespace Application\Entity;
  *
  * @author thiago
  */
-class TipoImovel extends \Base\Entity\AbstractEntity{
+class CategoriaImovel extends \Base\Entity\AbstractEntity{
     private $_id;
     private $_descricao;
     

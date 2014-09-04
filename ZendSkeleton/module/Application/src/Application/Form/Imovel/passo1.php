@@ -49,6 +49,13 @@ class passo1 extends Form{
             $estado->setAttribute('value', $dados['tipoTransacao']);
         }
         $tipo_operacao->setDisableInArrayValidator(true);
+        $categoria_imovel = new \Zend\Form\Element\Select('categoria');
+        $categoria_imovel->setAttribute('class', 'categoria-select');
+        $categoria_imovel->setLabel('Categoria');
+        $categoria_imovel->setDisableInArrayValidator(true);
+        $sub_categoria_imovel = new \Zend\Form\Element\Select('subCategoria');
+        $sub_categoria_imovel->setLabel('SubCategoria');
+        $sub_categoria_imovel->setDisableInArrayValidator(true);
         $preco = new \Zend\Form\Element\Text('valorTransacao');
         $preco->setLabel('Valor da Operação');
         $this->add($estado);
@@ -62,6 +69,8 @@ class passo1 extends Form{
         $this->add($iptu); 
         $this->add($tipo_operacao);
         $this->add($preco);
+        $this->add($categoria_imovel);
+        $this->add($sub_categoria_imovel);
         $this->add($submit);
     }
 }

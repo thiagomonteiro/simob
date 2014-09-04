@@ -27,7 +27,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     private $_descricao;
     private $_tipoTransacao;
     private $_proprietario;
-    private $_subTipoImovel;
+    private $_subCategoria;
     private $_comodosList;// Array
     
     public function setId($id){

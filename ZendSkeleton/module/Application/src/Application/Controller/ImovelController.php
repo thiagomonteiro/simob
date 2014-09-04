@@ -25,8 +25,8 @@ class ImovelController extends \Base\Controller\BaseController{
     private $_EstadoDao;
     private $_CidadeDao;
     private $_BairroDao;
-    private $_TipoImovelDao;
-    private $_SubTipoImovelDao;
+    private $_CategoriaImovelDao;
+    private $_SubCategoriaImovelDao;
     private $_TipoComodosDao;
     private $_TipoTransacaoDao;
     private $_imovel_session;
@@ -40,7 +40,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_CidadeDao = \Base\Model\daoFactory::factory('Cidade');
         $this->_EstadoDao = \Base\Model\daoFactory::factory('Estado');
         $this->_TipoTransacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
-        
+        $this->_CategoriaImovelDao = \Base\Model\daoFactory::factory('CategoriaImovel');
     }
     
    
@@ -85,16 +85,21 @@ class ImovelController extends \Base\Controller\BaseController{
     
     public function getFormPasso1($dadosPost=array()){
         $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
+        $categorias = $this->_CategoriaImovelDao->recuperarTodos();
         $dados_select_operacao = $this->SelectHelper()->getArrayData('selecione uma operação',$operacoes); 
+        $dados_select_categoria = $this->SelectHelper()->getArrayData('selecione uma categoria',$categorias);
         if(empty($dadosPost)){
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_passo1();
             $form->get('uf')->setAttribute('options', $dados_uf);
             $form->get('tipoTransacao')->setAttribute('options', $dados_select_operacao);
+            $form->get('categoria')->setAttribute('options', $dados_select_categoria);
             $optionsCidade = array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled'));
             $optionsBairro = array(array( 'label' => 'Selecione uma Cidade','selected' => 'selected', 'disabled' => 'disabled'));
+            $optionsSubCategoria = array(array('label' => 'Selecione uma Categoria','selected' => 'selected', 'disabled' => 'disabled'));
             $form->get('cidade')->setAttribute('options', $optionsCidade);           
             $form->get('bairro')->setAttribute('options', $optionsBairro);
+            $form->get('subCategoria')->setAttribute('options', $optionsSubCategoria);
         }else{  
             $dados_uf = $this->Localidades()->getEstados();
             $form = new form_passo1(null,array(),$dadosPost);
@@ -113,10 +118,25 @@ class ImovelController extends \Base\Controller\BaseController{
                         $form->get('bairro')->setAttribute('selected',$dadosPost['bairro']);
                     }
                 }
-            } 
+            }else{
+                $optionsCidade = array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled'));
+                $optionsBairro = array(array( 'label' => 'Selecione uma Cidade','selected' => 'selected', 'disabled' => 'disabled'));
+                $form->get('cidade')->setAttribute('options', $optionsCidade);           
+                $form->get('bairro')->setAttribute('options', $optionsBairro);
+            }
             $form->get('tipoTransacao')->setAttribute('options', $dados_select_operacao);
             if(empty($dadosPost['tipoTransacao']) != true){
                $form->get('tipoTransacao')->setAttribute('selected',$dadosPost['tipoTransacao']); 
+            }
+            $form->get('categoria')->setAttribute('options', $dados_select_categoria);
+            if(empty($dadosPost['categoria']) != true){
+               $form->get('categoria')->setAttribute('selected',$dadosPost['categoria']); 
+               //recuperar
+               if(empty($dadosPost['subCategoria']) != true){
+                   $form->get('subCategoria')->setAttribute('selected',$dadosPost['subCategoria']);
+               }else{
+                   $form->get('subCategoria')->setAttribute('options',array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled')));
+               }
             }
         }
         return $form;
