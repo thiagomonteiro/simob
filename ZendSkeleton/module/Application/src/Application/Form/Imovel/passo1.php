@@ -54,6 +54,7 @@ class passo1 extends Form{
         $categoria_imovel->setLabel('Categoria');
         $categoria_imovel->setDisableInArrayValidator(true);
         $sub_categoria_imovel = new \Zend\Form\Element\Select('subCategoria');
+        $sub_categoria_imovel->setAttribute('class', 'sub-categoria-select');
         $sub_categoria_imovel->setLabel('SubCategoria');
         $sub_categoria_imovel->setDisableInArrayValidator(true);
         $preco = new \Zend\Form\Element\Text('valorTransacao');

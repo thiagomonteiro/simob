@@ -119,4 +119,11 @@ class Imovel extends \Base\Entity\AbstractEntity {
         return $this->_tipoTransacao;
     }
     
+    public function setSubCategoria($subCategoria){
+        $this->_subCategoria = $subCategoria;
+    }
+    
+    public function getSubCategoria(){
+        return $this->_subCategoria;
+    }
 }

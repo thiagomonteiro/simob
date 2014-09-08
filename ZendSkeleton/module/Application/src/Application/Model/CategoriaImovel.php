@@ -23,7 +23,7 @@ class CategoriaImovel extends \Base\Model\AbstractModel{
     }
     
     public function criarVarios($results){
-        $lista = [];
+        $lista = array();
         foreach ($results as $result){
             $lista[] = $this->criarNovo($result);
         }
@@ -38,8 +38,13 @@ class CategoriaImovel extends \Base\Model\AbstractModel{
         
     }
 
-    protected function recuperar($obj) {
-        
+    protected function recuperar($id) {
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM CategoriaImovel WHERE( id =".$id.")";
+        $statement = $adapter->createStatement($sql);
+        $result = $statement->execute();
+        $lista = $this->criarVarios($result);
+        return $lista[0];
     }
 
     public function recuperarTodos($de = null, $qtd = null, $filtro = null, $param = null) {

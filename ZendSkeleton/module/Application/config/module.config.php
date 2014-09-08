@@ -490,8 +490,20 @@ $rota_imovel = array(
               ),
           ),
         ),
+        'getSubCategorias' => array(
+        'type' => 'Zend\Mvc\Router\Http\Segment',
+        'options' => array(
+                'route' => '/getSubCategorias[/:categoria]',
+                'constraints' => array(
+                    'categoria' => '[a-zA-Z0-9_-]+'
+                ),
+                'defaults' => array(
+                    'controller'    =>  'Application\Controller\Imovel',
+                    'action'        =>  'getSubCategorias'
+                ),
+            ),
+        ), 
     ),
-    
     
 );
 

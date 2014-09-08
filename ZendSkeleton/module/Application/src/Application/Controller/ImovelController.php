@@ -41,6 +41,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_EstadoDao = \Base\Model\daoFactory::factory('Estado');
         $this->_TipoTransacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
         $this->_CategoriaImovelDao = \Base\Model\daoFactory::factory('CategoriaImovel');
+        $this->_SubCategoriaImovelDao = \Base\Model\daoFactory::factory('SubCategoriaImovel');
     }
     
    
@@ -55,7 +56,9 @@ class ImovelController extends \Base\Controller\BaseController{
             if($form->isValid()){
                $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
                $params['tipoTransacao'] = $this->_TipoTransacaoDao->recuperar($params['tipoTransacao']);
+               $params['subCategoria'] = $this->_SubCategoriaImovelDao->recuperar($params['subCategoria']);
                $imovelObj = $this->_ImovelDao->criarNovo($params);
+               $this->SessionHelper()->definirSessao('imovel');
                $this->SessionHelper()->salvarObjeto('imovel', $imovelObj);
                $this->flashMessenger()->addSuccessMessage('Passo 1 concluído com sucesso! complete o cadastro');
                $this->redirect()->toRoute('crud_imovel/passo2');
@@ -71,7 +74,8 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function passo2Action(){
-        //$dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+        $this->SessionHelper()->definirSessao('imovel');
+        $dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
@@ -131,11 +135,11 @@ class ImovelController extends \Base\Controller\BaseController{
             $form->get('categoria')->setAttribute('options', $dados_select_categoria);
             if(empty($dadosPost['categoria']) != true){
                $form->get('categoria')->setAttribute('selected',$dadosPost['categoria']); 
-               //recuperar
+               $subCategorias = $this->_SubCategoriaImovelDao->recuperarTodosPorCategoria($dadosPost['categoria']);
+               $dados_select_subCategoria = $this->SelectHelper()->getArrayData('selecione uma sub categoria',$subCategorias);               
+               $form->get('subCategoria')->setAttribute('options', $dados_select_subCategoria);
                if(empty($dadosPost['subCategoria']) != true){
                    $form->get('subCategoria')->setAttribute('selected',$dadosPost['subCategoria']);
-               }else{
-                   $form->get('subCategoria')->setAttribute('options',array(array( 'label' => 'Selecione um Estado','selected' => 'selected', 'disabled' => 'disabled')));
                }
             }
         }
@@ -145,5 +149,17 @@ class ImovelController extends \Base\Controller\BaseController{
     public function getFormPasso2(){
         $form = new form_passo2();
         return $form;
+    }
+    
+    public function getSubCategoriasAction(){
+        $request = $this->getRequest();
+        if($request->isGet()){
+            $idCategoria = $this->getEvent()->getRouteMatch()->getParam('categoria');
+            $subCategorias = $this->_SubCategoriaImovelDao->recuperarTodosPorCategoria($idCategoria);
+            $selectList = $this->SelectHelper()->montarSelect($subCategorias,'subCategoria','sub-categoria-select','selecione uma subcategoria','id','descricao');
+            $data = array('success' => true,'select' => $selectList);
+            return $this->getResponse()->setContent(Json_encode($data)); 
+        }
+        
     }
 }

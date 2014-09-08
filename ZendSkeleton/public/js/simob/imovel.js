@@ -21,6 +21,16 @@ $(document).ready(function(){
            }
         });
     });
+    
+    content.delegate(".categoria-select","change",function(){
+        var categoria = $(".categoria-select option:selected").val();
+        $.get("/imovel/getSubCategorias/"+categoria, function(data){
+           var res = jQuery.parseJSON(data);
+           if(res.success == true){
+               $(".sub-categoria-select").replaceWith(res.select);
+           }
+        });
+    });
 });
 
 

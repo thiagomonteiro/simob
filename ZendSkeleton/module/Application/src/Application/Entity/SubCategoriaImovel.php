@@ -17,9 +17,9 @@ class SubCategoriaImovel extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_descricao;
     /*
-     * @var Application\Entity\TipoImovel
+     * @var Application\Entity\CategoriaImovel
      */
-    private $_tipo;
+    private $_categoria;
     
     
     public function getId() {
@@ -30,8 +30,8 @@ class SubCategoriaImovel extends \Base\Entity\AbstractEntity {
         return $this->_descricao;
     }
 
-    public function getTipo() {
-        return $this->Tipo;
+    public function getCategoria() {
+        return $this->_categoria;
     }
 
     public function setId($id) {
@@ -42,8 +42,8 @@ class SubCategoriaImovel extends \Base\Entity\AbstractEntity {
         $this->_descricao = $descricao;
     }
 
-    public function setTipo(\Application\Entity\TipoImovel $Tipo) {
-        $this->Tipo = $Tipo;
+    public function setCategoria(\Application\Entity\CategoriaImovel $categoria) {
+        $this->_categoria = $categoria;
     }
        
     

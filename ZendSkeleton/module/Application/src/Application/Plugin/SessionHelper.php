@@ -18,7 +18,6 @@ class SessionHelper extends AbstractPlugin {
     }
     
     public function recuperarObjeto($name){
-        $this->_session = new Container($name);
         return unserialize($this->_session->$name);
     }
     

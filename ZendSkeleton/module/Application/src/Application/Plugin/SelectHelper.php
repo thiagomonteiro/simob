@@ -19,4 +19,24 @@ class SelectHelper extends AbstractPlugin{
         return $select;
     }
     
+    /*
+     * função que cria um select html a partir de um objeto
+     * parametros
+     * name => nome para o select
+     * mensagem => mensagem default para o select
+     * chave => nome da propriedade do objeto que irá representar o value do option
+     * valor => valor da propriedade que será o texto do option
+     */
+    public function montarSelect($dados=array(),$name,$classe,$mensagem,$chave,$valor){
+        $select = "<select name=".$name." class=".$classe.">";
+        foreach($dados as $row){
+           $getChave = 'get' . ucfirst((string)$chave);
+           $getValor = 'get' . ucfirst((string)$valor);
+           $select.="<option value=".$row->$getChave().">";
+           $select.=$row->$getValor();
+           $select.="</option>";
+        }
+        $select.="</select>";
+        return $select;
+    }
 }
