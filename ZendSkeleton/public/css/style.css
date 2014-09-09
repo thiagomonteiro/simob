@@ -62,6 +62,20 @@ footer, hr{
     background-color: red;
     text-align: center;
 }
+
+
+#form-passo2 label{
+    //display: inline;
+    //float: left;
+}
+
+#form-passo2 .check-quarto{
+    
+}
+
+
+
+
 /*formularios*/
 
 
