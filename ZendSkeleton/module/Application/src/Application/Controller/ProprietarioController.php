@@ -254,4 +254,3 @@ class ProprietarioController extends \Base\Controller\BaseController{
     } 
     
     }
-
