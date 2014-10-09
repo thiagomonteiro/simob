@@ -63,7 +63,7 @@ footer, hr{
     background-color: red;
     text-align: center;
 }
-/*formulario 2*/
+/*formulario 2-inicio*/
 .formulario2 > .fieldcomodos > label{
     width: 100px;
     height: 50px;
@@ -107,7 +107,14 @@ footer, hr{
     display: block;
 }
 
-/*formulario2*/
+
+
+#caixa-busca > #form-busca label,#caixa-busca > #form-busca submit{
+    display: inline;
+    width: 20px;
+}
+
+/*formulario2-fim*/
 /*formularios*/
 
 

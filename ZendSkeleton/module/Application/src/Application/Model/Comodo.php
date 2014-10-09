@@ -82,6 +82,14 @@ class Comodo extends \Base\Model\AbstractModel {
         return $comodos_list;
     }
     
+    public function getAll(){
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM TipoComodos";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $comodos_list = $this->criarVarios($results);
+        return $comodos_list;
+    }
     
     public function recuperarPorParametro($de=null,$qtd=null,$param=null){ 
         if($de == null){

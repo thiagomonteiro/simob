@@ -6,6 +6,16 @@
     echo $this->form()->openTag($form),
     $this->formCollection($form),
     $this->form()->closeTag();
-
     ?>
+    <div id="caixa-busca" style="display: none;">
+        <?php
+            echo $this->buscaProprietario;// form de busca proprietario
+        ?>
+        <table>
+            resultados serao exibidos aki em uma tabela
+        </table>
+    </div>
+    <div id="dialog-mensagem" title="Aviso" style="display: none;">
+    <p id="mensagem"></p>
+    </div> 
 </section>

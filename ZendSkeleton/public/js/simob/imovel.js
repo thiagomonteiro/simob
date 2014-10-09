@@ -31,6 +31,17 @@ $(document).ready(function(){
            }
         });
     });
+    
+    $("#btn-proprietario").click(
+            function(){
+                $("#caixa-busca").dialog({
+                    height: 250,
+                    width:550,
+                    title:"Localizar proprietário",
+                    modal: true
+                });
+            }
+     );
 });
 
 
