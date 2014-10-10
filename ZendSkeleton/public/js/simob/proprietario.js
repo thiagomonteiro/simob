@@ -81,7 +81,7 @@ $(document).ready(function(){
     
     
     /* busca */
-    $("#busca-submit").click(     
+    $("#busca-proprietario").click(     
             function(e){
                 e.preventDefault();
                 var form = $("#form-busca"); 

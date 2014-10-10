@@ -26,7 +26,7 @@ class busca extends Form{
         $filtro->setLabel('filtro');
         $filtro->setDisableInArrayValidator(true);
         $submit = new \Zend\Form\Element\Submit('enviar');
-        $submit->setAttributes(array('value'=>'buscar','id'=>'busca-submit'));
+        $submit->setAttributes(array('value'=>'buscar','id'=>'busca-proprietario'));
         $this->setAttributes(array('class' => 'formulario', 'id' => 'form-busca'));
         $this->add($hiddenParam);
         $this->add($hiddenFiltro);
