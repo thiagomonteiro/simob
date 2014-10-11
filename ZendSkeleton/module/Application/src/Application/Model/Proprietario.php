@@ -91,7 +91,7 @@ class Proprietario extends \Base\Model\AbstractModel{
         $lista = $this->criarVarios($results);
         return $lista;
     }
-    
+   
     public function recuperarPorCpf($cpf,$de=null,$qtd=null){
        if($de == null){
             $de = 0;
@@ -99,8 +99,9 @@ class Proprietario extends \Base\Model\AbstractModel{
         if($qtd == null){
             $qtd = self::$_qtd_por_pagina;
         } 
+        $aux = str_replace(array(".","-"),"", $cpf);
         $adapter = $this->getAdapter();
-        $sql = "SELECT * FROM Proprietario WHERE (cpf =".$cpf.") LIMIT ".$de.", ".($qtd+1)."";
+        $sql = "SELECT * FROM Proprietario WHERE (cpf like '%".$aux."%') LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         $lista = $this->criarVarios($results);
@@ -113,7 +114,10 @@ class Proprietario extends \Base\Model\AbstractModel{
         }
         if($qtd == null){
             $qtd = self::$_qtd_por_pagina;
-        } 
+        }
+        if($filtro == "cpf"){
+           $param = str_replace(array(".","-"),"", $param);
+        }
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Proprietario WHERE (".$filtro." like '%".$param."%') LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->createStatement($sql);

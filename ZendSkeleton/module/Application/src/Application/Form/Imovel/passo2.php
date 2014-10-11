@@ -16,5 +16,38 @@ use Zend\Form\Form;
 class passo2 extends Form{
     public function __construct($name = null, $options = array(), $dados = array()) {
         parent::__construct($name, $options);
+        $this->setAttributes(array('class' => 'formulario2', 'id' => 'form-passo2'));
+        $submit = new \Zend\Form\Element\Submit('enviar');
+        $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit')); 
+        $proprietario_txt = new \Zend\Form\Element\Text("txt-proprietario");
+        $proprietario_txt->setAttribute('id', "txt-proprietario");
+        $proprietario_txt->setLabel("Proprietario");
+        $proprietario_txt->setAttribute('disabled', 'disabled');
+        $proprietario_btn = new \Zend\Form\Element\Button("btn-proprietario");
+        $proprietario_btn->setAttribute('id', "btn-proprietario");
+        $proprietario_btn->setLabel("Proprietario");
+        $comodos = new \Zend\Form\Element\Collection('collection');
+        $comodos->setAttribute('class', 'fieldcomodos');
+        $comodos->setLabel('Cômodos');
+        $comodos->setCount(2);
+        foreach ($dados as $row){
+            $check = new \Zend\Form\Element\Checkbox('check'.$row->getDescricao());
+            $check->setAttribute('class', 'check-'.$row->getDescricao())->setAttributes(array("for" => "check".$row->getDescricao()));
+            $check->setLabel($row->getDescricao());
+            $check->setUseHiddenElement(true);
+            $check->setCheckedValue(true);
+            $check->setUncheckedValue(false);
+            $comodos->add($check); 
+            $qtd = new \Zend\Form\Element\Number('qtd'.$row->getDescricao());
+            $qtd->setAttribute('class', 'qtd-'.$row->getDescricao());
+            $qtd->setAttribute('value', 0);
+            $qtd->setLabel('Quantidade');
+            $comodos->add($qtd);
+        }
+        
+        $this->add($comodos);
+        $this->add($proprietario_txt);
+        $this->add($proprietario_btn);
+        $this->add($submit);
     }
 }

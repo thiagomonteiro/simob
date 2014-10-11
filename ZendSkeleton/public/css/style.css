@@ -2,6 +2,7 @@
 body {
     padding-top: 60px;
     padding-bottom: 40px;
+    background-color: #dddddd;
 }
 
 .container{
@@ -62,6 +63,58 @@ footer, hr{
     background-color: red;
     text-align: center;
 }
+/*formulario 2-inicio*/
+.formulario2 > .fieldcomodos > label{
+    width: 100px;
+    height: 50px;
+}
+
+.formulario2 > .fieldcomodos > label input[type="checkbox"]{
+    margin-right: 2px;
+    width: 15px;
+    height: 15px;
+}
+
+.formulario2 > .fieldcomodos > label input[type="number"]{
+    margin-left: 2px;
+    width: 55px;
+}
+
+/*impar*/
+.formulario2 > .fieldcomodos label:nth-child(4n+2){
+        text-align: right
+}
+ 
+.formulario2 > .fieldcomodos label:nth-child(4n+3){
+        text-align: left;
+}
+/*impar*/
+
+
+/*par*/
+.formulario2 > .fieldcomodos label:nth-child(4n+4){
+        text-align: right
+}
+ 
+.formulario2 > .fieldcomodos label:nth-child(4n+5){
+        text-align: left;
+}
+/*par*/
+
+.formulario2 > #passo1-submit{
+    position: relative;
+    top:10px;
+    display: block;
+}
+
+
+
+#caixa-busca > #form-busca label,#caixa-busca > #form-busca submit{
+    display: inline;
+    width: 20px;
+}
+
+/*formulario2-fim*/
 /*formularios*/
 
 
@@ -796,7 +849,6 @@ form legend {
     color: #262626;
     border-bottom: 1px solid #ededed;
 }
-
 
 
 

@@ -19,6 +19,7 @@ use Zend\Json\Json;
 use Application\Form\Imovel\passo1 as form_passo1; 
 use Application\Filter\Imovel\criarImovel as filtro_criar;
 use Application\Form\Imovel\passo2 as form_passo2;
+use Application\Form\Proprietario\busca as form_busca;
 
 class ImovelController extends \Base\Controller\BaseController{
     private $_ImovelDao;
@@ -42,6 +43,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_TipoTransacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
         $this->_CategoriaImovelDao = \Base\Model\daoFactory::factory('CategoriaImovel');
         $this->_SubCategoriaImovelDao = \Base\Model\daoFactory::factory('SubCategoriaImovel');
+        $this->_TipoComodosDao = \Base\Model\daoFactory::factory('Comodo');
     }
     
    
@@ -82,8 +84,10 @@ class ImovelController extends \Base\Controller\BaseController{
         }
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $form = $this->getFormPasso2(); 
+        $form = $this->getFormPasso2();
+        $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $view = new ViewModel(array('partialCadastro2'   => $form ));
+        $view->addChild($partialBuscaProprietario , 'buscaProprietario');
         return $view;
     }
     
@@ -147,7 +151,8 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function getFormPasso2(){
-        $form = new form_passo2();
+        $comodos = $this->_TipoComodosDao->getAll();
+        $form = new form_passo2(null,array(),$comodos);
         return $form;
     }
     
@@ -162,4 +167,12 @@ class ImovelController extends \Base\Controller\BaseController{
         }
         
     }
+    
+     private function GetViewBarraDeBuscaProprietario($rota,$param=null){//passando os params para o application/src/form
+        $busca = new form_busca(null,array(),$param);//1- primeiro eu instancio o formulario
+        $busca->get('filtro')->setAttribute('options',array('selecione'=>'selecione','nome' => 'nome','cpf' => 'cpf'));
+        $view = new ViewModel(array('rota' => $rota, 'busca' => $busca));
+        $view->setTemplate('application/proprietario/partials/busca.phtml');
+        return $view;
+    } 
 }
