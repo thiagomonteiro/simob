@@ -80,11 +80,15 @@ class ImovelController extends \Base\Controller\BaseController{
         $dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
-                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+                $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
         }
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
-        $form = $this->getFormPasso2();
+        $comodos = $this->_TipoComodosDao->getAll();
+        if(empty($comodos)){
+            $this->layout()->mensagemCentro = $this->criarNotificacao("Nenum comodo cadastrado, cadastre novos comodos e tente novamente!", 'info','center');
+        }
+        $form = $this->getFormPasso2($comodos);
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $view = new ViewModel(array('partialCadastro2'   => $form ));
         $view->addChild($partialBuscaProprietario , 'buscaProprietario');
@@ -150,8 +154,7 @@ class ImovelController extends \Base\Controller\BaseController{
         return $form;
     }
     
-    public function getFormPasso2(){
-        $comodos = $this->_TipoComodosDao->getAll();
+    public function getFormPasso2($comodos){       
         $form = new form_passo2(null,array(),$comodos);
         return $form;
     }

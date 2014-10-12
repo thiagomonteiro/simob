@@ -46,7 +46,7 @@ class BairroController extends \Base\Controller\BaseController {
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
-                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+                $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
         }        
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/bairro.js');

@@ -544,6 +544,13 @@ input[type="submit"]{
     color: #fbfcfe;
 }
 
+input[type="submit"][disabled="disabled"],
+button[disabled="disabled"] {
+    cursor:url(/img/cancelar.png), not-allowed;
+}
+
+/*fim botoes*/
+
 
 form {
     margin: 0;

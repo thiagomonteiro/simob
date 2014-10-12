@@ -50,12 +50,13 @@ class BaseController extends AbstractActionController{
                 array('noescape' => true));
     }
     
-    public function criarNotificacao($mensagem,$tipo){
+    public function criarNotificacao($mensagem,$tipo,$posicao){
         //implementar if para array
+        
         if(is_array($mensagem)){
-            $response = '<div class = "response-notify" tipo ="'.$tipo.'">'.implode("",$mensagem).'</div>';
+            $response = '<div class = "response-notify" tipo ="'.$tipo.'" posicao="'.$posicao.'">'.implode("",$mensagem).'</div>';
         }else{
-            $response = '<div class = "response-notify" tipo ="'.$tipo.'">'.$mensagem.'</div>';
+            $response = '<div class = "response-notify" tipo ="'.$tipo.'" posicao="'.$posicao.'">'.$mensagem.'</div>';
         }
         return $response;
     }

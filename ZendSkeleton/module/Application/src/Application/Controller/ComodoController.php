@@ -32,7 +32,7 @@ class ComodoController extends \Base\Controller\BaseController{
     public function indexAction(){ 
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
-                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+                $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
         }        
         $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
         $param = $this->getEvent()->getRouteMatch()->getParam('param');   

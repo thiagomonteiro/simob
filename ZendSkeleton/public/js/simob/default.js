@@ -14,7 +14,7 @@ $(document).ready(
                     type: mensagem.attr('tipo'),
                     width: "all",
                     opacity: 0.8,
-                    position: "center",
+                    position: mensagem.attr('posicao'),
                 });
             }
         }

@@ -33,8 +33,11 @@
     </head>
     <body>
         <?php
-        if(isset($this->mensagem)){
-         echo $this->mensagem;
+        if(isset($this->mensagemTopo)){
+         echo $this->mensagemTopo;
+        }
+        if(isset($this->mensagemCentro)){
+          echo $this->mensagemCentro;   
         }
         ?>
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

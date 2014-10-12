@@ -37,7 +37,7 @@ class AdminController extends \Base\Controller\BaseController{
             $event = $this->getEvent();
             $event->getViewModel()->setTemplate('layout/admin');
             if(count($mensagem)){
-                $this->layout()->mensagem = $this->criarNotificacao($mensagem,'success');
+                $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
             }
             return $view;
             //$this->sessao->limparSessao();
@@ -66,7 +66,7 @@ class AdminController extends \Base\Controller\BaseController{
                   $this->redirect()->toRoute('home_admin');
                 }
                 else{
-                   echo $this->criarNotificacao($response['message'],'error');
+                   echo $this->criarNotificacao($response['message'],'error','center');
                 }
                
             }
