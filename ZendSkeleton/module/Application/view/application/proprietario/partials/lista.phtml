@@ -8,10 +8,18 @@
                 <td class="CPF">
                     <?php echo $proprietario->mascaraCpf($proprietario->getCpf());?>
                 </td>
-                <td>
-                    <button class="alterar-proprietario">Alterar</button>
-                    <button class="deletar-proprietario">Deletar</button>
-                </td>
+                <?php
+                    if($this->url == "http://simob/proprietario/index"):
+                ?>
+                    <td>
+                        <button class="alterar-proprietario">Alterar</button>
+                        <button class="deletar-proprietario">Deletar</button>
+                    </td>
+               <?php elseif($this->url == "http://simob/imovel/passo2"):?>
+                    <td>
+                         <button class="selecionar-proprietario">Selecionar</button>
+                    </td>
+               <?php endif;?>
             </tr>
     <?php endforeach;?>
     </tbody>

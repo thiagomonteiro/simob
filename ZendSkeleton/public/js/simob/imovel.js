@@ -87,8 +87,8 @@ $(document).ready(function(){
                             $(".listar").find('h1').remove();
                             $("#tabela-proprietarios").children('tbody').replaceWith(res.html);  
                             $("#tabela-proprietarios").show();
-                            $("#barra-paginacao").replaceWith(res.barrapaginacao);
-                            $("#barra-paginacao").show();
+                            $("#barra-paginacao").remove();
+                            $("#tabela-proprietarios").after(res.barrapaginacao);
                         }else{
                             $("#tabela-proprietarios").hide();
                             $("#barra-paginacao").hide();
@@ -98,6 +98,56 @@ $(document).ready(function(){
                     }
                 });
              });
+             
+             
+             content.delegate(".proxima-pagina","click",function(){
+                var url = $(this).attr('url');
+                var pagina = $(this).attr('data-proxima');
+                var filtro = $("#hidden-filtro").val();
+                var param = $("#hidden-param").val();
+                if(filtro.length == 0){
+                        $.get(url+'/'+pagina, function(data){
+                            var res = jQuery.parseJSON(data);
+                            if(res.success===true){
+                                $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                            }
+                        });
+                }else{
+                     $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                            var res = jQuery.parseJSON(data);
+                            if(res.success===true){
+                                $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                            }
+                        });
+                }
+            });
+
+            content.delegate(".pagina-anterior","click",function(){
+               var url = $(this).attr('url');
+               var pagina = $(this).attr('data-anterior');
+               var filtro = $("#hidden-filtro").val();
+               var param = $("#hidden-param").val();
+               if(filtro.length == 0){
+                   $.get(url+'/'+pagina, function(data){
+                        var res = jQuery.parseJSON(data);
+                        if(res.success === true){
+                            $("#tabela-proprietarios").children('tbody').replaceWith(res.html);
+                            $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                        }
+                    });
+               }else{
+                   $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                            var res = jQuery.parseJSON(data);
+                            if(res.success===true){
+                                $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
+                                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+                            }
+                        });
+               }
+            });
+             
         });
 
 
