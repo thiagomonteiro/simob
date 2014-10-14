@@ -43,6 +43,16 @@ $(document).ready(function(){
             }
      );
      
+     var dialogoBusca = $("#dialog-mensagem");
+     $(dialogoBusca).dialog({
+                            modal: true,
+                            autoOpen: false,
+                            buttons:{
+                                ok : function(){
+                                    $(this).dialog('close');
+                                }
+                            }
+                         });
      
      $("#busca-proprietario").click(
              function(e){
@@ -51,40 +61,26 @@ $(document).ready(function(){
                     var rota = form.attr('action');
                     var filtro = $("#filtro option:selected").text();
                     if(filtro == "selecione"){
-                        $("#dialog-mensagem").find("p").text("selecione um filtro");
-                        $("#dialog-mensagem").dialog({
-                            modal: true,
-                            buttons:{
-                                ok : function(){
-                                    $(this).dialog('close');
-                                }
-                            }
-                        });
+                        $(dialogoBusca).find("p").text("selecione um filtro");
+                        $(dialogoBusca).dialog( "open");
                         exit();
                     }
                     if(filtro == "cpf" || filtro == "nome"){
                         $("#hidden-filtro").val(filtro);
                     }
                     if($("#param").val()==""){
-                        $("#dialog-mensagem").find("p").text("informe um valor para a busca");
-                         $("#dialog-mensagem").dialog({
-                            modal: true,
-                            buttons:{
-                                ok : function(){
-                                    $(this).dialog('close');
-                                }
-                            }
-                         });
+                        $(dialogoBusca).find("p").text("informe um valor para a busca");
+                        $(dialogoBusca).dialog( "open");
                          exit();
                     }else{
                         $("#hidden-param").val($("#param").val());
                     }
                     
-                    $.post( rota, $(form).serialize(),function(data){
+                    $.post( rota+'/selecao', $(form).serialize(),function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success == true){
                         if(res.haDados){
-                            $(".listar").find('h1').remove();
+                            $("#tabela-proprietarios").parent().find('h5').remove();
                             $("#tabela-proprietarios").children('tbody').replaceWith(res.html);  
                             $("#tabela-proprietarios").show();
                             $("#barra-paginacao").remove();
@@ -92,8 +88,8 @@ $(document).ready(function(){
                         }else{
                             $("#tabela-proprietarios").hide();
                             $("#barra-paginacao").hide();
-                            $("#tabela-proprietarios").next('h1').remove();
-                            $("#tabela-proprietarios").after('<h1>Nenhum registro encontrado</h1>');
+                            $("#tabela-proprietarios").next('h5').remove();
+                            $("#tabela-proprietarios").after('<h5>Nenhum registro encontrado</h5>');
                         }
                     }
                 });
@@ -114,7 +110,7 @@ $(document).ready(function(){
                             }
                         });
                 }else{
-                     $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                     $.get(url+'/selecao/'+pagina+'/'+filtro+'/'+param, function(data){
                             var res = jQuery.parseJSON(data);
                             if(res.success===true){
                                 $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
@@ -138,7 +134,7 @@ $(document).ready(function(){
                         }
                     });
                }else{
-                   $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+                   $.get(url+'/selecao/'+pagina+'/'+filtro+'/'+param, function(data){
                             var res = jQuery.parseJSON(data);
                             if(res.success===true){
                                 $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
@@ -147,7 +143,14 @@ $(document).ready(function(){
                         });
                }
             });
-             
+            
+            content.delegate(".selecionar-proprietario", "click", function(){
+                /*var linha = $(this).closest('tr');
+                var id = $(linha).find(".id-proprietario").val();
+                var nome = $(linha).find(".nome").text();
+                $("#txt-proprietario").val($.trim(nome));*/
+                $(dialogoBusca).dialog( "close");
+            });
         });
 
 

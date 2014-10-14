@@ -37,7 +37,7 @@ $(document).ready(function(){
         var filtro = $("#hidden-filtro").val();
         var param = $("#hidden-param").val();
         if(filtro.length == 0){
-                $.get(url+'/'+pagina, function(data){
+                $.get(url+'/default/'+pagina, function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success===true){
                         $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
@@ -45,7 +45,7 @@ $(document).ready(function(){
                     }
                 });
         }else{
-             $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+             $.get(url+'/default/'+pagina+'/'+filtro+'/'+param, function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success===true){
                         $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
@@ -61,7 +61,7 @@ $(document).ready(function(){
        var filtro = $("#hidden-filtro").val();
        var param = $("#hidden-param").val();
        if(filtro.length == 0){
-           $.get(url+'/'+pagina, function(data){
+           $.get(url+'/default/'+pagina, function(data){
                 var res = jQuery.parseJSON(data);
                 if(res.success === true){
                     $("#tabela-proprietarios").children('tbody').replaceWith(res.html);
@@ -69,7 +69,7 @@ $(document).ready(function(){
                 }
             });
        }else{
-           $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+           $.get(url+'/default/'+pagina+'/'+filtro+'/'+param, function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success===true){
                         $("#tabela-proprietarios").children('tbody').replaceWith(res.html);                
@@ -117,7 +117,7 @@ $(document).ready(function(){
                     $("#hidden-param").val($("#param").val());
                 }
                 
-                $.post( rota, $(form).serialize(),function(data){
+                $.post( rota+'/default', $(form).serialize(),function(data){
                     var res = jQuery.parseJSON(data);
                     if(res.success == true){
                         if(res.haDados){

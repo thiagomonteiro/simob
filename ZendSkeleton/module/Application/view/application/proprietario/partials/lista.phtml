@@ -9,15 +9,15 @@
                     <?php echo $proprietario->mascaraCpf($proprietario->getCpf());?>
                 </td>
                 <?php
-                    if($this->url == "http://simob/proprietario/index"):
+                    if($this->visao == "default"):                   
                 ?>
                     <td>
-                        <button class="alterar-proprietario">Alterar</button>
-                        <button class="deletar-proprietario">Deletar</button>
+                        <button class="alterar-proprietario update-default">Alterar</button>
+                        <button class="deletar-proprietario delete-default">Deletar</button>
                     </td>
-               <?php elseif($this->url == "http://simob/imovel/passo2"):?>
+               <?php else:?>
                     <td>
-                         <button class="selecionar-proprietario">Selecionar</button>
+                        <button class="selecionar-proprietario select-default">Selecionar</button>
                     </td>
                <?php endif;?>
             </tr>

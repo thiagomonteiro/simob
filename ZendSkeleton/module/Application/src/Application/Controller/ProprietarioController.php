@@ -31,11 +31,6 @@ class ProprietarioController extends \Base\Controller\BaseController{
     
    
     public function indexAction() {
-        if(isset($_SERVER['HTTP_REFERER'])){
-            $url_pagina = $_SERVER['HTTP_REFERER'];
-        }else{
-            $url_pagina ="http://simob/proprietario/index";
-        }
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
@@ -44,7 +39,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
         $param = $this->getEvent()->getRouteMatch()->getParam('param');
         $result = $this->_ProprietarioDao->recuperarTodos(null,  self::$_qtd_por_pagina);
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-        $partialLista = $this->GetViewLista($result,$url_pagina);
+        $partialLista = $this->GetViewLista($result);
         $partialPaginacao = $this->GetViewBarraPaginacao($paginacao);
         $partialBusca = $this->GetViewBarraDeBusca('crud_proprietario/buscar',$param);
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
@@ -57,11 +52,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
     }
     
      public function proximaPaginaAction(){
-        if(isset($_SERVER['HTTP_REFERER'])){
-            $url_pagina = $_SERVER['HTTP_REFERER'];
-        }else{
-            $url_pagina ="http://simob/proprietario/index";
-        }
+        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
         //somente requisições ajax        
         $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
         $param = $this->getEvent()->getRouteMatch()->getParam('param');   
@@ -72,7 +63,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
             $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
         }
         $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($proprietariosList,$url_pagina);
+        $viewModelListar= $this->GetViewLista($proprietariosList,$visao);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -81,11 +72,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
     }
     
     public function paginaAnteriorAction(){
-        if(isset($_SERVER['HTTP_REFERER'])){
-            $url_pagina = $_SERVER['HTTP_REFERER'];
-        }else{
-            $url_pagina ="http://simob/proprietario/index";
-        }
+        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
         //somente requisições ajax
         $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
         $param = $this->getEvent()->getRouteMatch()->getParam('param');   
@@ -96,7 +83,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
             $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
         }
         $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($proprietariosList, $url_pagina);
+        $viewModelListar= $this->GetViewLista($proprietariosList, $visao);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -105,11 +92,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
     }
     
     public function buscarAction(){
-        if(isset($_SERVER['HTTP_REFERER'])){
-            $url_pagina = $_SERVER['HTTP_REFERER'];
-        }else{
-            $url_pagina ="http://simob/proprietario/index";
-        }
+        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
         $request = $this->getRequest();//2- pego a requisiçao
         if($request->isPost()){//3-verifico se é um post se for:
             $params = $request->getPost()->toArray();
@@ -118,7 +101,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
         $filtro = $params['hidden-filtro'];
         $result = $this->_ProprietarioDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
         $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($result,$url_pagina);
+        $viewModelListar= $this->GetViewLista($result,$visao);
         $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
         $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
         $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
@@ -253,8 +236,8 @@ class ProprietarioController extends \Base\Controller\BaseController{
         return $form;
     }
     
-    private function GetViewLista($proprietariosList,$url){
-        $view= new ViewModel(array('proprietarios'=>$proprietariosList,'url' => $url));
+    private function GetViewLista($proprietariosList,$visao="default"){
+        $view= new ViewModel(array('proprietarios'=>$proprietariosList,'visao' => $visao));
         $view->setTemplate('application/proprietario/partials/lista.phtml');
         return $view;
     }

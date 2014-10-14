@@ -308,11 +308,12 @@ $rota_proprietario = array(
          'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
+                'route' => '/proximaPagina[/:visao][/:pagina][/:filtro][/:param]',
                 'constraints' => array(
+                    'visao' => '[a-zA-Z]*',
                     'pagina' => '[0-9]+',
                     'filtro' => '[a-zA-Z]*',
-                    'param' => '[a-zA-Z0-9_-]+'
+                    'param' => '[a-zA-Z0-9_-]+',
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -322,11 +323,12 @@ $rota_proprietario = array(
         'paginaAnterior' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
+                'route' => '/paginaAnterior[/:visao][/:pagina][/:filtro][/:param]',
                 'constraints' => array(
+                    'visao' => '[a-zA-Z]*',
                     'pagina' => '[0-9]+',
                     'filtro' => '[a-zA-Z]*',
-                    'param' => '[a-zA-Z0-9_-]+'
+                    'param' => '[a-zA-Z0-9_-]+',
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
@@ -336,7 +338,10 @@ $rota_proprietario = array(
         'buscar' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/buscar',
+                'route' => '/buscar[/:visao]',
+                'constraints' => array(
+                    'visao' => '[a-zA-Z]*',
+                ),
                 'defaults' => array(
                     'action' => 'buscar',
                 ),

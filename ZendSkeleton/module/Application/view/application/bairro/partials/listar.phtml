@@ -6,8 +6,10 @@
                 <td class="nome"><?php echo $row->getNome();?></td>
                 <td class="cidade"><?php echo $row->getCidade()->getNome();?></td>
                 <td class="estado"><?php echo $row->getCidade()->getEstado()->getUf();?></td>
-                <td><button class="alterar-bairro">Alterar</button></td>
-                <td><button class="deletar-bairro">Deletar</button></td>
+                <td>
+                    <button class="alterar-bairro update-default">Alterar</button>
+                    <button class="deletar-bairro delete-default">Deletar</button>
+                </td>
             </tr>
             <?php endforeach;?>
         </tbody>
