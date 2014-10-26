@@ -7,7 +7,7 @@ use Zend\InputFilter\InputFilter,
     Zend\InputFilter\InputFilterInterface;
 use Zend\Validator\NotEmpty;
 
-class criarImovel implements InputFilterAwareInterface {
+class passo1 implements InputFilterAwareInterface {
 
     
     public function getInputFilter()

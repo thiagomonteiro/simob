@@ -145,11 +145,18 @@ $(document).ready(function(){
             });
             
             content.delegate(".selecionar-proprietario", "click", function(){
-                /*var linha = $(this).closest('tr');
+                var linha = $(this).closest('tr');
                 var id = $(linha).find(".id-proprietario").val();
                 var nome = $(linha).find(".nome").text();
-                $("#txt-proprietario").val($.trim(nome));*/
-                $(dialogoBusca).dialog( "close");
+                $("#txt-proprietario").val($.trim(nome));
+                //$("#id-proprietario").val(id);
+                $(".ui-dialog-titlebar-close").click();
+            });
+            
+            
+            $("#passo2-submit").click(function(){
+                    
+                        
             });
         });
 

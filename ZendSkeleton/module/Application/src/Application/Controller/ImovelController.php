@@ -17,7 +17,8 @@ use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Application\Form\Imovel\passo1 as form_passo1; 
-use Application\Filter\Imovel\criarImovel as filtro_criar;
+use Application\Filter\Imovel\passo1 as filtro_passo1;
+use Application\Filter\Imovel\passo2 as filtro_passo2;
 use Application\Form\Imovel\passo2 as form_passo2;
 use Application\Form\Proprietario\busca as form_busca;
 
@@ -52,7 +53,7 @@ class ImovelController extends \Base\Controller\BaseController{
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
             $form = $this->getFormPasso1($params); 
-            $Filter = new filtro_criar();
+            $Filter = new filtro_passo1();
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
@@ -76,6 +77,7 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function passo2Action(){
+        $request = $this->getRequest();
         $this->SessionHelper()->definirSessao('imovel');
         $dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
         $mensagem = $this->flashMessenger()->getSuccessMessages();
@@ -88,7 +90,23 @@ class ImovelController extends \Base\Controller\BaseController{
         if(empty($comodos)){
             $this->layout()->mensagemCentro = $this->criarNotificacao("Nenum comodo cadastrado, cadastre novos comodos e tente novamente!", 'info','center');
         }
-        $form = $this->getFormPasso2($comodos);
+           
+        if($request->isPost()){
+            $params = $request->getPost()->toArray();            
+            $form = $this->getFormPasso2($params,$comodos); 
+            $Filter = new filtro_passo2();
+            $form->setData($params);
+            $form->setInputFilter($Filter->getInputFilter());
+            if($form->isValid()){
+               $this->redirect()->toRoute('crud_imovel/passo3');
+            }else{  
+                //print_r($form->getMessages());
+            }
+        }else{
+            $form = $this->getFormPasso2(array(),$comodos); 
+        }
+        
+        $form = $this->getFormPasso2(array(),$comodos);
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $view = new ViewModel(array('partialCadastro2'   => $form ));
         $view->addChild($partialBuscaProprietario , 'buscaProprietario');
@@ -154,8 +172,8 @@ class ImovelController extends \Base\Controller\BaseController{
         return $form;
     }
     
-    public function getFormPasso2($comodos){       
-        $form = new form_passo2(null,array(),$comodos);
+    public function getFormPasso2($dados_post = array(), $comodos){       
+        $form = new form_passo2(null, array(), array(), $comodos);
         return $form;
     }
     

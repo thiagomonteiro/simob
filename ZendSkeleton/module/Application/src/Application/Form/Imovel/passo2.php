@@ -14,19 +14,21 @@ use Zend\Form\Form;
  * @author administrador
  */
 class passo2 extends Form{
-    public function __construct($name = null, $options = array(), $arrayComodos = array()) {
+    public function __construct($name = null, $options = array(),$dados = array(), $arrayComodos = array()) {
         parent::__construct($name, $options);
         $this->setAttributes(array('class' => 'formulario2', 'id' => 'form-passo2'));
         $submit = new \Zend\Form\Element\Submit('enviar');
-        $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit')); 
-        $proprietario_txt = new \Zend\Form\Element\Text("txt-proprietario");
+        $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo2-submit')); 
+        $proprietario_id = new \Zend\Form\Element\Hidden("idProprietario");
+        $proprietario_id->setAttribute("id", "id-proprietario");
+        $proprietario_txt = new \Zend\Form\Element\Text("proprietario");
         $proprietario_txt->setAttribute('id', "txt-proprietario");
-        $proprietario_txt->setLabel("Proprietario");
-        $proprietario_txt->setAttribute('disabled', 'disabled');
+        $proprietario_txt->setLabel("proprietario");
+        $proprietario_txt->setAttribute('readonly', 'readonly');
         $proprietario_btn = new \Zend\Form\Element\Button("btn-proprietario");
         $proprietario_btn->setAttribute('id', "btn-proprietario");
         $proprietario_btn->setLabel("Proprietario");
-        $comodos = new \Zend\Form\Element\Collection('collection');
+        $comodos = new \Zend\Form\Element\Collection('comodos');
         $comodos->setAttribute('class', 'fieldcomodos');
         $comodos->setLabel('Cômodos');
         $comodos->setCount(2);
@@ -37,7 +39,7 @@ class passo2 extends Form{
                 $check->setLabel($row->getDescricao());
                 $check->setUseHiddenElement(true);
                 $check->setCheckedValue(true);
-                $check->setUncheckedValue(false);
+                $check->setUncheckedValue(false);   
                 $comodos->add($check); 
                 $qtd = new \Zend\Form\Element\Number('qtd'.$row->getDescricao());
                 $qtd->setAttribute('class', 'qtd-'.$row->getDescricao());
@@ -50,6 +52,7 @@ class passo2 extends Form{
             $submit->setAttribute('disabled', 'disabled');//desabilita o botão submit impedindo que o usuario prosiga.
         }
         $this->add($comodos);
+        $this->add($proprietario_id);
         $this->add($proprietario_txt);
         $this->add($proprietario_btn);
         $this->add($submit);
