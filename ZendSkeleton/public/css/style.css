@@ -36,20 +36,20 @@ footer, hr{
     display: block;
 }
 
-.formulario ul, .formulario2 ul{    
+.list-error{/*erros dos formularios editado no arquivo vendor/view/helper/FormElementError*/    
     list-style: none;  
     color: #c85305;
     font-size: 86%;
 }
 
-.formulario ul li, .formulario2 ul li{
+.list-error li{
     background-color: #FFFFE0;
     display: inline-block;
     height: 30px;
     border-radius: 5px;
 }
 
-.formulario ul li:before, .formulario2 ul li:before{
+.list-error li:before{
     content:url("/img/erro.png");
     position : relative;
     top: 3px;
