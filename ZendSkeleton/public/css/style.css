@@ -36,7 +36,7 @@ footer, hr{
     display: block;
 }
 
-.list-error{/*erros dos formularios editado no arquivo vendor/view/helper/FormElementError*/    
+.list-error{/*erros dos formularios editado no arquivo zend/form/view/helper/FormElementError*/    
     list-style: none;  
     color: #c85305;
     font-size: 86%;
