@@ -84,13 +84,10 @@ class ImovelController extends \Base\Controller\BaseController{
         if(count($mensagem)){
                 $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
         }
-        $this->setTemplate('layout/admin');
-        $this->appendJavaScript('simob/imovel.js');
         $comodos = $this->_TipoComodosDao->getAll();
         if(empty($comodos)){
             $this->layout()->mensagemCentro = $this->criarNotificacao("Nenum comodo cadastrado, cadastre novos comodos e tente novamente!", 'info','center');
         }
-           
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
             $form = $this->getFormPasso2($params,$comodos); 
@@ -100,17 +97,23 @@ class ImovelController extends \Base\Controller\BaseController{
             if($form->isValid()){
                $this->redirect()->toRoute('crud_imovel/passo3');
             }else{  
-                //print_r($form->getMessages());
             }
         }else{
             $form = $this->getFormPasso2(array(),$comodos); 
         }
-        
-        $form = $this->getFormPasso2(array(),$comodos);
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
+        $this->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/imovel.js');
         $view = new ViewModel(array('partialCadastro2'   => $form ));
         $view->addChild($partialBuscaProprietario , 'buscaProprietario');
         return $view;
+    }
+    
+    public function passo3Action(){
+       $this->setTemplate('layout/admin');
+       $this->appendJavaScript('simob/imovel.js');
+       $view = new ViewModel();
+       return $view;
     }
     
     public function getFormPasso1($dadosPost=array()){

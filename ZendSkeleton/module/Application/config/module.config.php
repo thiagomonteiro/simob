@@ -495,6 +495,15 @@ $rota_imovel = array(
               ),
           ),
         ),
+        'passo3' => array(
+          'type' => 'segment',
+          'options' => array(
+              'route' => '/passo3',
+              'defaults' => array(
+                 'action' => 'passo3',  
+              ),
+          ),
+        ),
         'getSubCategorias' => array(
         'type' => 'Zend\Mvc\Router\Http\Segment',
         'options' => array(

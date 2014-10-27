@@ -20,13 +20,13 @@ class passo2 extends Form{
         $submit = new \Zend\Form\Element\Submit('enviar');
         $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo2-submit')); 
         $proprietario_id = new \Zend\Form\Element\Hidden("idProprietario");
-        $proprietario_id->setAttribute("id", "id-proprietario");
+        $proprietario_id->setAttribute("class", "id-proprietario");
         $proprietario_txt = new \Zend\Form\Element\Text("proprietario");
-        $proprietario_txt->setAttribute('id', "txt-proprietario");
+        $proprietario_txt->setAttribute('class', "txt-proprietario");
         $proprietario_txt->setLabel("proprietario");
         $proprietario_txt->setAttribute('readonly', 'readonly');
-        $proprietario_btn = new \Zend\Form\Element\Button("btn-proprietario");
-        $proprietario_btn->setAttribute('id', "btn-proprietario");
+        $proprietario_btn = new \Zend\Form\Element\Button("btnProprietario");
+        $proprietario_btn->setAttribute('class', "btn-proprietario");
         $proprietario_btn->setLabel("Proprietario");
         $comodos = new \Zend\Form\Element\Collection('comodos');
         $comodos->setAttribute('class', 'fieldcomodos');

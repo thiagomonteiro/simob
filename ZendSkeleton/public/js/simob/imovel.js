@@ -32,7 +32,7 @@ $(document).ready(function(){
         });
     });
     
-    $("#btn-proprietario").click(
+    $(".btn-proprietario").click(
             function(){
                 $("#caixa-busca").dialog({
                     height: 250,
@@ -148,8 +148,8 @@ $(document).ready(function(){
                 var linha = $(this).closest('tr');
                 var id = $(linha).find(".id-proprietario").val();
                 var nome = $(linha).find(".nome").text();
-                $("#txt-proprietario").val($.trim(nome));
-                //$("#id-proprietario").val(id);
+                $(".txt-proprietario").val($.trim(nome));
+                $(".id-proprietario").val(id);
                 $(".ui-dialog-titlebar-close").click();
             });
             

@@ -5,7 +5,6 @@ use Zend\InputFilter\InputFilter,
     Zend\InputFilter\Factory,
     Zend\InputFilter\InputFilterAwareInterface,
     Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\NotEmpty;
 
 class passo2 implements InputFilterAwareInterface {
 
@@ -37,7 +36,6 @@ class passo2 implements InputFilterAwareInterface {
             )
         );
         
-
         return $inputFilter;
     }
 
