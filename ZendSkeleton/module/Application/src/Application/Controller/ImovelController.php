@@ -21,6 +21,7 @@ use Application\Filter\Imovel\passo1 as filtro_passo1;
 use Application\Filter\Imovel\passo2 as filtro_passo2;
 use Application\Form\Imovel\passo2 as form_passo2;
 use Application\Form\Proprietario\busca as form_busca;
+use ArrayObject;
 
 class ImovelController extends \Base\Controller\BaseController{
     private $_ImovelDao;
@@ -31,6 +32,8 @@ class ImovelController extends \Base\Controller\BaseController{
     private $_SubCategoriaImovelDao;
     private $_TipoComodosDao;
     private $_TipoTransacaoDao;
+    private $_ProprietarioDao;
+    private $_ImovelComodoDao;
     private $_imovel_session;
     /**
      * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
@@ -45,6 +48,8 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_CategoriaImovelDao = \Base\Model\daoFactory::factory('CategoriaImovel');
         $this->_SubCategoriaImovelDao = \Base\Model\daoFactory::factory('SubCategoriaImovel');
         $this->_TipoComodosDao = \Base\Model\daoFactory::factory('Comodo');
+        $this->_ProprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
+        $this->_ImovelComodoDao = \Base\Model\daoFactory::factory('ImovelComodo');
     }
     
    
@@ -79,7 +84,7 @@ class ImovelController extends \Base\Controller\BaseController{
     public function passo2Action(){
         $request = $this->getRequest();
         $this->SessionHelper()->definirSessao('imovel');
-        $dados_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+        $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
         $mensagem = $this->flashMessenger()->getSuccessMessages();
         if(count($mensagem)){
                 $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
@@ -95,7 +100,20 @@ class ImovelController extends \Base\Controller\BaseController{
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
             if($form->isValid()){
-               $this->redirect()->toRoute('crud_imovel/passo3');
+                $proprietarioObj = $this->_ProprietarioDao->recuperar($params['idProprietario']);
+                $imovel_sessao->setProprietario($proprietarioObj);
+                $data = $this->_ImovelDao->salvar($imovel_sessao);
+                $imovel_sessao->setId($data->insert_id);//apos cadastrar o imovel insiro o id retornado da função salvar. em seguida posso salvar os comodos
+                $listComodos = new ArrayObject();
+                foreach ($comodos as $row){
+                    if(!empty($params['check'.$row->getDescricao()])){
+                        $qtd = $params['qtd'.$row->getDescricao()];
+                        $comodo = $this->_ImovelComodoDao->criarNovo($imovel_sessao , $row, $qtd);
+                        $listComodos->append($comodo);
+                    }   
+                }
+                $this->_ImovelComodoDao->salvar($listComodos);
+                $this->redirect()->toRoute('crud_imovel/passo3');
             }else{  
             }
         }else{

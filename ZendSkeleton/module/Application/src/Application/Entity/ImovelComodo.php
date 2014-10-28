@@ -11,7 +11,9 @@
  *
  * @author thiago
  */
-class ImovelComodo extends Base\Entity\AbstractEntity {
+namespace Application\Entity;
+
+class ImovelComodo extends \Base\Entity\AbstractEntity {
     private $_id;
     /*
      * @var \Application\Entity\Imovel
@@ -21,6 +23,8 @@ class ImovelComodo extends Base\Entity\AbstractEntity {
      * @var \Application\Entity\TipoComodos
      */
     private $_tipoComodo;
+    
+    private $_Qtd;
     
     public function getId() {
         return $this->_id;
@@ -38,12 +42,20 @@ class ImovelComodo extends Base\Entity\AbstractEntity {
         $this->_id = $id;
     }
 
-    public function setImovel($imovel) {
+    public function setImovel(\Application\Entity\Imovel $imovel) {
         $this->_imovel = $imovel;
     }
 
-    public function setTipoComodo($tipoComodo) {
+    public function setTipoComodo(\Application\Entity\TipoComodos $tipoComodo) {
         $this->_tipoComodo = $tipoComodo;
+    }
+    
+    public function setQtd($qtd){
+        $this->_Qtd = $qtd;
+    }
+    
+    public function getQtd(){
+        return $this->_Qtd;
     }
     
 }

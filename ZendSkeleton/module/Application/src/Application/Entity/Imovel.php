@@ -15,20 +15,18 @@ namespace Application\Entity;
  */
 class Imovel extends \Base\Entity\AbstractEntity {
     private $_id;
-    
     private $_bairro;
     private $_rua;
     private $_numero;
     private $_areaTotal;
     private $_areaConstruida;
     private $_valorIptu;
-    private $_valorCondominio;
     private $_valorTransacao;
     private $_descricao;
     private $_tipoTransacao;
     private $_proprietario;
     private $_subCategoria;
-    private $_comodosList;// Array
+    
     
     public function setId($id){
         $this->_id = $id;
@@ -86,15 +84,6 @@ class Imovel extends \Base\Entity\AbstractEntity {
         return $this->_valorIptu;
     }
     
-    public function setValorCondominio($condominio){
-        $this->_valorCondominio = $condominio;
-    }
-    
-    public function getValorCondominio(){
-       return $this->_valorCondominio;
-    }
-    
-
     public function setValorTransacao($valor){
         $this->_valorTransacao = $valor;
     }
@@ -125,5 +114,13 @@ class Imovel extends \Base\Entity\AbstractEntity {
     
     public function getSubCategoria(){
         return $this->_subCategoria;
+    }
+    
+    public function setProprietario(\Application\Entity\Proprietario $proprietario){
+        $this->_proprietario = $proprietario;
+    }
+    
+    public function getProprietario(){
+        return $this->_proprietario;
     }
 }

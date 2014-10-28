@@ -38,12 +38,13 @@ class passo2 extends Form{
                 $check->setAttribute('class', 'check-'.$row->getDescricao())->setAttributes(array("for" => "check".$row->getDescricao()));
                 $check->setLabel($row->getDescricao());
                 $check->setUseHiddenElement(true);
-                $check->setCheckedValue(true);
+                $check->setCheckedValue($row->getId());
                 $check->setUncheckedValue(false);   
                 $comodos->add($check); 
                 $qtd = new \Zend\Form\Element\Number('qtd'.$row->getDescricao());
                 $qtd->setAttribute('class', 'qtd-'.$row->getDescricao());
                 $qtd->setAttribute('value', 0);
+                $qtd->setAttribute('min', 0);
                 $qtd->setLabel('Quantidade');
                 $comodos->add($qtd);
             }
