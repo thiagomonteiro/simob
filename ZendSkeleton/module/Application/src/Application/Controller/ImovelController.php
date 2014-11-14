@@ -106,13 +106,14 @@ class ImovelController extends \Base\Controller\BaseController{
                 $imovel_sessao->setId($data->insert_id);//apos cadastrar o imovel insiro o id retornado da função salvar. em seguida posso salvar os comodos
                 $listComodos = new ArrayObject();
                 foreach ($comodos as $row){
-                    if(!empty($params['check'.$row->getDescricao()])){
-                        $qtd = $params['qtd'.$row->getDescricao()];
+                    if(!empty($params['check'.$row->getId()])){
+                        $qtd = $params['qtd'.$row->getId()];
                         $comodo = $this->_ImovelComodoDao->criarNovo($imovel_sessao , $row, $qtd);
                         $listComodos->append($comodo);
                     }   
-                }
+                } 
                 $this->_ImovelComodoDao->salvar($listComodos);
+                $this->flashMessenger()->addSuccessMessage('Passo 2 concluído com sucesso! complete o cadastro');
                 $this->redirect()->toRoute('crud_imovel/passo3');
             }else{  
             }
@@ -128,10 +129,17 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     public function passo3Action(){
-       $this->setTemplate('layout/admin');
-       $this->appendJavaScript('simob/imovel.js');
-       $view = new ViewModel();
-       return $view;
+      $request = $this->getRequest();
+      $this->SessionHelper()->definirSessao('imovel');
+      $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+      $mensagem = $this->flashMessenger()->getSuccessMessages();
+      if(count($mensagem)){
+        $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
+      }
+      $this->setTemplate('layout/admin');
+      $this->appendJavaScript('simob/imovel.js');
+      $view = new ViewModel();
+      return $view;
     }
     
     public function getFormPasso1($dadosPost=array()){

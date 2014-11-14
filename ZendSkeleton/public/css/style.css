@@ -118,6 +118,22 @@ footer, hr{
 /*formularios*/
 
 
+/*formulario3-inicio*/
+#galeria-passo3{
+    text-align: center;
+    height: 300px;
+    background-image: url(/img/camera.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-color: whitesmoke;
+}
+
+input[type="file"]{
+    height: 50px;
+    background: url(/img/add_foto.png) no-repeat 99% 51%;
+}
+/*formulario3-fim*/
+
 /*inicio menu lateral*/
 aside{
     float:left;

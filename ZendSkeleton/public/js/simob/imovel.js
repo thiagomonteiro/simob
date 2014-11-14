@@ -1,5 +1,13 @@
 $(document).ready(function(){
     var content = $(document);//o metodo live foi descontinuado
+    
+    $('.check-comodo').on("click",function(){   
+        if( $(this).is(':checked') ){
+          $(this).parent().next("label").children(".qtd-comodo").val(1);   
+        }else{
+          $(this).parent().next("label").children(".qtd-comodo").val(0);   
+        }
+    });
     content.delegate(".uf-select","change",function(){
         var uf = $(".uf-select option:selected").text();
         $.get("/bairro/getCidades/"+uf,function(data){
@@ -152,12 +160,7 @@ $(document).ready(function(){
                 $(".id-proprietario").val(id);
                 $(".ui-dialog-titlebar-close").click();
             });
-            
-            
-            $("#passo2-submit").click(function(){
-                    
-                        
-            });
+
         });
 
 

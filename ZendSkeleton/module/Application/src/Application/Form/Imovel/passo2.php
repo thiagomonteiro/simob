@@ -34,15 +34,15 @@ class passo2 extends Form{
         $comodos->setCount(2);
         if(!empty($arrayComodos)){
             foreach ($arrayComodos as $row){
-                $check = new \Zend\Form\Element\Checkbox('check'.$row->getDescricao());
-                $check->setAttribute('class', 'check-'.$row->getDescricao())->setAttributes(array("for" => "check".$row->getDescricao()));
+                $check = new \Zend\Form\Element\Checkbox('check'.$row->getId());
+                $check->setAttribute('class', 'check-comodo')->setAttributes(array("for" => "check".$row->getDescricao()));
                 $check->setLabel($row->getDescricao());
                 $check->setUseHiddenElement(true);
                 $check->setCheckedValue($row->getId());
                 $check->setUncheckedValue(false);   
                 $comodos->add($check); 
-                $qtd = new \Zend\Form\Element\Number('qtd'.$row->getDescricao());
-                $qtd->setAttribute('class', 'qtd-'.$row->getDescricao());
+                $qtd = new \Zend\Form\Element\Number('qtd'.$row->getId());
+                $qtd->setAttribute('class', 'qtd-comodo');
                 $qtd->setAttribute('value', 0);
                 $qtd->setAttribute('min', 0);
                 $qtd->setLabel('Quantidade');
