@@ -21,11 +21,11 @@ body {
     width: 100%;
 }
 
-footer, hr{
+/*footer, hr{
     position: fixed;
     bottom: 2px;
     float: left;
-}
+}*/
 
 /****posicionamento*****/
 
@@ -119,19 +119,48 @@ footer, hr{
 
 
 /*formulario3-inicio*/
-#galeria-passo3{
+#preview{
     text-align: center;
-    height: 300px;
+    height:450px;
     background-image: url(/img/camera.png);
     background-repeat: no-repeat;
     background-position:center;
     background-color: whitesmoke;
 }
 
-input[type="file"]{
-    height: 50px;
-    background: url(/img/add_foto.png) no-repeat 99% 51%;
+#preview > ul{
+    list-style: none;
 }
+
+#preview > ul > li{
+    display: inline-block;
+    width: 200px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+#preview > ul > li > img{
+    height: 100px;
+    width: 100px
+}
+
+
+
+.upload-wrapper {cursor:pointer; }
+.upload-file {cursor:pointer; position:absolute; }
+.upload-button {cursor:pointer; height:30px; width:30px; }
+
+.upload-wrapper {cursor:pointer; display:inline-block; position:relative; overflow:hidden; }
+.upload-file {cursor:pointer; position:absolute; filter:alpha(opacity=70); -moz-opacity:0.7; opacity:0.7; }
+.upload-button {cursor:pointer; height:30px; width:30px; }
+
+.upload-wrapper {cursor:pointer; display:inline-block; position:relative; overflow:hidden; }
+.upload-file {cursor:pointer; position:absolute; filter:alpha(opacity=70); -moz-opacity:0.7; opacity:0.7; font-size:20px;}
+.upload-button {cursor:pointer; height:30px; width:30px; }
+
+.upload-wrapper {cursor:pointer; display:inline-block; position:relative; overflow:hidden; }
+.upload-file {cursor:pointer; position:absolute; filter:alpha(opacity=100); -moz-opacity:0.01; opacity:0.01; font-size:20px;}
+.upload-button {cursor:pointer; height:30px; width:30px; }
+
 /*formulario3-fim*/
 
 /*inicio menu lateral*/

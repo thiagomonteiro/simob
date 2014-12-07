@@ -2,8 +2,22 @@
     Passo 3
 </header>
 <section class="criar">
-    <div id="galeria-passo3">
-        Nenhuma Imagem
+    <div id="preview">
+        <h3>Nenhuma Imagem</h3>
+        <ul>
+        </ul>
     </div>
-    <input type="file"/>
+    <?php
+    $form = $this->partialCadastro3;
+    $form->setAttribute('action', $this->url('crud_imovel/passo3'));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+    ?>
+    <!--<form class="upload-wrapper" method="post" action="/imovel/passo3">
+        <input class="upload-file" type="file" multiple/>
+        <img class="upload-button" alt="" title="" src="/img/add_foto.png" />
+    </form>
+    -->
 </section>

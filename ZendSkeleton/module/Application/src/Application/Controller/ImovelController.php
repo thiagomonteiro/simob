@@ -19,8 +19,10 @@ use Zend\Json\Json;
 use Application\Form\Imovel\passo1 as form_passo1; 
 use Application\Filter\Imovel\passo1 as filtro_passo1;
 use Application\Filter\Imovel\passo2 as filtro_passo2;
+use Application\Filter\Imovel\passo3 as filtro_passo3;
 use Application\Form\Imovel\passo2 as form_passo2;
 use Application\Form\Proprietario\busca as form_busca;
+use Application\Form\Imovel\passo3 as form_passo3;
 use ArrayObject;
 
 class ImovelController extends \Base\Controller\BaseController{
@@ -136,10 +138,44 @@ class ImovelController extends \Base\Controller\BaseController{
       if(count($mensagem)){
         $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
       }
+      $form = $this->getFormPasso3();
+      if($request->isPost()){
+          $postData = array_merge_recursive(
+                  $this->getRequest()->getPost()->toArray(),
+                  $this->getRequest()->getFiles()->toArray()
+          );
+          $form->setData($postData);
+          if($form->isValid()){
+              $data = $form->getData();
+              $this->saveImage($data['uploadfile']);
+          }else{
+              $this->flashMessenger()->addErrorMessage("Falha ao enviar arquivos");
+          }
+      }
       $this->setTemplate('layout/admin');
-      $this->appendJavaScript('simob/imovel.js');
-      $view = new ViewModel();
+      $this->appendJavaScript('simob/galeria.js');
+      $this->appendJavascript('libs/jquery.form.js');
+      $view = new ViewModel(array('partialCadastro3'   => $form ));
       return $view;
+    }
+    
+    private function saveImage($fotos){
+        if(isset($fotos))
+        {            
+            date_default_timezone_set("Brazil/East");
+            $allowedExts = array(".gif", ".jpeg", ".jpg", ".png", ".bmp");
+            $dir = $_SERVER['DOCUMENT_ROOT'].'/fotos/';
+            foreach ($fotos as $row){
+               $name = $row['name'];
+               $tmp_name = $row['tmp_name'];
+               $ext = strtolower(substr($name, -4));
+               if(in_array($ext,$allowedExts))
+               {
+                   $new_name = date("Y.m.d-H.i.s") ."-".uniqid().$ext; //gera o nome baseado na date() e na função uniqid
+                   $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
+               }
+            }
+        }
     }
     
     public function getFormPasso1($dadosPost=array()){
@@ -203,6 +239,11 @@ class ImovelController extends \Base\Controller\BaseController{
     
     public function getFormPasso2($dados_post = array(), $comodos){       
         $form = new form_passo2(null, array(), array(), $comodos);
+        return $form;
+    }
+    
+    public function getFormPasso3($dados_post = array()){
+        $form = new form_passo3(null, array());
         return $form;
     }
     
