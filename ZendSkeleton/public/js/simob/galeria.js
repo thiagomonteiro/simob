@@ -15,7 +15,6 @@ $(document).ready(function(){
                   url  : url,
                   type : 'POST',
                   success : function(msg){
-                      
                   }
                 });
                 
