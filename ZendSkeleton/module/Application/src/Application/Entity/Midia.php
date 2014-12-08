@@ -17,6 +17,9 @@ class Midia extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_tipo;//sera video ou imagem
     private $_url;
+    private $_nome;
+    private $_posicao;
+    private $_imovel;
     
     public function getId() {
         return $this->_id;
@@ -28,6 +31,18 @@ class Midia extends \Base\Entity\AbstractEntity {
 
     public function getUrl() {
         return $this->_url;
+    }
+
+    public function getNome() {
+        return $this->_nome;
+    }
+
+    public function getPosicao() {
+        return $this->_posicao;
+    }
+    
+    public function getImovel(){
+        return $this->_imovel;
     }
 
     public function setId($id) {
@@ -42,4 +57,15 @@ class Midia extends \Base\Entity\AbstractEntity {
         $this->_url = $url;
     }
 
+    public function setNome($nome) {
+        $this->_nome = $nome;
+    }
+
+    public function setPosicao($posicao) {
+        $this->_posicao = $posicao;
+    }
+    
+    public function setImovel(\Application\Entity\Imovel $imovel){
+        $this->_imovel = $imovel;
+    }
 }

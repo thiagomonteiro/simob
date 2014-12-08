@@ -37,6 +37,7 @@ class ImovelController extends \Base\Controller\BaseController{
     private $_ProprietarioDao;
     private $_ImovelComodoDao;
     private $_imovel_session;
+    private $_MidiaDao;
     /**
      * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
      */
@@ -52,6 +53,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_TipoComodosDao = \Base\Model\daoFactory::factory('Comodo');
         $this->_ProprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
         $this->_ImovelComodoDao = \Base\Model\daoFactory::factory('ImovelComodo');
+        $this->_MidiaDao = \Base\Model\daoFactory::factory('Midia');
     }
     
    
@@ -106,6 +108,8 @@ class ImovelController extends \Base\Controller\BaseController{
                 $imovel_sessao->setProprietario($proprietarioObj);
                 $data = $this->_ImovelDao->salvar($imovel_sessao);
                 $imovel_sessao->setId($data->insert_id);//apos cadastrar o imovel insiro o id retornado da função salvar. em seguida posso salvar os comodos
+                $this->SessionHelper()->definirSessao('imovel');//redefinindo a sessao apos salvar o id do imovel
+                $this->SessionHelper()->salvarObjeto('imovel', $imovel_sessao);
                 $listComodos = new ArrayObject();
                 foreach ($comodos as $row){
                     if(!empty($params['check'.$row->getId()])){
@@ -147,7 +151,8 @@ class ImovelController extends \Base\Controller\BaseController{
           $form->setData($postData);
           if($form->isValid()){
               $data = $form->getData();
-              $this->saveImage($data['uploadfile']);
+              $response = $this->saveImage($data['uploadfile']);
+              return $response;
           }else{
               $this->flashMessenger()->addErrorMessage("Falha ao enviar arquivos");
           }
@@ -165,6 +170,7 @@ class ImovelController extends \Base\Controller\BaseController{
             date_default_timezone_set("Brazil/East");
             $allowedExts = array(".gif", ".jpeg", ".jpg", ".png", ".bmp");
             $dir = $_SERVER['DOCUMENT_ROOT'].'/fotos/';
+            $miniaturas='';
             foreach ($fotos as $row){
                $name = $row['name'];
                $tmp_name = $row['tmp_name'];
@@ -173,8 +179,21 @@ class ImovelController extends \Base\Controller\BaseController{
                {
                    $new_name = date("Y.m.d-H.i.s") ."-".uniqid().$ext; //gera o nome baseado na date() e na função uniqid
                    $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
+                   $midiaObj = $this->_MidiaDao->criarNovo();
+                   $midiaObj->setTipo("imagem");
+                   $midiaObj->setNome($name);
+                   //$midiaObj->setUrl($dir.$new_name);
+                   $midiaObj->setUrl("/fotos/".$new_name);
+                   $midiaObj->setPosicao(0);
+                   $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+                   $midiaObj->setImovel($imovel_sessao);
+                   $data = $this->_MidiaDao->salvar($midiaObj);
+                   $midiaObj->setId($data->insert_id);
+                   $miniaturas.='<li><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><button class="delete-default">Remover</button><input type="text" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
                }
             }
+            $data = array('success' => true,'data' => $miniaturas);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
     }
     

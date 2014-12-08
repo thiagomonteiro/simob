@@ -14,11 +14,17 @@ $(document).ready(function(){
                 $(form).ajaxSubmit({//função do plugin js/libs/jquery.form.js
                   url  : url,
                   type : 'POST',
-                  success : function(msg){
+                  success : function(data){
+                    var res = jQuery.parseJSON(data);
+                     if(res.success == true){
+                         $("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
+                         $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
+                         $('#preview').children('ul').append(res.data);
+                     }
                   }
                 });
                 
-                $("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
+                /*$("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
                 $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
                 for (var i = 0; i < $(this).get(0).files.length; ++i) {
                   var Leitor = new FileReader();
@@ -26,7 +32,7 @@ $(document).ready(function(){
                   Leitor.onload = function (oFREvent) {
                         $('#preview').children('ul').append('<li><img src="'+oFREvent.target.result+'"><button class="delete-default">Remover</button><input type="text" placeholder="Renomear Imagem"></li>');
                   };
-                }
+                }*/
             });
             
 });
