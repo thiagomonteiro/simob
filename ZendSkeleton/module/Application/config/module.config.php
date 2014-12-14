@@ -641,6 +641,7 @@ return array(
             'Localidades' => 'Application\Plugin\Localidades',
             'SelectHelper' => 'Application\Plugin\SelectHelper',
             'SessionHelper' => 'Application\Plugin\SessionHelper',
+            'SimpleImage'   => 'Application\Plugin\SimpleImage',
         )
     ),
 );

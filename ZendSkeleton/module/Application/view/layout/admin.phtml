@@ -56,7 +56,7 @@
                       <ul>
                          <li class='last'><a href="<?php echo $this->url('crud_imovel/passo1') ?>"><span>Adicionar</span></a>
                          </li>
-                         <li class='last'><a href='#'><span>Gerenciar</span></a>
+                         <li class='last'><a href="<?php echo $this->url('crud_imovel/index') ?>"><span>Gerenciar</span></a>
                          </li>
                       </ul>
                    </li>
@@ -76,25 +76,12 @@
                             <li class='last'><a href="<?php echo $this->url('crud_comodo/index');?>">Gerenciar</a></li>
                        </ul>
                    </li>
-                   <li class='has-sub'><a href='#'><span>Transações</span></a> <!-- venda, aluguel, etc -->
-                       <ul>
-                            <li class='last'><a href="#">Adicionar</a></li>
-                            <li class='last'><a href="#">Gerenciar</a></li>
-                       </ul>
-                   </li>
-                   <li class='has-sub'><a href='#'><span>Tipo de Uso(finalidade)</span></a> <!-- comercial, residencial, etc -->
-                       <ul>
-                            <li class='last'><a href="#">Adicionar</a></li>
-                            <li class='last'><a href="#">Gerenciar</a></li>
-                       </ul>
-                   </li>
                    <li class='has-sub'><a href='#'><span>Proprietarios</span></a> <!-- comercial, residencial, etc -->
                        <ul>
                             <li class='last'><a href="<?php echo $this->url('crud_proprietario/criar');?>">Adicionar</a></li>
                             <li class='last'><a href="<?php echo $this->url('crud_proprietario/index');?>">Gerenciar</a></li>
                        </ul>
                    </li>
-                   
                 </ul>
         </aside>
         <div class="container">

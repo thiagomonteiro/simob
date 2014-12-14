@@ -56,7 +56,11 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_MidiaDao = \Base\Model\daoFactory::factory('Midia');
     }
     
-   
+    public function indexAction() {
+        $this->setTemplate('layout/admin');
+        $view = new ViewModel();
+        return $view;
+    }
     public function passo1Action(){
         $request = $this->getRequest();
         if($request->isPost()){
@@ -179,9 +183,13 @@ class ImovelController extends \Base\Controller\BaseController{
                {
                    $new_name = date("Y.m.d-H.i.s") ."-".uniqid().$ext; //gera o nome baseado na date() e na função uniqid
                    $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
+                   $image = $this->SimpleImage();
+                   $image->load($dir.$new_name); 
+                   $image->resize(400,400);
+                   $image->save($dir.$new_name); 
                    $midiaObj = $this->_MidiaDao->criarNovo();
                    $midiaObj->setTipo("imagem");
-                   $midiaObj->setNome($name);
+                   $midiaObj->setNome(str_replace($allowedExts,"", $name));//removendo extensões do nome
                    //$midiaObj->setUrl($dir.$new_name);
                    $midiaObj->setUrl("/fotos/".$new_name);
                    $midiaObj->setPosicao(0);

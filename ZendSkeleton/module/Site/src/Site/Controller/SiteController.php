@@ -30,13 +30,18 @@ class SiteController extends \Base\Controller\BaseController{
     }
     
     public function indexAction() {
+            $image = $this->SimpleImage();
+            echo'<img src="/fotos/picture.jpg">';
+            $image->load('./public/fotos/picture.jpg'); 
+            $image->resize(100,100);
+            $image->save('./public/fotos/picture.jpg'); 
             $dados_uf = $this->Localidades()->getEstados();
-            print_r($dados_uf);
+            //print_r($dados_uf);
             $view = new ViewModel();
             $event = $this->getEvent();
             $event->getViewModel()->setTemplate('layout/layout');
             return $view;
-        
-         
     }
 }
+?>
+
