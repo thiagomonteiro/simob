@@ -197,7 +197,7 @@ class ImovelController extends \Base\Controller\BaseController{
                    $midiaObj->setImovel($imovel_sessao);
                    $data = $this->_MidiaDao->salvar($midiaObj);
                    $midiaObj->setId($data->insert_id);
-                   $miniaturas.='<li><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><button class="delete-default">Remover</button><input type="text" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
+                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
                }
             }
             $data = array('success' => true,'data' => $miniaturas);

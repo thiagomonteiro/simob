@@ -6,6 +6,21 @@
 
 
 $(document).ready(function(){
+
+    var content = $(document);
+    content.delegate(".miniatura","mouseover",function(){
+        $(this).draggable({revert:true});
+    });
+    
+    
+    
+    $("#lixeira").droppable({
+        drop: function(event, ui) {
+            $(ui.draggable).remove();
+        }
+    });
+    
+    
     $(".upload-file").change(
             function(e){
                 e.preventDefault();
@@ -20,6 +35,7 @@ $(document).ready(function(){
                          $("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
                          $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
                          $('#preview').children('ul').append(res.data);
+                         $("#preview").children("#lixeira").show();
                      }
                   }
                 });
