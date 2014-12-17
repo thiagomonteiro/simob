@@ -504,6 +504,18 @@ $rota_imovel = array(
               ),
           ),
         ),
+        'removerImagem' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/removerImagem[/:id]',
+                'constraints' => array(
+                    'id' => '[0-9]+'
+                ),
+                'defaults' => array(
+                    'action'    =>  'removerImagem'
+                ),
+            ),
+        ),
         'getSubCategorias' => array(
         'type' => 'Zend\Mvc\Router\Http\Segment',
         'options' => array(

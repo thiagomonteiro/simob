@@ -36,7 +36,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
         return $this->_id;
     }
     
-    public function setBairro(\Application\Entity\Bairro $bairro){
+    public function setBairro($bairro){
         $this->_bairro = $bairro;
     }
     
@@ -116,7 +116,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
         return $this->_subCategoria;
     }
     
-    public function setProprietario(\Application\Entity\Proprietario $proprietario){
+    public function setProprietario($proprietario){
         $this->_proprietario = $proprietario;
     }
     

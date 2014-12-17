@@ -7,9 +7,12 @@
 
 $(document).ready(function(){
 
+    var idDelete;//variavel que irá guardar o id da foto que estiver sendo arrastada
+    
     var content = $(document);
     content.delegate(".miniatura","mouseover",function(){
         $(this).draggable({revert:true});
+        idDelete = $(this).children('input').val();// atribuindo o id da foto a variavel
     });
     
     
@@ -17,6 +20,9 @@ $(document).ready(function(){
     $("#lixeira").droppable({
         drop: function(event, ui) {
             $(ui.draggable).remove();
+            $.get("/imovel/removerImagem/"+idDelete,function(data){
+                var res = jQuery.parseJSON(data);
+            });
         }
     });
     
@@ -40,15 +46,6 @@ $(document).ready(function(){
                   }
                 });
                 
-                /*$("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
-                $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
-                for (var i = 0; i < $(this).get(0).files.length; ++i) {
-                  var Leitor = new FileReader();
-                  Leitor.readAsDataURL(this.files[i]);
-                  Leitor.onload = function (oFREvent) {
-                        $('#preview').children('ul').append('<li><img src="'+oFREvent.target.result+'"><button class="delete-default">Remover</button><input type="text" placeholder="Renomear Imagem"></li>');
-                  };
-                }*/
             });
             
 });

@@ -65,7 +65,7 @@ class Midia extends \Base\Entity\AbstractEntity {
         $this->_posicao = $posicao;
     }
     
-    public function setImovel(\Application\Entity\Imovel $imovel){
+    public function setImovel($imovel){
         $this->_imovel = $imovel;
     }
 }

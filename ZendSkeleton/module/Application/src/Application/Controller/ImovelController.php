@@ -205,6 +205,17 @@ class ImovelController extends \Base\Controller\BaseController{
         }
     }
     
+    public function removerImagemAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $response = $this->_MidiaDao->remover($id);
+        if($response == "ok"){
+            $data = array('success' => true,'menssagem'=>'Imagem removida com sucesso');
+        }else{
+            $data = array('success' => false,'menssagem' => $response);
+        }
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
     public function getFormPasso1($dadosPost=array()){
         $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
         $categorias = $this->_CategoriaImovelDao->recuperarTodos();

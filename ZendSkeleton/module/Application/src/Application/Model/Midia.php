@@ -15,13 +15,32 @@ use Application\Entity\Midia as MidiaEntity;
  */
 class Midia extends \Base\Model\AbstractModel {
     private $_ImovelMidia;
-    
-    public function __construct() {
+    private $_ImovelDao;
 
+
+    public function __construct() {
+        $this->_ImovelDao = \Base\Model\daoFactory::factory('Imovel');
     }
     
     public function criarNovo($params = null){
         return $this->_ImovelMidia = new MidiaEntity($params);
+    }
+    
+    public function criarVarios($results, $imovel = null){
+        $listaMidia = array();
+        foreach ($results as $row){
+            if(is_null($imovel)){
+               $row['imovel'] = $this->_ImovelDao->recuperar($row['imovel']);
+            }else{
+                $row['imovel'] = $imovel;
+            }
+            $listaMidia[]= $this->criarNovo($row);
+        }
+        if(count($listaMidia)>1){
+            return $listaMidia;
+        }else{
+            return $listaMidia[0];
+        }
     }
     
     public function salvar($obj){
@@ -46,16 +65,31 @@ class Midia extends \Base\Model\AbstractModel {
         return $results->getResource();//retorna os dados da inserção
     }
 
-    protected function recuperar($obj) {
-        
+    public function recuperar($id) {
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Midia WHERE(id=".$id.")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $midias_list = $this->criarVarios($results);
+        return $midias_list;
     }
 
     protected function recuperarTodos($de, $qtd, $filtro, $param) {
         
     }
 
-    protected function remover($obj) {
-        
+    public function remover($id) {
+        $obj = $this->recuperar($id);
+        unlink($_SERVER['DOCUMENT_ROOT'].$obj->getUrl());
+        try{
+        $adapter = $this->getAdapter();
+        $sql = "DELETE FROM Midia WHERE(id =".$id.")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+           return "ok";
+         }catch(\Zend\Db\Adapter\Exception\RuntimeException $e){
+           return "Não foi possível excluir, este Comodo faz referência a um imóvel ou proprietario";
+       }
     }
 
 }
