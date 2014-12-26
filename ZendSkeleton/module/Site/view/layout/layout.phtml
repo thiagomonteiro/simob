@@ -1,0 +1,62 @@
+<head>
+       <meta charset="utf-8">
+       <?php echo $this->headTitle('SIMOB '. $this->translate('Sistema Imobiliaria'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+       <?php echo $this->headMeta()
+           ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+           ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+       ?>
+
+       <!-- Le styles -->
+       <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                       ->prependStylesheet($this->basePath() . '/css/site.css')
+                       ->prependStylesheet($this->basePath() . '/css/notifIt.css')
+                       ->prependStylesheet($this->basePath() . '/css/jquery-ui-1.10.4.custom.min.css');
+         ?>
+
+       <!-- Scripts -->
+       <?php echo $this->headScript()
+           ->prependFile($this->basePath() . '/js/simob/default.js')
+           ->prependFile($this->basePath() . '/js/libs/jquery-ui-1.10.4.custom.min.js')
+           ->prependFile($this->basePath() . '/js/bootstrap.js')
+           ->prependFile($this->basePath() . '/js/jquery.min.js');
+       ?>
+
+</head>
+<body>
+    <header id="cabecalho"><img></header>
+        <aside> aside e ferramenta de busca</aside>
+        <div id="cssmenu">
+            <ul>
+                <li class='active'><a href='#'><span>Home</span></a></li>
+                <li><a href='#'><span>Imoveis</span></a></li>
+                <li><a href='#'><span>Lançamentos</span></a></li>
+                <li class='last'><a href='#'><span>Contato</span></a></li>
+             </ul>
+        </div>
+        <div class="container">
+            conteudo
+            <br>
+            conteudo
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>conteudo
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>conteudo
+        </div>
+        <footer id="rodape">
+            <div class="esquerda grand">logo</div>
+            <div class="central">http://www.peninsulabuzios.com.br/</div>
+            <div class="esquerda">lista com bairros de buzios</div>
+        </footer>
+</body>

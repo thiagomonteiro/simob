@@ -113,9 +113,9 @@ class ProprietarioController extends \Base\Controller\BaseController{
         try{
             $id = $this->getEvent()->getRouteMatch()->getParam('id');
             $response = $this->_ProprietarioDao->remover($id);
-            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
-        } catch (Exception $e) {
-            $data = array('success' => false,'mensagem' => 'ocorreu uma falha, repita a operação caso o problema persita contacte o Administrador do sistema');
+            $data = array('success' => true,'mensagem'=>'Registro removido com sucesso');
+        } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
+            $data = array('success' => false,'mensagem' => 'Operação não permitida, verifique se este usuário não se encontra cadastrado a nenhum imóvel');
         }
         return $this->getResponse()->setContent(Json_encode($data));
     }

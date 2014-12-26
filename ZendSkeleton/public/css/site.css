@@ -1,0 +1,112 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 21/12/2014, 14:25:53
+    Author     : thiago
+*/
+body{
+overflow: auto;
+background: rgba(216,225,231,1);
+background: -moz-linear-gradient(top, rgba(216,225,231,1) 14%, rgba(226,233,238,1) 20%, rgba(242,246,248,1) 29%, rgba(224,239,249,1) 54%, rgba(195,212,222,1) 74%, rgba(181,198,208,1) 84%);
+background: -webkit-gradient(left top, left bottom, color-stop(14%, rgba(216,225,231,1)), color-stop(20%, rgba(226,233,238,1)), color-stop(29%, rgba(242,246,248,1)), color-stop(54%, rgba(224,239,249,1)), color-stop(74%, rgba(195,212,222,1)), color-stop(84%, rgba(181,198,208,1)));
+background: -webkit-linear-gradient(top, rgba(216,225,231,1) 14%, rgba(226,233,238,1) 20%, rgba(242,246,248,1) 29%, rgba(224,239,249,1) 54%, rgba(195,212,222,1) 74%, rgba(181,198,208,1) 84%, rgba(226,233,238,1)96%);
+background: -o-linear-gradient(top, rgba(216,225,231,1) 14%, rgba(226,233,238,1) 20%, rgba(242,246,248,1) 29%, rgba(224,239,249,1) 54%, rgba(195,212,222,1) 74%, rgba(181,198,208,1) 84%, rgba(226,233,238,1)96%);
+background: -ms-linear-gradient(top, rgba(216,225,231,1) 14%, rgba(226,233,238,1) 20%, rgba(242,246,248,1) 29%, rgba(224,239,249,1) 54%, rgba(195,212,222,1) 74%, rgba(181,198,208,1) 84%, rgba(226,233,238,1)96%);
+background: linear-gradient(to bottom, rgba(216,225,231,1) 14%, rgba(226,233,238,1) 20%, rgba(242,246,248,1) 29%, rgba(224,239,249,1) 54%, rgba(195,212,222,1) 74%, rgba(181,198,208,1) 84%, rgba(226,233,238,1)96%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8e1e7', endColorstr='#b5c6d0', GradientType=0 );
+}
+
+header > img{
+    width: 100%;
+    height: 25%;
+    background-image: url('/img/testeferradura_128.gif');
+    background-repeat: no-repeat;
+    background-position:center;
+    border-radius: 10px;
+}
+
+aside{
+    float: right;
+    border: 1px solid black;
+    height: 500px;
+    width: 19%;
+    border-radius: 10px;
+}
+
+
+
+#cssmenu {
+  float:left;
+  width: 80%;
+  background:#66b5ba;
+  padding: 8px 0;
+  border-radius: 5px;
+}
+#cssmenu:before {
+  content: '';
+  display: block;
+}
+#cssmenu:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+#cssmenu ul {
+  list-style-type: none;
+  position: relative;
+  display: block;
+  font-size: 20px;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid white;
+  zoom: 1;
+}
+#cssmenu ul:before {
+  content: '';
+  display: block;
+}
+#cssmenu ul:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+#cssmenu li {
+  display: block;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+#cssmenu li a {
+  float: left;
+  color: black;
+  text-decoration: none;
+  height: 24px;
+  padding: 9px 15px 0;
+  font-weight: normal;
+}
+#cssmenu li:hover,
+#cssmenu .active {
+  text-decoration: none;
+  border-bottom: 2px solid white;
+}
+#cssmenu li:hover a {
+  color: white;
+}
+#cssmenu .active a {
+  color: #fff;
+  font-weight: 700;
+}
+
+#rodape{
+    float: left;
+    width: 100%;
+    height: 300px;
+    background:#66b5ba;
+    border-top: 10px solid whitesmoke;
+    
+}
+

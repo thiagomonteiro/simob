@@ -152,14 +152,20 @@ $(document).ready(function(){
                                 if(res.success == true){
                                     $(linha).remove();
                                     notif({
-                                        msg: res.menssagem,
+                                        msg: res.mensagem,
                                         type: 'success',
                                         width: "all",
                                         opacity: 0.8,
                                         position: "center",
                                     });
                                 }else{
-                                   $("#dialog-mensagem").find("p").text(res.mensagem);
+                                   notif({
+                                        msg: res.mensagem,
+                                        type: 'error',
+                                        width: "all",
+                                        opacity: 0.8,
+                                        position: "center",
+                                    });
                                 }
                             });
                             $(this).dialog("close");
