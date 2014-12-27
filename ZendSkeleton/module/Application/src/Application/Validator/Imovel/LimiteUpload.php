@@ -14,10 +14,9 @@ use Zend\Validator\AbstractValidator;
  * @author thiago
  */
 class LimiteUpload extends AbstractValidator {
-    
     const LIMITE = "Limite";
- 
-    /**
+
+        /**
      * Validation failure message template definitions
      *
      * @var array

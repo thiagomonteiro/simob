@@ -4,7 +4,8 @@ namespace Application\Filter\Imovel;
 use Zend\InputFilter\InputFilter,
     Zend\InputFilter\Factory,
     Zend\InputFilter\InputFilterAwareInterface,
-    Zend\InputFilter\InputFilterInterface;
+    Zend\InputFilter\InputFilterInterface,
+    Application\Validator\Imovel\LimiteUpload;
     
 
 class passo3 implements InputFilterAwareInterface{
@@ -22,7 +23,7 @@ class passo3 implements InputFilterAwareInterface{
                     'validators' => array(                       
                         array('name' => 'Application\Validator\Imovel\LimiteUpload',
                               'options' => array(
-                                  'messages' => array(\Application\Validator\Imovel\LimiteUpload::LIMITE => 'Limite'),
+                                  'messages' => array(LimiteUpload::LIMITE => 'Limite de 15 fotos, restantes:'),
                               ),
                         ),
                     ),

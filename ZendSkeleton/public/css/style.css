@@ -1,3 +1,6 @@
+.navbar{
+    z-index:5;
+}
 /***posicionamento****/
 body {
     padding-top: 60px;
@@ -133,14 +136,6 @@ footer, hr{
 }
 
 
-
-#preview > #capa{
-    background-color: white;
-    width: 200px;
-    height: 275px;
-    float: left;
-}
-
 #preview > ul{
     list-style: none;
     width: 80%;
@@ -153,8 +148,13 @@ footer, hr{
     margin: 3px;
     background-color: #dddddd;
     border-radius: 5px;
-    z-index: +1;
+    z-index: 1;
 }
+
+#preview > ul > li:hover{
+    z-index: 2;
+}
+
 #preview > ul > li > img{
     height: 80%;
     width: 80%;
@@ -162,6 +162,33 @@ footer, hr{
 #preview > ul > li > input{
     width: 100%;
     font-size:smaller;
+}
+
+#preview > #capa{
+    position: relative;
+    top: 10px;
+    left: 10px;
+    width: 180px;
+    height: 275px;
+    float: left;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #888888;
+}
+
+#preview > #capa[background="show"]{
+    background-image: url(/img/foto_de_capa.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #dddddd;
+}
+
+#preview > #capa[display="none"]{
+    display:none;
+}
+
+#preview > #capa > img{
+   width: 170px;
+    height: 170px; 
 }
 
 #preview > #lixeira{
@@ -180,10 +207,6 @@ footer, hr{
 }
 
 #preview > #lixeira[display="none"]{
-    display:none;
-}
-
-#preview > #capa[display="none"]{
     display:none;
 }
 

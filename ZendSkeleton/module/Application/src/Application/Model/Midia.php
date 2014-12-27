@@ -62,8 +62,8 @@ class Midia extends \Base\Model\AbstractModel {
 
     protected function inserir($obj) {
         $adapter =  $this->getAdapter();
-        $sql = "INSERT INTO Midia (url,posicao,nome,tipo,imovel)".
-                "VALUES('".$obj->getUrl()."','".$obj->getPosicao().
+        $sql = "INSERT INTO Midia (url,nome,tipo,imovel)".
+                "VALUES('".$obj->getUrl().
                 "','".$obj->getNome()."','".$obj->getTipo()."','".$obj->getImovel()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
@@ -115,6 +115,24 @@ class Midia extends \Base\Model\AbstractModel {
          }catch(\Zend\Db\Adapter\Exception\RuntimeException $e){
            return "Não foi possível excluir, este Comodo faz referência a um imóvel ou proprietario";
        }
+    }
+    
+    public function salvarCapa($id){
+        $aux = $this->limparCapa();// a funçao limpar capa seta false em todos as outras fotas, e ainda retorna o true para o update do selecionar capa
+        $adapter =  $this->getAdapter();
+        $sql = "UPDATE Midia SET capa =".$aux." WHERE id=".$id;
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
+    }
+    
+    public function limparCapa(){
+        $adapter =  $this->getAdapter();
+        $aux =false;
+        $sql = "UPDATE Midia SET capa = 0";
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
 
 }

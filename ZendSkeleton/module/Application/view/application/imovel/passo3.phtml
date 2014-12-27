@@ -2,10 +2,10 @@
     Passo 3
 </header>
 <section class="criar">
-       <?php if(empty($midiasSalvas)): ?>
+       <?php if(empty($midiasSalvas)): ?><!-- sem nenhuma imagem salva-->
         <div id="preview" display="show">
             <h3>Nenhuma Imagem</h3>
-            <div id="capa" display="none">
+            <div id="capa" display="none" background="none">
                 Arraste uma imagem para capa do álbum.
             </div>
             <ul>
@@ -13,19 +13,35 @@
             <div id="lixeira" display="none">
             </div>
         </div>
-       <?php else:?>            
+       <?php else:?>   <!-- com imagens na galeria-->         
         <div id="preview" display="none">
-            <div id="capa">
-                Arraste uma imagem para capa do álbum.
-            </div>
+                 <?php 
+                    $capa = null;
+                    foreach($midiasSalvas as $row){
+                        if(boolval($row->getCapa())==TRUE){
+                            $capa = $row;
+                        }
+                    }
+                  ?>
+                <?php if(is_null($capa)):?>
+                        <div id="capa" background="show"><!--exibe a imagem de background com a imagem foto_de_capa.png-->
+                            Arraste uma imagem para capa do álbum.
+                        </div>
+                 <?php else:?>           
+                        <div id="capa">
+                            <img src="<?php echo $capa->getUrl();?>">
+                            <rodape>Foto de capa</rodape>
+                        </div>
+                 <?php endif;?>
+            
              <ul> 
                  <?php
                     if(is_array($midiasSalvas)){
                         foreach ($midiasSalvas as $row){
-                            echo '<li class="miniatura"><img src="'.$row->getUrl().'"><input type="hidden" value="'.$row->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" value="'.$row->getNome().'"></li>';
+                            echo '<li class="miniatura"><img src="'.$row->getUrl().'"><input type="hidden" value="'.$row->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" nome="'.$row->getNome().'" value="'.$row->getNome().'"></li>';
                          }
                     }else{
-                        echo '<li class="miniatura"><img src="'.$midiasSalvas->getUrl().'"><input type="hidden" value="'.$midiasSalvas->getId().'"><input class="nome-miniatura" type="text" placeholder="nomear Imagem" value="'.$midiasSalvas->getNome().'"></li>';
+                        echo '<li class="miniatura"><img src="'.$midiasSalvas->getUrl().'"><input type="hidden" value="'.$midiasSalvas->getId().'"><input class="nome-miniatura" type="text" placeholder="nomear Imagem" nome="'.$midiasSalvas->getNome().'" value="'.$midiasSalvas->getNome().'"></li>';
                     }
                     
                  ?>

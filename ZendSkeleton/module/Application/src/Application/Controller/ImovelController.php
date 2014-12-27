@@ -161,7 +161,6 @@ class ImovelController extends \Base\Controller\BaseController{
               $response = $this->saveImage($data['uploadfile']);
               return $response;
           }else{    
-              //print_r($form->getMessages()); 
                $data = array('success' => false,'mensagem' => "limite de 15 fotos");
                $response = $this->getResponse()->setContent(Json_encode($data));
                return $response;
@@ -200,12 +199,11 @@ class ImovelController extends \Base\Controller\BaseController{
                    $midiaObj->setNome(str_replace($allowedExts,"", $name));//removendo extensões do nome
                    //$midiaObj->setUrl($dir.$new_name);
                    $midiaObj->setUrl("/fotos/".$new_name);
-                   $midiaObj->setPosicao(0);
                    $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
                    $midiaObj->setImovel($imovel_sessao);
                    $data = $this->_MidiaDao->salvar($midiaObj);
                    $midiaObj->setId($data->insert_id);
-                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
+                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" nome="'.$midiaObj->getNome().'" value="'.$midiaObj->getNome().'"></li>';
                }
             }
             $data = array('success' => true,'data' => $miniaturas);
@@ -237,6 +235,17 @@ class ImovelController extends \Base\Controller\BaseController{
             $data = array("success" => false, "mensagem" => "Falha ao atualizar");
         }
         return $this->getResponse()->setContent(json_encode($data));
+    }
+    
+    public function selecionarCapaAction(){
+        try{
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $this->_MidiaDao->salvarCapa($id);
+             $data = array('success' => true,'menssagem'=>'Capa selecionada');
+        }  catch (\Zend\Db\Adapter\Exception\RuntimeException $e){
+             $data = array('success' => false,'menssagem' => "falha ao selecionar capa");
+        }       
+        return $this->getResponse()->setContent(Json_encode($data));
     }
 
 

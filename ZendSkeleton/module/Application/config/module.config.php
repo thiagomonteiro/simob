@@ -529,6 +529,18 @@ $rota_imovel = array(
                 ),
             ),
         ),
+        'selecionarCapa' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/selecionarCapa[/:id]',
+                'constraints' => array(
+                    'id' => '[0-9]+'
+                ),
+                'defaults' => array(
+                    'action' => 'selecionarCapa'
+                ),
+            ),
+        ),
         'getSubCategorias' => array(
         'type' => 'Zend\Mvc\Router\Http\Segment',
         'options' => array(
