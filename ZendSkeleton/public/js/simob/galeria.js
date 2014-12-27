@@ -15,8 +15,6 @@ $(document).ready(function(){
         idDelete = $(this).children('input').val();// atribuindo o id da foto a variavel
     });
     
-    
-    
     $("#lixeira").droppable({
         drop: function(event, ui) {
             $(ui.draggable).remove();
@@ -26,10 +24,32 @@ $(document).ready(function(){
         }
     });
     
+    content.delegate(".nome-miniatura","keypress",function(e){
+         if (e.which == 13) {
+            var id = $(this).parent().children("input:hidden").val(); 
+            var nome = $(this).val().replace(' ','-');            
+            $.post("/imovel/alterarImagem/"+id+"/"+nome,function(data){
+                var res = jQuery.parseJSON(data);
+                if(res.success){
+                        notif({
+                        msg: res.mensagem,
+                        type: 'info',
+                        width: 150,                        
+                        opacity: 0.8,
+                        position: "right",
+                        multiline: true,
+                    });
+                } 
+            });
+         }
+    });
     
     $(".upload-file").change(
             function(e){
                 e.preventDefault();
+                var fileCount = this.files.length;
+                $("#contador").val(fileCount);
+                var $fileUpload = $("input[type='file']");
                 var form = $(".upload-wrapper"); 
                 var url = form.attr('action');
                 $(form).ajaxSubmit({//função do plugin js/libs/jquery.form.js
@@ -42,6 +62,15 @@ $(document).ready(function(){
                          $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
                          $('#preview').children('ul').append(res.data);
                          $("#preview").children("#lixeira").show();
+                         $("#preview").children("#capa").show();
+                     }else{
+                            notif({
+                            msg: res.mensagem,
+                            width: "all",
+                            type: "warning",                     
+                            position: "center",
+                            multiline: true,
+                        });
                      }
                   }
                 });

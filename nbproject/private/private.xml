@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/view/site/index/index.phtml</file>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/src/Site/Controller/SiteController.php</file>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/view/layout/layout.phtml</file>
-            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/public/css/site.css</file>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Application/src/Application/Controller/ImovelController.php</file>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/public/js/simob/galeria.js</file>
         </group>
     </open-files>
 </project-private>

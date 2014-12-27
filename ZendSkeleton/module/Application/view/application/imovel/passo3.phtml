@@ -2,13 +2,38 @@
     Passo 3
 </header>
 <section class="criar">
-    <div id="preview">
-        <h3>Nenhuma Imagem</h3>
-        <ul>
-        </ul>
-        <div id="lixeira">
+       <?php if(empty($midiasSalvas)): ?>
+        <div id="preview" display="show">
+            <h3>Nenhuma Imagem</h3>
+            <div id="capa" display="none">
+                Arraste uma imagem para capa do álbum.
+            </div>
+            <ul>
+            </ul>
+            <div id="lixeira" display="none">
+            </div>
         </div>
-    </div>
+       <?php else:?>            
+        <div id="preview" display="none">
+            <div id="capa">
+                Arraste uma imagem para capa do álbum.
+            </div>
+             <ul> 
+                 <?php
+                    if(is_array($midiasSalvas)){
+                        foreach ($midiasSalvas as $row){
+                            echo '<li class="miniatura"><img src="'.$row->getUrl().'"><input type="hidden" value="'.$row->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" value="'.$row->getNome().'"></li>';
+                         }
+                    }else{
+                        echo '<li class="miniatura"><img src="'.$midiasSalvas->getUrl().'"><input type="hidden" value="'.$midiasSalvas->getId().'"><input class="nome-miniatura" type="text" placeholder="nomear Imagem" value="'.$midiasSalvas->getNome().'"></li>';
+                    }
+                    
+                 ?>
+             </ul>
+             <div id="lixeira" display="show">
+             </div>
+        </div>    
+       <?php endif;?>       
     <?php
     $form = $this->partialCadastro3;
     $form->setAttribute('action', $this->url('crud_imovel/passo3'));
@@ -17,9 +42,4 @@
     $this->formCollection($form),
     $this->form()->closeTag();
     ?>
-    <!--<form class="upload-wrapper" method="post" action="/imovel/passo3">
-        <input class="upload-file" type="file" multiple/>
-        <img class="upload-button" alt="" title="" src="/img/add_foto.png" />
-    </form>
-    -->
 </section>

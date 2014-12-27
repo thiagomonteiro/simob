@@ -147,24 +147,32 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
       }
       $form = $this->getFormPasso3();
+      $midiasSalvas = array();
       if($request->isPost()){
           $postData = array_merge_recursive(
                   $this->getRequest()->getPost()->toArray(),
                   $this->getRequest()->getFiles()->toArray()
           );
           $form->setData($postData);
-          if($form->isValid()){
+          $Filter = new filtro_passo3();
+          $form->setInputFilter($Filter->getInputFilter());
+          if($form->isValid()){              
               $data = $form->getData();
               $response = $this->saveImage($data['uploadfile']);
               return $response;
-          }else{
-              $this->flashMessenger()->addErrorMessage("Falha ao enviar arquivos");
+          }else{    
+              //print_r($form->getMessages()); 
+               $data = array('success' => false,'mensagem' => "limite de 15 fotos");
+               $response = $this->getResponse()->setContent(Json_encode($data));
+               return $response;
           }
+      }else{//acionado quando o usuário der um refresh na pagina, impede que as imagens sumam
+       $midiasSalvas = $this->_MidiaDao->recuperarTodos(null,null,'imovel',$imovel_sessao->getId());          
       }
       $this->setTemplate('layout/admin');
       $this->appendJavaScript('simob/galeria.js');
       $this->appendJavascript('libs/jquery.form.js');
-      $view = new ViewModel(array('partialCadastro3'   => $form ));
+      $view = new ViewModel(array('partialCadastro3'   => $form , 'midiasSalvas' => $midiasSalvas));
       return $view;
     }
     
@@ -197,7 +205,7 @@ class ImovelController extends \Base\Controller\BaseController{
                    $midiaObj->setImovel($imovel_sessao);
                    $data = $this->_MidiaDao->salvar($midiaObj);
                    $midiaObj->setId($data->insert_id);
-                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
+                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" value="'.$midiaObj->getNome().'"></li>';
                }
             }
             $data = array('success' => true,'data' => $miniaturas);
@@ -216,6 +224,22 @@ class ImovelController extends \Base\Controller\BaseController{
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
+    public function alterarImagemAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $nome = $this->getEvent()->getRouteMatch()->getParam('nome');
+        $obj = $this->_MidiaDao->recuperar($id);
+        $obj->setNome(str_replace("-", " ", $nome));
+        $obj->setPersistido(true);
+        try{
+            $response = $this->_MidiaDao->salvar($obj);
+            $data = array("success" => true, "mensagem" => "nome atualizado");
+        } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
+            $data = array("success" => false, "mensagem" => "Falha ao atualizar");
+        }
+        return $this->getResponse()->setContent(json_encode($data));
+    }
+
+
     public function getFormPasso1($dadosPost=array()){
         $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
         $categorias = $this->_CategoriaImovelDao->recuperarTodos();

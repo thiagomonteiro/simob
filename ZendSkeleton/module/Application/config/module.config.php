@@ -516,6 +516,19 @@ $rota_imovel = array(
                 ),
             ),
         ),
+        'alterarImagem' => array(//altera nome da imagem
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/alterarImagem[/:id][/:nome]',
+                'constraints' => array(
+                    'id' => '[0-9]+',
+                    'nome' => '[a-zA-Z0-9_-]+'
+                ),
+                'defaults' => array(
+                    'action'    =>  'alterarImagem'
+                ),
+            ),
+        ),
         'getSubCategorias' => array(
         'type' => 'Zend\Mvc\Router\Http\Segment',
         'options' => array(

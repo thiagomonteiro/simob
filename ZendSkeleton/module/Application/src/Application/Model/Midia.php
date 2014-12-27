@@ -36,11 +36,12 @@ class Midia extends \Base\Model\AbstractModel {
             }
             $listaMidia[]= $this->criarNovo($row);
         }
-        if(count($listaMidia)>1){
-            return $listaMidia;
-        }else{
+        if(count($listaMidia)== 1){
             return $listaMidia[0];
+        }else{
+            return $listaMidia;
         }
+        
     }
     
     public function salvar($obj){
@@ -52,7 +53,11 @@ class Midia extends \Base\Model\AbstractModel {
     }
     
     protected function atualizar($obj) {
-        
+        $adapter =  $this->getAdapter();
+        $sql = "UPDATE Midia SET nome ='".$obj->getNome()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();
+        return true;
     }
 
     protected function inserir($obj) {
@@ -74,8 +79,28 @@ class Midia extends \Base\Model\AbstractModel {
         return $midias_list;
     }
 
-    protected function recuperarTodos($de, $qtd, $filtro, $param) {
-        
+    public function recuperarTodos($de, $qtd, $filtro, $param) {
+        if($de == null){
+            $de = 0;
+        }
+        if($qtd == null){
+            $qtd = 100;
+        }
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Midia WHERE(".$filtro."='".$param."') LIMIT ".$de.", ".($qtd+1)."";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $midias_list = $this->criarVarios($results);
+        return $midias_list;
+    }
+    
+    public function recuperarTotal($id){
+        $adapter = $this->getAdapter();
+        $sql = "SELECT * FROM Midia WHERE(imovel= '".$id."')";
+        $statement = $adapter->query($sql);
+        $result = $statement->execute();
+        $total = count($this->criarVarios($result));
+        return $total;
     }
 
     public function remover($id) {
