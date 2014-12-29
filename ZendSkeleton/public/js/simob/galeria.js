@@ -20,7 +20,7 @@ $(document).ready(function(){
         drop: function(event, ui) {
             $(ui.draggable).remove();
             $.get("/imovel/removerImagem/"+idMiniatura,function(data){
-                var res = jQuery.parseJSON(data);
+                window.location.reload();
             });
         }
     });

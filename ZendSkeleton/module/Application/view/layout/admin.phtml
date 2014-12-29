@@ -15,8 +15,8 @@
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/notifIt.css')
                         ->prependStylesheet($this->basePath() . '/css/jquery-ui-1.10.4.custom.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.css') ?>
+                        ->prependStylesheet($this->basePath() . '/css/top-menu.css')
+                ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
@@ -40,49 +40,53 @@
           echo $this->mensagemCentro;   
         }
         ?>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container-superior">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Configurações</a></li>
-                        <li class="active"><a href="<?php echo $this->url('rota_front_end')?>">Front-end</a></li>
-                    </ul>
-                </div>
-            </div>
+        <nav id="cssmenu">
+            <ul>
+                <li class="active"><a href="#">Configurações</a></li>
+                <li class="active"><a href="<?php echo $this->url('rota_front_end')?>">Front-end</a></li>
+            </ul>
         </nav>
         <aside>
-                <ul>
-                   <li class='has-sub'><a href='#'><span>Imoveis</span></a>
-                      <ul>
-                         <li class='last'><a href="<?php echo $this->url('crud_imovel/passo1') ?>"><span>Adicionar</span></a>
-                         </li>
-                         <li class='last'><a href="<?php echo $this->url('crud_imovel/index') ?>"><span>Gerenciar</span></a>
-                         </li>
-                      </ul>
-                   </li>
-                   <li class='has-sub'><a href='#'><span>Localidades</span></a>
-                       <ul>
-                           <li class='has-sub'><a href='#'><span>Bairros</span></a>
-                               <ul>
-                                   <li class='last'><a href="<?php echo $this->url('crud_bairro/criarBairro');?>">Adicionar</a></li>
-                                   <li class='last'><a href="<?php echo $this->url('crud_bairro/gerenciarBairro');?>">Gerenciar</a></li>
-                               </ul>
-                           </li>
-                       </ul>
-                   </li>
-                   <li class='has-sub'><a href='#'><span>Comodos</span></a> <!-- comercial, residencial, etc -->
-                       <ul>
-                            <li class='last'><a href="<?php echo $this->url('crud_comodo/criar');?>">Adicionar</a></li>
-                            <li class='last'><a href="<?php echo $this->url('crud_comodo/index');?>">Gerenciar</a></li>
-                       </ul>
-                   </li>
-                   <li class='has-sub'><a href='#'><span>Proprietarios</span></a> <!-- comercial, residencial, etc -->
-                       <ul>
-                            <li class='last'><a href="<?php echo $this->url('crud_proprietario/criar');?>">Adicionar</a></li>
-                            <li class='last'><a href="<?php echo $this->url('crud_proprietario/index');?>">Gerenciar</a></li>
-                       </ul>
-                   </li>
-                </ul>
+            <a href="<?php echo $this->url('crud_imovel/passo1') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/criar-imovel.png"> 
+                </div>
+            </a>
+            <a href="<?php echo $this->url('crud_imovel/index') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/gerenciar-imovel.png"> 
+                </div>
+            </a>
+             <a href="<?php echo $this->url('crud_bairro/criarBairro') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/criar-bairro.png"> 
+                </div>
+            </a>
+            <a href="<?php echo $this->url('crud_bairro/gerenciarBairro') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/gerenciar-bairro.png"> 
+                </div>
+            </a>
+             <a href="<?php echo $this->url('crud_comodo/criar') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/criar-comodo.png"> 
+                </div>
+            </a>
+            <a href="<?php echo $this->url('crud_comodo/index') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/gerenciar-comodo.png"> 
+                </div>
+            </a>
+            <a href="<?php echo $this->url('crud_proprietario/criar') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/criar-proprietario.png"> 
+                </div>
+            </a>
+            <a href="<?php echo $this->url('crud_proprietario/index') ?>">
+                <div class="menu-box">
+                    <image src="/img/menu/gerenciar-proprietario.png"> 
+                </div>
+            </a>
         </aside>
         <div class="container">
             <?php echo $this->content; ?>
