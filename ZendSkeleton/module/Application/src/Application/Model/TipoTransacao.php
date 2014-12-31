@@ -46,6 +46,7 @@ class TipoTransacao extends \Base\Model\AbstractModel {
        $sql = "SELECT * FROM TipoTransacao WHERE(id=".$id.")";
        $statement = $adapter->query($sql);
        $result = $statement->execute();      
+       $this->fecharConexao();
        $tipo = $this->criarVarios($result);
        return $tipo[0]; 
     }
@@ -61,6 +62,7 @@ class TipoTransacao extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM TipoTransacao";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista;
     }

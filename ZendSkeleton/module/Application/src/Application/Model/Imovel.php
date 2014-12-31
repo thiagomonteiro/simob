@@ -68,6 +68,7 @@ class Imovel extends \Base\Model\AbstractModel {
                 "','".$obj->getSubCategoria()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return $results->getResource();//retorna os dados da inserção
     }
 
@@ -76,6 +77,7 @@ class Imovel extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM Imovel WHERE(id=".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         $imovel_list = $this->criarVarios($results);
         return $imovel_list;
     }

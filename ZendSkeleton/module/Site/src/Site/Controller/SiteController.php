@@ -30,7 +30,11 @@ class SiteController extends \Base\Controller\BaseController{
     }
     
     public function indexAction() {
-        $view = new ViewModel();
+        $proprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
+        $obj = $proprietarioDao->recuperar(10);
+        print_r($obj);
+        $dados=array();
+        $view = new ViewModel(array('dados' => $dados));
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('/layout/layout');
         return $view;

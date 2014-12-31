@@ -9,7 +9,9 @@
 namespace Application\Model;
 
 use Application\Entity\Cidade as CidadeEntity;
-use Application\Model\Estado as EstadoModel;
+use Application\Entity\Estado as EstadoEntity;
+use Application\Entity\Pais as PaisEntity;
+
 /**
  * Description of cidade
  *
@@ -20,30 +22,40 @@ class Cidade extends \Base\Model\AbstractModel{
     private $_estadoDAO;
     
     public function __construct() {
-        $this->_estadoDAO = new EstadoModel();
     }
     
     public function criarNovo($params = null){
       return new CidadeEntity($params);    
     }
     
-    public function criarVarios($results , $estado=null){
+    public function criarVarios($results){
         $lista_cidades = array();
         foreach($results as $result){
-            if(is_null($estado)){
-                $dadosEstado = $this->_estadoDAO->recuperar($result['estado']);
-                $result['estado'] = $dadosEstado;
-            }else{
-               $result['estado']=$estado;
-            }
-            $lista_cidades[] = $this->criarNovo($result);
+            $cidadeObj= new CidadeEntity();
+            $estadoObj = new EstadoEntity();
+            $paisObj = new PaisEntity();
+            //pais
+            $paisObj->setId($result['pais_id']);
+            $paisObj->setNome($result['pais_nome']);
+            $paisObj->setSigla($result['pais_sigla']);
+            //estado
+            $estadoObj->setId($result['estado_id']);
+            $estadoObj->setNome($result['estado_nome']);
+            $estadoObj->setUf($result['estado_uf']);
+            //cidade
+            $cidadeObj->setId($result['cidade_id']);
+            $cidadeObj->setNome($result['cidade_nome']);
+            //relaçoes
+            $estadoObj->setPais($paisObj);
+            $cidadeObj->setEstado($estadoObj);
+            $lista_cidades[] = $cidadeObj;
         }
         if(count($lista_cidades)>1){
             $response = $lista_cidades;
         }else{
             $response = $lista_cidades[0];
         }
-        return $response;
+        return $response;            
     }
     
      
@@ -57,8 +69,8 @@ class Cidade extends \Base\Model\AbstractModel{
     }
     
     public function recuperar($id){
-        $adapter = $this->getAdapter();
-        $sql = 'select * from cidade where(id ='.$id.')';
+        $adapter = $this->getAdapter();        
+        $sql = "SELECT cidade.id AS cidade_id ,cidade.nome AS cidade_nome, estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM cidade INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id where(cidade.id =".$id.")";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
         return $this->criarVarios($results);
@@ -74,7 +86,7 @@ class Cidade extends \Base\Model\AbstractModel{
     
     public function recuperarPorEstado(\Application\Entity\Estado $estado){
         $adapter = $this->getAdapter();
-        $sql = 'select * from cidade where(estado ='.$estado->getId().')';
+        $sql = "SELECT cidade.id AS cidade_id ,cidade.nome AS cidade_nome, estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM cidade INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id where(estado =".$estado->getId().")";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
         return $this->criarVarios($results,$estado);
@@ -82,7 +94,7 @@ class Cidade extends \Base\Model\AbstractModel{
     
     public function recuperarPorNome($nome){
         $adapter = $this->getAdapter();
-        $sql = "select * from cidade where(nome ='".$nome."')";
+        $sql = "SELECT cidade.id AS cidade_id ,cidade.nome AS cidade_nome, estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM cidade INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id where(cidade.nome ='".$nome."')";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
         return $this->criarVarios($results);

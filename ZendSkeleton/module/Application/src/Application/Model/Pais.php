@@ -39,6 +39,7 @@ class Pais extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM pais WHERE(id='".$id."')";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
+        $this->fecharConexao();
         $arrayPais = array();
         foreach ($results as $row){
             $arrayPais = $row;

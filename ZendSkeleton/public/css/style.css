@@ -82,7 +82,7 @@ footer, hr{
 }
 
 .formulario2 > .fieldcomodos > label input[type="checkbox"]{
-    
+    margin-top: 20px;
 }
 
 .formulario2 > .fieldcomodos > label span{

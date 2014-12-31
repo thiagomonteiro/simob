@@ -46,6 +46,7 @@ class ImovelComodo extends \Base\Model\AbstractModel {
         $sql = "INSERT INTO ImovelComodo (qtd,imovel,comodo)VALUES('".$obj->getQtd()."','".$obj->getImovel()->getId()."','".$obj->getTipoComodo()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
     }
 
     protected function recuperar($obj) {

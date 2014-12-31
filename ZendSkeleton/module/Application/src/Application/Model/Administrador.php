@@ -26,7 +26,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
     {
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Administrador (nome, email, senha)VALUES ('".$obj->getNome()."','".$obj->getEmail()."','".$obj->getSenha()."')";
-        $statement = $adapter -> query($sql);
+        $statement = $adapter -> query($sql);        
         $results = $statement -> execute();
     }
 
@@ -40,6 +40,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."')";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
+        $this->fecharConexao();
         $lista_usuario = array();
         foreach($results as $result){
             $lista_usuario[] = new AdmEntity($result);
@@ -48,11 +49,11 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
     }
 
     public function recuperarPorLogin($obj){ 
-        
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Administrador WHERE(email ='".$obj->getEmail()."' and senha='".$obj->getSenha()."')";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
+        $this->fecharConexao();
         $lista_usuario = array();
         foreach($results as $result){
             $lista_usuario[] = new AdmEntity($result);
@@ -78,6 +79,7 @@ private $classe = "\\Application\\Entity\\Administrador"; // este valor será mo
         $sql = "SELECT * FROM Administrador LIMIT $de,$qtd";
         $statement = $adapter->query($sql);
         $results =  $statement->execute();
+        $this->fecharConexao();
         $lista_usuario = array();
         foreach($results as $result){
             $obj = new $this->classe($result);//instanciando um objeto

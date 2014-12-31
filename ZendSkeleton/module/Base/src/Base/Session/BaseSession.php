@@ -42,7 +42,8 @@ class BaseSession {
     }
     
     public function isAutenticado(){
-        return boolval($this->_Autenticado);
+        //return boolval($this->_Autenticado);
+        return $this->_Autenticado;
     }
    
      

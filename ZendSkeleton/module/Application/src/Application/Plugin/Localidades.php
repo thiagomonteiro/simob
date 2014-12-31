@@ -35,7 +35,7 @@ class Localidades extends AbstractPlugin {
     
     
    public function getCidades($uf){//funçao que preenche o select-box de cidades        
-        $estado = $this->estadoDAO->recuperarPorUf($uf);
+        $estado = $this->estadoDAO->recuperarPorUf($uf);        
         $Array_cidades = $this->cidadeDAO->recuperarPorEstado($estado);
         $dados_select =  array();
         $dados_select[] =  array('value' => "",'label' => 'Selecione uma Cidade','disabled' => 'disabled');

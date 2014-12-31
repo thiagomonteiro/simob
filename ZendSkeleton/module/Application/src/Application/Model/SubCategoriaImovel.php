@@ -51,6 +51,7 @@ class SubCategoriaImovel extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM SubCategoriaImovel WHERE(id =".$idSubCategoria.")";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista[0];
     }
@@ -60,6 +61,7 @@ class SubCategoriaImovel extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM SubCategoriaImovel WHERE(categoria =".$idCategoria.")";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista;
     }
@@ -75,6 +77,7 @@ class SubCategoriaImovel extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM SubCategoriaImovel";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista;
     }

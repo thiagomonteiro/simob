@@ -57,6 +57,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "UPDATE Midia SET nome ='".$obj->getNome()."' WHERE id=".$obj->getId();
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return true;
     }
 
@@ -67,6 +68,7 @@ class Midia extends \Base\Model\AbstractModel {
                 "','".$obj->getNome()."','".$obj->getTipo()."','".$obj->getImovel()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return $results->getResource();//retorna os dados da inserção
     }
 
@@ -75,6 +77,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM Midia WHERE(id=".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         $midias_list = $this->criarVarios($results);
         return $midias_list;
     }
@@ -90,6 +93,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM Midia WHERE(".$filtro."='".$param."') LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         $midias_list = $this->criarVarios($results);
         return $midias_list;
     }
@@ -99,6 +103,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM Midia WHERE(imovel= '".$id."')";
         $statement = $adapter->query($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $total = count($this->criarVarios($result));
         return $total;
     }
@@ -111,6 +116,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "DELETE FROM Midia WHERE(id =".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
            return "ok";
          }catch(\Zend\Db\Adapter\Exception\RuntimeException $e){
            return "Não foi possível excluir, este Comodo faz referência a um imóvel ou proprietario";
@@ -123,6 +129,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "UPDATE Midia SET capa =".$aux." WHERE id=".$id;
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return true;
     }
     
@@ -132,6 +139,7 @@ class Midia extends \Base\Model\AbstractModel {
         $sql = "UPDATE Midia SET capa = 0";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return true;
     }
 

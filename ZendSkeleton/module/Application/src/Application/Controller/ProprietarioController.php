@@ -151,7 +151,7 @@ class ProprietarioController extends \Base\Controller\BaseController{
     private function GetFormAlterar($id){
         $proprietarioObj = $this->_ProprietarioDao->recuperar($id);
         $uf =  $proprietarioObj->getBairro()->getCidade()->getEstado(); 
-        $dados_uf = $this->Localidades()->getEstados();
+        $dados_uf = $this->Localidades()->getEstados();        
         unset($dados_uf[0]);
         $dados_uf[$uf->getId()]["selected"]="selected";
         $cidade = $proprietarioObj->getBairro()->getCidade();

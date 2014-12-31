@@ -9,7 +9,7 @@
 namespace Application\Model;
 
 use Application\Entity\Estado as EstadoEntity;
-use Application\Model\Pais as PaisModel;
+use \Application\Entity\Pais as PaisEntity;
 /**
  * Description of estado
  *
@@ -19,7 +19,6 @@ class Estado extends \Base\Model\AbstractModel {
     private $_paisDao;
     
     public function __construct() {
-        $this->_paisDao = new PaisModel();
     }
     public function criarNovo($params = null){
       return new EstadoEntity($params);    
@@ -28,14 +27,16 @@ class Estado extends \Base\Model\AbstractModel {
     public function criarVarios($results,$pais=null){
         $lista_estados = array();
         foreach($results as $result){
-            if(is_null($pais)){
-                $dadosPais = $this->_paisDao->recuperar($result['pais']);
-                $paisObj = $this->_paisDao->criarNovo($dadosPais);
-                $result['pais']=$paisObj;
-            }else{
-                $result['pais'] = $pais;
-            }  
-            $lista_estados[] = $this->criarNovo($result);
+            $paisObj = new PaisEntity();
+            $estadoObj = new EstadoEntity();   
+            $paisObj->setId($result['pais_id']);
+            $paisObj->setNome($result['pais_nome']);
+            $paisObj->setSigla($result['pais_sigla']);
+            $estadoObj->setId($result['estado_id']);
+            $estadoObj->setNome($result['estado_nome']);
+            $estadoObj->setUf($result['estado_uf']);
+            $estadoObj->setPais($paisObj);
+            $lista_estados[] = $estadoObj;        
         }
         if(count($lista_estados)>1){
             $response = $lista_estados;
@@ -55,15 +56,16 @@ class Estado extends \Base\Model\AbstractModel {
     
     public function recuperar($id){
         $adapter = $this->getAdapter();
-        $sql = "select * from estado where(id ='".$id."')";
+        $sql= "SELECT estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM estado INNER JOIN pais ON estado.pais = pais.id where(estado.id ='".$id."')";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return $this->criarVarios($results);
     }
     
     public function recuperarPorUf($uf){       
         $adapter = $this->getAdapter();
-        $sql = "select * from estado where(uf ='".$uf."')";
+        $sql = "SELECT estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM estado INNER JOIN pais ON estado.pais = pais.id where(uf ='".$uf."')";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
         return $this->criarVarios($results);
@@ -73,14 +75,13 @@ class Estado extends \Base\Model\AbstractModel {
         
     }
     
-   
-    
     public function recuperarTodos($de=null,$qtd=null,$filtro=null,$param=null){
         if($de == null and $qtd == null){
             $adapter = $this->getAdapter();
-            $sql = 'select * from estado where(pais = 1)';
+            $sql = "SELECT estado.id AS estado_id, estado.nome AS estado_nome, estado.uf AS estado_uf, pais.id AS pais_id, pais.nome AS pais_nome, pais.sigla AS pais_sigla FROM estado INNER JOIN pais ON estado.pais = pais.id where(pais.id = 1)";
             $statement = $adapter->query($sql);
             $results =  $statement->execute();
+            $this->fecharConexao();
             return $this->criarVarios($results);
         }
     }

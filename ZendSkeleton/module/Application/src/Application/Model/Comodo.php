@@ -46,6 +46,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql = "INSERT INTO TipoComodos (descricao) VALUES ('".$obj->getDescricao()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return true;
     }
     public function atualizar($obj){
@@ -53,6 +54,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql =  "UPDATE TipoComodos SET descricao ='".$obj->getDescricao()."' WHERE id=".$obj->getId();
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return true;
     }
     public function recuperar($obj){
@@ -65,6 +67,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql = "DELETE FROM TipoComodos WHERE(id =".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         return "ok";
          }catch(\Zend\Db\Adapter\Exception\RuntimeException $e){
            return "Não foi possível excluir, este Comodo faz referência a um imóvel ou proprietario";
@@ -82,6 +85,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM TipoComodos LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         $comodos_list = $this->criarVarios($results);
         return $comodos_list;
     }
@@ -91,6 +95,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM TipoComodos";
         $statement = $adapter->query($sql);
         $results = $statement->execute();
+        $this->fecharConexao();
         $comodos_list = $this->criarVarios($results);
         return $comodos_list;
     }
@@ -106,6 +111,7 @@ class Comodo extends \Base\Model\AbstractModel {
         $sql = "SELECT * FROM TipoComodos WHERE (descricao like '%".$param."%') LIMIT ".$de.", ".($qtd+1)."";      
         $statement = $adapter->query($sql);
         $results = $statement->execute();         
+        $this->fecharConexao();
         $comodos_list = $this->criarVarios($results, null);
         return $comodos_list;
     }

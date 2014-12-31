@@ -43,6 +43,7 @@ class CategoriaImovel extends \Base\Model\AbstractModel{
         $sql = "SELECT * FROM CategoriaImovel WHERE( id =".$id.")";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista[0];
     }
@@ -58,6 +59,7 @@ class CategoriaImovel extends \Base\Model\AbstractModel{
         $sql = "SELECT * FROM CategoriaImovel";
         $statement = $adapter->createStatement($sql);
         $result = $statement->execute();
+        $this->fecharConexao();
         $lista = $this->criarVarios($result);
         return $lista;
     }
