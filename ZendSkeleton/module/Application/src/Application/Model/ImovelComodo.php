@@ -15,7 +15,9 @@ namespace Application\Model;
  */
 class ImovelComodo extends \Base\Model\AbstractModel {
     private $_imovelComodo;
+    
     public function __construct() {
+
     }
     
     public function criarNovo($imovel,$comodo,$qtd){
@@ -24,6 +26,10 @@ class ImovelComodo extends \Base\Model\AbstractModel {
         $this->_imovelComodo->setTipoComodo($comodo);
         $this->_imovelComodo->setQtd($qtd);
         return $this->_imovelComodo;
+    }
+    
+    public function criarVarios(){
+        
     }
 
     public function salvar($arrayObj){

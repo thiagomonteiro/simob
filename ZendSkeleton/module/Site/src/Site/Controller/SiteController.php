@@ -30,9 +30,15 @@ class SiteController extends \Base\Controller\BaseController{
     }
     
     public function indexAction() {
-        $proprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
-        $obj = $proprietarioDao->recuperar(10);
+        /*$proprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
+        $obj = $proprietarioDao->recuperar(10);        
         print_r($obj);
+        for($i = 0; $i< 100; $i++){
+            $proprietarioDao->salvar($obj);
+        }*/
+        $imovelDao = \Base\Model\daoFactory::factory('Imovel');
+        $objs = $imovelDao->recuperarTodos();
+        print_r($objs);
         $dados=array();
         $view = new ViewModel(array('dados' => $dados));
         $event = $this->getEvent();
