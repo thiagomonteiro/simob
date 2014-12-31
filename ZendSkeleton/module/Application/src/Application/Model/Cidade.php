@@ -9,8 +9,7 @@
 namespace Application\Model;
 
 use Application\Entity\Cidade as CidadeEntity;
-use Application\Entity\Estado as EstadoEntity;
-use Application\Entity\Pais as PaisEntity;
+use Application\Model\Estado as EstadoModel;
 
 /**
  * Description of cidade
@@ -25,30 +24,21 @@ class Cidade extends \Base\Model\AbstractModel{
     }
     
     public function criarNovo($params = null){
-      return new CidadeEntity($params);    
+            $cidadeObj= new CidadeEntity();
+            $estadoDao = new EstadoModel();
+            $estadoObj = $estadoDao->criarNovo($params);
+            //cidade
+            $cidadeObj->setId($params['cidade_id']);
+            $cidadeObj->setNome($params['cidade_nome']);
+            //relaçoes            
+            $cidadeObj->setEstado($estadoObj);
+            return $cidadeObj;
     }
     
     public function criarVarios($results){
         $lista_cidades = array();
         foreach($results as $result){
-            $cidadeObj= new CidadeEntity();
-            $estadoObj = new EstadoEntity();
-            $paisObj = new PaisEntity();
-            //pais
-            $paisObj->setId($result['pais_id']);
-            $paisObj->setNome($result['pais_nome']);
-            $paisObj->setSigla($result['pais_sigla']);
-            //estado
-            $estadoObj->setId($result['estado_id']);
-            $estadoObj->setNome($result['estado_nome']);
-            $estadoObj->setUf($result['estado_uf']);
-            //cidade
-            $cidadeObj->setId($result['cidade_id']);
-            $cidadeObj->setNome($result['cidade_nome']);
-            //relaçoes
-            $estadoObj->setPais($paisObj);
-            $cidadeObj->setEstado($estadoObj);
-            $lista_cidades[] = $cidadeObj;
+            $lista_cidades[] = $this->criarNovo($result);
         }
         if(count($lista_cidades)>1){
             $response = $lista_cidades;

@@ -41,7 +41,7 @@ class LimiteUpload extends AbstractValidator {
         $midiaDao = \Base\Model\daoFactory::factory('Midia');
         $qtdBd = $midiaDao->recuperarTotal($imovel_sessao->getId());
         $total = $qtdBd + $qtdUpload;
-        if($total <= 20){ 
+        if($total <= 16){ 
           return true;  
         }else{
            return false;

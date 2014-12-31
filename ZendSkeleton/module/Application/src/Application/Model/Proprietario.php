@@ -8,10 +8,7 @@
 
 namespace Application\Model;
 use Application\Entity\Proprietario as ProprietarioEntity;
-use Application\Entity\Bairro as BairroEntity;
-use Application\Entity\Cidade as CidadeEntity;
-use Application\Entity\Estado as EstadoEntity;
-use Application\Entity\Pais as PaisEntity;
+use Application\Model\Bairro as BairroModel;
 /**
  * Description of Proprietario
  *
@@ -22,56 +19,38 @@ class Proprietario extends \Base\Model\AbstractModel{
     private $_bairroDao;
     
     public function __construct() {
-        $this->_bairroDao = \Base\Model\daoFactory::factory('Bairro');
+        $this->_bairroDao = new BairroModel();
     }
     
     public function criarNovo($params = null){
         return $this->_proprietarioObj = new ProprietarioEntity($params);
     }
-    
-    public function criarVarios($results,$getBairro = null){
-        $lista_proprietarios = array();
-        foreach($results as $result){
-            //proprietario
+
+    public function criarNovoFromSql($params, $getBairro = null){
             $proprietario = new ProprietarioEntity();
-            $proprietario->setId($result['proprietario_id']);
-            $proprietario->setNome($result['proprietario_nome']);
-            $proprietario->setLogradouro($result['logradouro']);
-            $proprietario->setNumero($result['numero']);
-            $proprietario->setTelefone($result['telefone']);
-            $proprietario->setCelular($result['celular']);
-            $proprietario->setCpf($result['cpf']);
-            $proprietario->setRg($result['rg']);
-            $proprietario->setProfissao($result['profissao']);
-            if(!is_null($getBairro)){
-                $bairro = new BairroEntity();
-                $cidade = new CidadeEntity();
-                $estado = new EstadoEntity();
-                $pais = new PaisEntity();
-                //pais
-                $pais->setId($result['pais_id']);
-                $pais->setNome($result['pais_nome']);
-                $pais->setSigla($result['pais_sigla']);
-                //estado
-                $estado->setId($result['estado_id']);
-                $estado->setNome($result['estado_nome']);
-                $estado->setUf($result['estado_uf']);
-                $estado->setPais($pais);
-                //cidade
-                $cidade->setId($result['cidade_id']);
-                $cidade->setNome($result['cidade_nome']);
-                $cidade->setEstado($estado);
-                //bairro
-                $bairro->setId($result['bairro_id']);
-                $bairro->setNome($result['bairro_nome']);
-                $bairro->setCidade($cidade);
+            $proprietario->setId($params['proprietario_id']);
+            $proprietario->setNome($params['proprietario_nome']);
+            $proprietario->setLogradouro($params['logradouro']);
+            $proprietario->setNumero($params['numero']);
+            $proprietario->setTelefone($params['telefone']);
+            $proprietario->setCelular($params['celular']);
+            $proprietario->setCpf($params['cpf']);
+            $proprietario->setRg($params['rg']);
+            $proprietario->setProfissao($params['profissao']);
+            if(!is_null($getBairro)){// se for diferente de de nulo ou seja $this->criarVarios($result,true), ele vai buscar os bairros, senha so retorna os dados do usuario
+                $bairro = $this->_bairroDao->criarNovo($params);
                 $proprietario->setBairro($bairro);
             }
-            $lista_proprietarios[]=$proprietario;
+            return $proprietario;
+    }
+    
+    public function criarVariosFromSql($results,$getBairro = null){
+        $lista_proprietarios = array();
+        foreach($results as $result){
+            $lista_proprietarios[]=  $this->criarNovoFromSql($result,$getBairro);
         }
         return $lista_proprietarios;
     }
-    
     
     
     protected function atualizar($obj) {
@@ -110,7 +89,7 @@ class Proprietario extends \Base\Model\AbstractModel{
         $sql = "SELECT Proprietario.id as proprietario_id, Proprietario.nome as proprietario_nome, Proprietario.logradouro as logradouro, Proprietario.numero as numero, Proprietario.telefone as telefone, Proprietario.celular as celular, Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao, Bairro.id as bairro_id, Bairro.nome as bairro_nome,cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id, estado.nome as estado_nome, estado.uf as estado_uf, pais.id as pais_id, pais.nome as pais_nome, pais.sigla as pais_sigla FROM Proprietario INNER JOIN Bairro on Proprietario.Bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id WHERE(Proprietario.id =".$id.")";        
         $statement = $adapter->query($sql);   
         $result = $statement->execute();      
-        $proprietario = $this->criarVarios($result,true);
+        $proprietario = $this->criarVariosFromSql($result,true);
         return $proprietario[0]; 
     }
 
@@ -125,7 +104,7 @@ class Proprietario extends \Base\Model\AbstractModel{
         $sql = "SELECT Proprietario.id as proprietario_id, Proprietario.nome as proprietario_nome, Proprietario.logradouro as logradouro, Proprietario.numero as numero, Proprietario.telefone as telefone, Proprietario.celular as celular, Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao, Bairro.id as bairro_id, Bairro.nome as bairro_nome,cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id, estado.nome as estado_nome, estado.uf as estado_uf, pais.id as pais_id, pais.nome as pais_nome, pais.sigla as pais_sigla FROM Proprietario INNER JOIN Bairro on Proprietario.Bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id LIMIT ".$de.", ".($qtd+1)."";        
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();        
-        $lista = $this->criarVarios($results);
+        $lista = $this->criarVariosFromSql($results);
         return $lista;
     }
    
@@ -142,7 +121,7 @@ class Proprietario extends \Base\Model\AbstractModel{
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         $this->fecharConexao();
-        $lista = $this->criarVarios($results);
+        $lista = $this->criarVariosFromSql($results);
         return $lista;
     }
     
@@ -166,7 +145,7 @@ class Proprietario extends \Base\Model\AbstractModel{
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         $this->fecharConexao();
-        $lista = $this->criarVarios($results);
+        $lista = $this->criarVariosFromSql($results);
         return $lista;
     }
 

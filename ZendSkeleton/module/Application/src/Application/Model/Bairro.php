@@ -15,9 +15,6 @@
 
 namespace Application\Model;
 use \Application\Entity\Bairro as BairroEntity;
-use \Application\Entity\Cidade as CidadeEntity;
-use \Application\Entity\Estado as EstadoEntity;
-use \Application\Entity\Pais as PaisEntity;
 use \Application\Model\Cidade as CidadeModel;
 
 class Bairro extends \Base\Model\AbstractModel {
@@ -31,43 +28,24 @@ class Bairro extends \Base\Model\AbstractModel {
     
     
     public function criarNovo($params = null){
-        
-        return $this->_bairroObj = new BairroEntity($params);
-        
+            $this->_bairroObj = new BairroEntity();
+            $cidadeObj = $this->_cidadeDao->criarNovo($params);         
+            $bairro = new BairroEntity();
+            $bairro->setId($params['bairro_id']);
+            $bairro->setNome($params['bairro_nome']);
+            $bairro->setCidade($cidadeObj);
+            return $bairro;
     }
     
     public function criarVarios($results,$cidade = null){
         $lista_bairros = array();
         foreach($results as $result){
-            ///bairro
-            $bairro = new BairroEntity();
-            $bairro->setId($result['bairro_id']);
-            $bairro->setNome($result['bairro_nome']);
-            //cidade
-            $cidade = new CidadeEntity();
-            $cidade->setId($result['cidade_id']);
-            $cidade->setNome($result['cidade_nome']);
-            //estado
-            $estado = new EstadoEntity();
-            $estado->setId($result['estado_id']);
-            $estado->setNome($result['estado_nome']);
-            $estado->setUf($result['estado_uf']);
-            //pais
-            $pais = new PaisEntity();
-            $pais->setId($result['pais_id']);
-            $pais->setNome($result['pais_nome']);
-            $pais->setSigla($result['pais_sigla']);
-            
-            $estado->setPais($pais);
-            $cidade->setEstado($estado);
-            $bairro->setCidade($cidade);
-            $lista_bairros[]=$bairro;
+            $lista_bairros[] = $this->criarNovo($result);
         }
-
         return $lista_bairros;
     }
     
-    
+ 
     public function inserir($obj){
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Bairro (nome,cidade)VALUES('".$obj->getNome()."','".$obj->getCidade()->getId()."')";

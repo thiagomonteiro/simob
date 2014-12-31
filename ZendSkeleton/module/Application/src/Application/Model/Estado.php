@@ -9,7 +9,7 @@
 namespace Application\Model;
 
 use Application\Entity\Estado as EstadoEntity;
-use \Application\Entity\Pais as PaisEntity;
+use Application\Model\Pais as PaisModel;
 /**
  * Description of estado
  *
@@ -21,23 +21,22 @@ class Estado extends \Base\Model\AbstractModel {
     public function __construct() {
     }
     public function criarNovo($params = null){
-      return new EstadoEntity($params);    
+        $paisModel = new PaisModel();
+        $estadoObj = new EstadoEntity();   
+        $paramsPais = array('id'=>$params['pais_id'],'nome' => $params['pais_nome'], 'sigla' => $params['pais_sigla']);
+        $paisObj = $paisModel->criarNovo($paramsPais);
+        $estadoObj->setId($params['estado_id']);
+        $estadoObj->setNome($params['estado_nome']);
+        $estadoObj->setUf($params['estado_uf']);
+        $estadoObj->setPais($paisObj);
+        return $estadoObj;
     }
     
     public function criarVarios($results,$pais=null){
         $lista_estados = array();
         foreach($results as $result){
-            $paisObj = new PaisEntity();
-            $estadoObj = new EstadoEntity();   
-            $paisObj->setId($result['pais_id']);
-            $paisObj->setNome($result['pais_nome']);
-            $paisObj->setSigla($result['pais_sigla']);
-            $estadoObj->setId($result['estado_id']);
-            $estadoObj->setNome($result['estado_nome']);
-            $estadoObj->setUf($result['estado_uf']);
-            $estadoObj->setPais($paisObj);
-            $lista_estados[] = $estadoObj;        
-        }
+            $lista_estados[] = $this->criarNovo($result);        
+        }        
         if(count($lista_estados)>1){
             $response = $lista_estados;
         }else{

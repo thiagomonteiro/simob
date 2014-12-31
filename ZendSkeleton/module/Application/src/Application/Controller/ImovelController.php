@@ -161,7 +161,7 @@ class ImovelController extends \Base\Controller\BaseController{
               $response = $this->saveImage($data['uploadfile']);
               return $response;
           }else{    
-               $data = array('success' => false,'mensagem' => "limite de 15 fotos");
+               $data = array('success' => false,'mensagem' => "limite de 16 fotos");
                $response = $this->getResponse()->setContent(Json_encode($data));
                return $response;
           }

@@ -12,7 +12,7 @@ use Application\Entity\CategoriaImovel as CategoriaEntity;
 use Application\Entity\SubCategoriaImovel as SubCategoriaEntity;
 use Application\Entity\Proprietario as ProprietarioEntity;
 use Application\Entity\Bairro as BairroEntity;
-use Application\Entity\Cidade as CidadeEntity;
+
 
 /**
  * Description of Imovel
@@ -27,19 +27,44 @@ class Imovel extends \Base\Model\AbstractModel {
     }
     
     public function criarNovo($params = null){
+         return $this->_imovelObj = new ImovelEntity($params);
+     }
+
+     public function criarVarios($results,$proprietario = null,$bairro = null){
+          $listaImovel = array();
+         foreach ($results as $row){
+              if(is_null($proprietario)){
+                    $row['proprietario'] = $this->_proprietarioDao->recuperar($row['proprietario']);
+                }else{
+                    $row['proprietario'] = $proprietario;
+                }
+              if(is_null($bairro)){
+                    $row['bairro'] = $this->_bairroDao->recuperar($row['bairro']);
+                }else{
+                    $row['bairro'] = $bairro;
+                }
+            $listaImovel[] = $this->criarNovo($row);
+         }
+         return $listaImovel;
+     }
+    
+    public function criarNovoFromSql($params = null){
         return new ImovelEntity($params);
     }
     
-    public function criarVarios($results){
-        $listaImovel = array();
+    public function criarVariosFromSql($results){
+        $listaImovel = array();        
         foreach ($results as $row){
-            $imovel = $this->criarNovo();
+            $imovel = new ImovelEntity();            
             $listaImovel[] = $imovel;
         }
         return $listaImovel;
     }
     
-     public function salvar($obj){
+    
+
+
+    public function salvar($obj){
         if($obj->isPersistido()){
             return $this->atualizar($obj);
         }else{
@@ -62,7 +87,6 @@ class Imovel extends \Base\Model\AbstractModel {
                 "','".$obj->getSubCategoria()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
-        $this->fecharConexao();
         return $results->getResource();//retorna os dados da inserção
     }
 
@@ -82,7 +106,7 @@ class Imovel extends \Base\Model\AbstractModel {
         " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id WHERE(Imovel.id=".$id.")";
         $statement = $adapter->query($sql);
         $results = $statement->execute();        
-        $imovel_list = $this->criarVarios($results);
+        $imovel_list = $this->criarVariosFromSql($results);
         return $imovel_list;
     }
 
@@ -102,7 +126,7 @@ class Imovel extends \Base\Model\AbstractModel {
         " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id";        
         $statement = $adapter->query($sql);
         $results = $statement->execute();        
-        $imovel_list = $this->criarVarios($results);
+        $imovel_list = $this->criarVariosFromSql($results);
         return $imovel_list;
     }
 
