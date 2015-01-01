@@ -18,7 +18,7 @@
                  <?php 
                     $capa = null;
                     foreach($midiasSalvas as $row){
-                        if(boolval($row->getCapa())==TRUE){
+                        if($row->getCapa()==TRUE){
                             $capa = $row;
                         }
                     }

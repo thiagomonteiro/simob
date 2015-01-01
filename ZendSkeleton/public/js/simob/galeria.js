@@ -31,7 +31,7 @@ $(document).ready(function(){
            $.post("/imovel/selecionarCapa/"+idMiniatura,function(data){
                var res = jQuery.parseJSON(data)
                    if(res.success){
-                       window.location.replace("http://simob/imovel/passo3");  
+                       window.location.reload();
                    }
            });
        } 

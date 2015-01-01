@@ -30,7 +30,9 @@ body {
 footer, hr{
     position: fixed;
     bottom: 2px;
-    float: left;
+    right: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /****posicionamento*****/
@@ -263,12 +265,27 @@ aside{
    -moz-box-shadow: 5px 5px 0 #333;
     -moz-border-radius: 7px;
    -webkit-border-radius: 7px;
+   width: 70px; /*defino o tamanho da box que guarda um item do menu*/
+   height: 70px;
+   overflow: hidden;/*defino que o que no couber, no caso a span com a legenda ficará oculto*/
 }
 
 .menu-box:hover{
     box-shadow: 15px -10px 3px #000;
    -webkit-box-shadow: 5px -3px 3px #000;
    -moz-box-shadow: 5px -3px 3px #000;
+   overflow: visible;
+}
+.menu-box:hover > span{
+    position: relative;
+    top: -15px;
+    display: block;
+    background-color: rgba(255,255,255,0.6);
+    color: black;
+    text-align: center;    
+    pointer-events: none;
+    border-radius: 4px;
+    font-size: 13px;    
 }
 
 .menu-box:active{
@@ -277,6 +294,9 @@ aside{
    -moz-box-shadow: 0px 0px 0px #000;
     background-color:  #ededed;
 }
+
+
+
 
 
 /*tabelas*/
