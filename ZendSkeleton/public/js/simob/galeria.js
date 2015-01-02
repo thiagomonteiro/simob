@@ -75,12 +75,7 @@ $(document).ready(function(){
                   success : function(data){
                     var res = jQuery.parseJSON(data);
                      if(res.success == true){
-                         $("#preview").css('background-image', 'none');//remove a imagem da maquina fotografica
-                         $("#preview").children("h3").remove();//remove o texto "nenhuma imagem selecionada"
-                         $('#preview').children('ul').append(res.data);
-                         $("#preview").children("#lixeira").show();
-                         $("#preview").children("#capa").show();
-                         $("#preview").children("#capa").attr('background','show');
+                         window.location.reload();
                      }else{
                             notif({
                             msg: res.mensagem,

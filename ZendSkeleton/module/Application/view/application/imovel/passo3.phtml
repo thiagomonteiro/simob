@@ -17,10 +17,14 @@
         <div id="preview" display="none">
                  <?php 
                     $capa = null;
-                    foreach($midiasSalvas as $row){
-                        if($row->getCapa()==TRUE){
-                            $capa = $row;
+                    if(is_array($midiasSalvas)){
+                        foreach($midiasSalvas as $row){
+                            if($row->getCapa()==TRUE){
+                                $capa = $row;
+                            }
                         }
+                    }else{
+                            $capa = $midiasSalvas;
                     }
                   ?>
                 <?php if(is_null($capa)):?>
@@ -38,10 +42,14 @@
                  <?php
                     if(is_array($midiasSalvas)){
                         foreach ($midiasSalvas as $row){
-                            echo '<li class="miniatura"><img src="'.$row->getUrl().'"><input type="hidden" value="'.$row->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" nome="'.$row->getNome().'" value="'.$row->getNome().'"></li>';
+                            if($row->getTipo()!= \Application\Entity\TipoMidia::SEM_MIDIA){
+                                echo '<li class="miniatura"><img src="'.$row->getUrl().'"><input type="hidden" value="'.$row->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" nome="'.$row->getNome().'" value="'.$row->getNome().'"></li>';
+                            }
                          }
                     }else{
-                        echo '<li class="miniatura"><img src="'.$midiasSalvas->getUrl().'"><input type="hidden" value="'.$midiasSalvas->getId().'"><input class="nome-miniatura" type="text" placeholder="nomear Imagem" nome="'.$midiasSalvas->getNome().'" value="'.$midiasSalvas->getNome().'"></li>';
+                        if($midiasSalvas->getTipo()!= \Application\Entity\TipoMidia::SEM_MIDIA){
+                            echo '<li class="miniatura"><img src="'.$midiasSalvas->getUrl().'"><input type="hidden" value="'.$midiasSalvas->getId().'"><input class="nome-miniatura" type="text" placeholder="nomear Imagem" nome="'.$midiasSalvas->getNome().'" value="'.$midiasSalvas->getNome().'"></li>';
+                        }
                     }
                     
                  ?>

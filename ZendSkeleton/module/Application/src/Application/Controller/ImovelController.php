@@ -123,6 +123,7 @@ class ImovelController extends \Base\Controller\BaseController{
                     }   
                 } 
                 $this->_ImovelComodoDao->salvar($listComodos);
+                $this->setCapaDefault();
                 $this->flashMessenger()->addSuccessMessage('Passo 2 concluído com sucesso! complete o cadastro');
                 $this->redirect()->toRoute('crud_imovel/passo3');
             }else{  
@@ -166,7 +167,7 @@ class ImovelController extends \Base\Controller\BaseController{
                return $response;
           }
       }else{//acionado quando o usuário der um refresh na pagina, impede que as imagens sumam
-       $midiasSalvas = $this->_MidiaDao->recuperarTodos(null,null,'imovel',$imovel_sessao->getId());          
+       $midiasSalvas = $this->_MidiaDao->recuperarTodos(null,null,null,$imovel_sessao->getId());          
       }
       $this->setTemplate('layout/admin');
       $this->appendJavaScript('simob/galeria.js');
@@ -195,7 +196,8 @@ class ImovelController extends \Base\Controller\BaseController{
                    $image->resize(400,400);
                    $image->save($dir.$new_name); 
                    $midiaObj = $this->_MidiaDao->criarNovo();
-                   $midiaObj->setTipo("imagem");
+                   $midiaObj->setTipo(1);
+                   $midiaObj->setCapa(false);
                    $midiaObj->setNome(str_replace($allowedExts,"", $name));//removendo extensões do nome
                    //$midiaObj->setUrl($dir.$new_name);
                    $midiaObj->setUrl("/fotos/".$new_name);
@@ -203,10 +205,9 @@ class ImovelController extends \Base\Controller\BaseController{
                    $midiaObj->setImovel($imovel_sessao);
                    $data = $this->_MidiaDao->salvar($midiaObj);
                    $midiaObj->setId($data->insert_id);
-                   $miniaturas.='<li class="miniatura"><img src="'.$midiaObj->getUrl().'"><input type="hidden" value="'.$midiaObj->getId().'"><input type="text" class="nome-miniatura" placeholder="nomear Imagem" nome="'.$midiaObj->getNome().'" value="'.$midiaObj->getNome().'"></li>';
                }
             }
-            $data = array('success' => true,'data' => $miniaturas);
+            $data = array('success' => true);
             return $this->getResponse()->setContent(Json_encode($data));
         }
     }
@@ -247,9 +248,24 @@ class ImovelController extends \Base\Controller\BaseController{
         }       
         return $this->getResponse()->setContent(Json_encode($data));
     }
+    
+    /*
+     * seta uma imagem antes do usuario selecionar as imagens isso impede que o 
+     * usuario deixe o album vazio atrapalhando o função sql que recupera os imoveis
+     * para exibir no front end
+     */
+    private function setCapaDefault(){
+        $midiaObj = $this->_MidiaDao->criarNovo();
+        $midiaObj->setTipo(0);
+        $midiaObj->setCapa(true);
+        $midiaObj->setNome("capa_default");
+        $midiaObj->setUrl("/img/no_image.png");
+        $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+        $midiaObj->setImovel($imovel_sessao);
+        $data = $this->_MidiaDao->salvar($midiaObj);
+    }
 
-
-    public function getFormPasso1($dadosPost=array()){
+        public function getFormPasso1($dadosPost=array()){
         $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
         $categorias = $this->_CategoriaImovelDao->recuperarTodos();
         $dados_select_operacao = $this->SelectHelper()->getArrayData('selecione uma operação',$operacoes); 

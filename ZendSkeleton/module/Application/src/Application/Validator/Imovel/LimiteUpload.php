@@ -41,7 +41,7 @@ class LimiteUpload extends AbstractValidator {
         $midiaDao = \Base\Model\daoFactory::factory('Midia');
         $qtdBd = $midiaDao->recuperarTotal($imovel_sessao->getId());
         $total = $qtdBd + $qtdUpload;
-        if($total <= 16){ 
+        if($total <= 17){// um total de 16 descontando 1 midia que serve de imagem padrao para album caso não haja outras 
           return true;  
         }else{
            return false;
