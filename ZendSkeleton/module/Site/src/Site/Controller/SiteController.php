@@ -31,9 +31,9 @@ class SiteController extends \Base\Controller\BaseController{
     
     public function indexAction() {
         $imovelDao = \Base\Model\daoFactory::factory('Imovel');
-        $imoveObj = $imovelDao->recuperar(187);
-        $dados=array('imoveis_list'=>$data);
-        $view = new ViewModel(array('dados' => $dados));
+        $imoveis = $imovelDao->recuperarAnuncios();
+       // print_r($imoveis);
+        $view = new ViewModel(array('imoveis_list'=>$imoveis));
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('/layout/layout');
         return $view;

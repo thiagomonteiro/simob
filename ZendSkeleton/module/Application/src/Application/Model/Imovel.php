@@ -69,8 +69,20 @@ class Imovel extends \Base\Model\AbstractModel {
         return $listaImovel;
     }
     
-    
+    private function criarAnuncio($params){
+        $bairroObj = $this->_bairroDao->criarNovo($params);
+        $dados_imovel = array('id' => $params['imovel_id'],'descricao' => $params['imovel_descricao'],'bairro' => $bairroObj);
+        $imovelObj = $this->criarNovo($dados_imovel);
+        print_r($imovelObj);
+    }
 
+    private function criarVariosAnuncios($results){
+        $list_anuncios = array();
+        foreach ($results as $row){
+            $list_anuncios[] = $this->criarAnuncio($row);
+        }
+        return $list_anuncios;
+    }
 
     public function salvar($obj){
         if($obj->isPersistido()){
@@ -144,7 +156,34 @@ class Imovel extends \Base\Model\AbstractModel {
         $imovel_list = $this->criarVariosFromSql($results);
         return $imovel_list;
     }
-
+    
+    public function recuperarAnuncios($de = null, $qtd = null){
+        if($de == null){
+            $de=0;
+        }
+        if($qtd == null){
+            $qtd=  self::$_qtd_por_pagina;
+        }
+       $adapter = $this->getAdapter();
+       $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao,".
+       " Bairro.id AS bairro_id, Bairro.nome as bairro_nome,".
+       " cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
+       " estado.nome as estado_nome, estado.uf as estado_uf, pais.id as pais_id, pais.nome as pais_nome,".
+       " pais.sigla as pais_sigla ,TipoTransacao.id as tipo_transacao_id, TipoTransacao.descricao as tipo_transacao_descricao,".
+       " TipoTransacao.id AS trans_id, TipoTransacao.descricao AS trans_descricao,".
+       " SubCategoriaImovel.id AS sub_cat_id, SubCategoriaImovel.descricao AS sub_cat_descricao,".
+       " Midia.id AS midia_id, Midia.url AS midia_url FROM Imovel INNER JOIN Midia".
+       " ON Imovel.id = Midia.imovel INNER JOIN TipoTransacao ON TipoTransacao.id = Imovel.tipo_transacao".
+       " INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id".
+       " INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id".
+       " INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id".
+       " WHERE(Midia.capa = 1) GROUP BY imovel_id LIMIT ".$de.", ".($qtd+1)."";
+       $statement = $adapter->query($sql);
+       $results = $statement->execute();
+       $anuncios_list = $this->criarVariosAnuncios($results);
+       return $anuncios_list;
+    }
+    
     protected function remover($obj) {
         
     }

@@ -28,13 +28,11 @@ class Bairro extends \Base\Model\AbstractModel {
     
     
     public function criarNovo($params = null){
-            $this->_bairroObj = new BairroEntity();
             $cidadeObj = $this->_cidadeDao->criarNovo($params);         
-            $bairro = new BairroEntity();
-            $bairro->setId($params['bairro_id']);
-            $bairro->setNome($params['bairro_nome']);
-            $bairro->setCidade($cidadeObj);
-            return $bairro;
+            $dados = array('id' => $params['bairro_id'], 'nome' => $params['bairro_nome'],'cidade' => $cidadeObj);
+            $this->_bairroObj = new BairroEntity();
+            $bairroObj = new BairroEntity($dados);
+            return $bairroObj;
     }
     
     public function criarVarios($results,$cidade = null){
@@ -45,7 +43,7 @@ class Bairro extends \Base\Model\AbstractModel {
         return $lista_bairros;
     }
     
- 
+
     public function inserir($obj){
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Bairro (nome,cidade)VALUES('".$obj->getNome()."','".$obj->getCidade()->getId()."')";

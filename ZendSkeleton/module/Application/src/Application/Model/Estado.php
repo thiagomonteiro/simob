@@ -19,16 +19,12 @@ class Estado extends \Base\Model\AbstractModel {
     private $_paisDao;
     
     public function __construct() {
+        $this->_paisDao = \Base\Model\daoFactory::factory('Pais');
     }
     public function criarNovo($params = null){
-        $paisModel = new PaisModel();
-        $estadoObj = new EstadoEntity();   
-        $paramsPais = array('id'=>$params['pais_id'],'nome' => $params['pais_nome'], 'sigla' => $params['pais_sigla']);
-        $paisObj = $paisModel->criarNovo($paramsPais);
-        $estadoObj->setId($params['estado_id']);
-        $estadoObj->setNome($params['estado_nome']);
-        $estadoObj->setUf($params['estado_uf']);
-        $estadoObj->setPais($paisObj);
+        $paisObj = $this->_paisDao->criarNovo($params); 
+        $dados = array('id' => $params['estado_id'],'nome' => $params['estado_nome'],'uf' => $params['estado_uf'] ,'pais' => $paisObj);
+        $estadoObj = new EstadoEntity($dados);   
         return $estadoObj;
     }
     

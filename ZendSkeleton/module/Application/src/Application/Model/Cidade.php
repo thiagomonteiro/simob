@@ -21,17 +21,13 @@ class Cidade extends \Base\Model\AbstractModel{
     private $_estadoDAO;
     
     public function __construct() {
+        $this->_estadoDAO = \Base\Model\daoFactory::factory('Estado');
     }
     
     public function criarNovo($params = null){
-            $cidadeObj= new CidadeEntity();
-            $estadoDao = new EstadoModel();
-            $estadoObj = $estadoDao->criarNovo($params);
-            //cidade
-            $cidadeObj->setId($params['cidade_id']);
-            $cidadeObj->setNome($params['cidade_nome']);
-            //relaçoes            
-            $cidadeObj->setEstado($estadoObj);
+            $estadoObj = $this->_estadoDAO->criarNovo($params);         
+            $dados = array('id' => $params['cidade_id'],'nome' => $params['cidade_nome'],'estado' => $estadoObj);
+            $cidadeObj = new CidadeEntity($dados);
             return $cidadeObj;
     }
     

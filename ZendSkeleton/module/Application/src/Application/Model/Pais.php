@@ -21,11 +21,10 @@ class Pais extends \Base\Model\AbstractModel {
     }
     
     public function criarNovo($params=null){
-      return new PaisEntity($params);    
+        $dados = array('id' => $params['pais_id'],'nome' => $params['pais_nome'],'sigla' => $params['pais_sigla']);
+      return new PaisEntity($dados);    
     }
-    
-   
-    
+       
     public function inserir($obj){
         
     }

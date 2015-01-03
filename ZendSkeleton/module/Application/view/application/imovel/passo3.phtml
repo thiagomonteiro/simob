@@ -27,7 +27,7 @@
                             $capa = $midiasSalvas;
                     }
                   ?>
-                <?php if(is_null($capa)):?>
+                <?php if($capa == null || $capa->getTipo()== \Application\Entity\TipoMidia::SEM_MIDIA):?>
                         <div id="capa" background="show"><!--exibe a imagem de background com a imagem foto_de_capa.png-->
                             Arraste uma imagem para capa do álbum.
                         </div>
