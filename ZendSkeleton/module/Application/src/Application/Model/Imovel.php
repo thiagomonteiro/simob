@@ -11,6 +11,7 @@ use Application\Entity\Imovel as ImovelEntity;
 use Application\Entity\CategoriaImovel as CategoriaEntity;
 use Application\Entity\SubCategoriaImovel as SubCategoriaEntity;
 use Application\Entity\Proprietario as ProprietarioEntity;
+use Application\Entity\Midia as MidiaEntity;
 use Application\Model\Bairro as BairroModel;
 
 
@@ -73,7 +74,9 @@ class Imovel extends \Base\Model\AbstractModel {
         $bairroObj = $this->_bairroDao->criarNovo($params);
         $dados_imovel = array('id' => $params['imovel_id'],'descricao' => $params['imovel_descricao'],'bairro' => $bairroObj);
         $imovelObj = $this->criarNovo($dados_imovel);
-        print_r($imovelObj);
+        $dados_midia = array('id' => $params['midia_id'], 'url' => $params['midia_url'], 'imovel' => $imovelObj);
+        $midiaObj = new MidiaEntity($dados_midia);
+        return $midiaObj;
     }
 
     private function criarVariosAnuncios($results){

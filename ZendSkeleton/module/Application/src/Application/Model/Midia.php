@@ -45,13 +45,9 @@ class Midia extends \Base\Model\AbstractModel {
         
     }
     
-    public function criarNovoFromSql($params = null,$imovel = null){
-        $this->_ImovelMidia = new MidiaEntity($params);
-        $this->_ImovelMidia->setId($params['midia_id']);
-        $this->_ImovelMidia->setNome($params['midia_nome']);
-        $this->_ImovelMidia->setUrl($params['midia_url']);
-        $this->_ImovelMidia->setCapa($params['midia_capa']);
-        $this->_ImovelMidia->setTipo($params['midia_tipo']);
+    public function criarNovoFromSql($params = null,$imovel = null){      
+        $dados = array('id' => $params['midia_id'], 'nome' => $params['midia_nome'], 'url' => $params['midia_url'], 'capa' => $params['midia_capa'], 'tipo' => $params['midia_tipo']);
+        $this->_ImovelMidia = new MidiaEntity($dados);
         if(is_null($imovel)){
             $this->_ImovelMidia->setImovel($this->_ImovelDao->criarNovoFromSql($params));
         }else{
@@ -197,7 +193,7 @@ class Midia extends \Base\Model\AbstractModel {
     }
     
     public function salvarCapa($id){
-        $aux = $this->limparCapa();// a funçao limpar capa seta false em todos as outras fotas, e ainda retorna o true para o update do selecionar capa
+        $aux = $this->limparCapa($id);// a funçao limpar capa seta false em todos as outras fotas, e ainda retorna o true para o update do selecionar capa
         $adapter =  $this->getAdapter();
         $sql = "UPDATE Midia SET capa =".$aux." WHERE id=".$id;
         $statement = $adapter->createStatement($sql);
@@ -206,10 +202,12 @@ class Midia extends \Base\Model\AbstractModel {
         return true;
     }
     
-    public function limparCapa(){
+    //erro aki preciso do id do imovel
+    public function limparCapa($id){
+        $midiaObj = $this->recuperar($id);
         $adapter =  $this->getAdapter();
         $aux =false;
-        $sql = "UPDATE Midia SET capa = 0";
+        $sql = "UPDATE Midia SET capa = 0 WHERE(imovel=".$midiaObj->getImovel()->getId().")";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         $this->fecharConexao();

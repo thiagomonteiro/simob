@@ -6,7 +6,12 @@
  * and open the template in the editor.
  */
 
-print_r($imoveis_list);
+foreach ($imoveis_list as $row):?>
+    <div class="anuncio-imovel">
+        <img src="<?php echo $row->getUrl(); ?>"> 
+    </div>
+<?php
+endforeach;
 ?>
 
 

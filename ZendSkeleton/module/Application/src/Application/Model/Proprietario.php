@@ -27,16 +27,11 @@ class Proprietario extends \Base\Model\AbstractModel{
     }
 
     public function criarNovoFromSql($params, $getBairro = null){
-            $proprietario = new ProprietarioEntity();
-            $proprietario->setId($params['proprietario_id']);
-            $proprietario->setNome($params['proprietario_nome']);
-            $proprietario->setLogradouro($params['logradouro']);
-            $proprietario->setNumero($params['numero']);
-            $proprietario->setTelefone($params['telefone']);
-            $proprietario->setCelular($params['celular']);
-            $proprietario->setCpf($params['cpf']);
-            $proprietario->setRg($params['rg']);
-            $proprietario->setProfissao($params['profissao']);
+            $data = array('id' => $params['proprietario_id'], 'nome' => $params['proprietario_nome'],
+            'logradouro' => $params['logradouro'], 'numero' => $params['numero'],
+            'telefone' => $params['telefone'], 'celular' => $params['celular'],
+            'cpf' => $params['cpf'], 'rg' => $params['rg'], 'profissao' => $params['profissao']);
+            $proprietario = new ProprietarioEntity($data);
             if(!is_null($getBairro)){// se for diferente de de nulo ou seja $this->criarVarios($result,true), ele vai buscar os bairros, senha so retorna os dados do usuario
                 $bairro = $this->_bairroDao->criarNovo($params);
                 $proprietario->setBairro($bairro);
