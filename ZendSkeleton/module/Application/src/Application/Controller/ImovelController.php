@@ -259,7 +259,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $midiaObj->setTipo(0);
         $midiaObj->setCapa(true);
         $midiaObj->setNome("capa_default");
-        $midiaObj->setUrl("/img/no_image.png");
+        $midiaObj->setUrl("/img/no_image.jpg");
         $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
         $midiaObj->setImovel($imovel_sessao);
         $data = $this->_MidiaDao->salvar($midiaObj);

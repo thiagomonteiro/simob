@@ -12,7 +12,7 @@ use Application\Entity\CategoriaImovel as CategoriaEntity;
 use Application\Entity\SubCategoriaImovel as SubCategoriaEntity;
 use Application\Entity\Proprietario as ProprietarioEntity;
 use Application\Entity\Midia as MidiaEntity;
-use Application\Model\Bairro as BairroModel;
+
 
 
 /**
@@ -23,9 +23,11 @@ use Application\Model\Bairro as BairroModel;
 class Imovel extends \Base\Model\AbstractModel {
     private $_imovelObj;
     private $_bairroDao;
+    private $_transacaoDao;
     
     public function __construct() {
-        $this->_bairroDao = new BairroModel();
+        $this->_bairroDao = \Base\Model\daoFactory::factory('Bairro');
+        $this->_transacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
     }
     
     public function criarNovo($params = null){
@@ -71,8 +73,10 @@ class Imovel extends \Base\Model\AbstractModel {
     }
     
     private function criarAnuncio($params){
+        $dados_transacao = array('id' =>  $params['trans_id'],'descricao' => $params['trans_descricao']);
+        $transacaoObj = $this->_transacaoDao->criarNovo($dados_transacao);        
         $bairroObj = $this->_bairroDao->criarNovo($params);
-        $dados_imovel = array('id' => $params['imovel_id'],'descricao' => $params['imovel_descricao'],'bairro' => $bairroObj);
+        $dados_imovel = array('id' => $params['imovel_id'],'descricao' => $params['imovel_descricao'], 'valorTransacao' => $params['imovel_valor'], 'bairro' => $bairroObj, 'tipoTransacao' => $transacaoObj);
         $imovelObj = $this->criarNovo($dados_imovel);
         $dados_midia = array('id' => $params['midia_id'], 'url' => $params['midia_url'], 'imovel' => $imovelObj);
         $midiaObj = new MidiaEntity($dados_midia);
@@ -160,7 +164,7 @@ class Imovel extends \Base\Model\AbstractModel {
         return $imovel_list;
     }
     
-    public function recuperarAnuncios($de = null, $qtd = null){
+    public function recuperarAnuncios($de = null, $qtd = 15){
         if($de == null){
             $de=0;
         }
@@ -168,7 +172,7 @@ class Imovel extends \Base\Model\AbstractModel {
             $qtd=  self::$_qtd_por_pagina;
         }
        $adapter = $this->getAdapter();
-       $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao,".
+       $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao, Imovel.valor_transacao as imovel_valor,".
        " Bairro.id AS bairro_id, Bairro.nome as bairro_nome,".
        " cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
        " estado.nome as estado_nome, estado.uf as estado_uf, pais.id as pais_id, pais.nome as pais_nome,".
