@@ -26,13 +26,14 @@ class SiteController extends \Base\Controller\BaseController{
     }
     
     public function indexAction() {
+        parent::indexAction();
         $imovelDao = \Base\Model\daoFactory::factory('Imovel');
         $imoveis = $imovelDao->recuperarAnuncios();
+        $this->setTemplate('/layout/layout');
+        $this->appendJavaScript("simob/home.js");
         $view = new ViewModel(array('imoveis_list'=>$imoveis));
-        $event = $this->getEvent();
-        $event->getViewModel()->setTemplate('/layout/layout');
         return $view;
     }
 }
-?>
+
 

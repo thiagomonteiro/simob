@@ -30,6 +30,7 @@ header > img{
 
 aside{
     float: right;
+    margin-top: 20px;
     border: 3px solid #66b5ba;
     height: 500px;
     width: 19%;
@@ -121,6 +122,7 @@ aside > ul > li > a > img{
 }
 
 #rodape{
+    margin-top: 20px;
     float: left;
     width: 100%;
     height: 300px;
@@ -129,13 +131,17 @@ aside > ul > li > a > img{
     
 }
 
+.container{
+    width: 80%;
+}
+
 .anuncio > li{
     margin-top: 20px;
     margin-right: 20px;
     float: left;
     list-style: none;
     width: 220px;
-    height: 280px;
+    height: 290px;
     background-color: #c4e3f3;
     border-radius: 7px;
     -moz-box-shadow: 10px 10px 5px #423f42;
@@ -144,15 +150,23 @@ aside > ul > li > a > img{
 }
 
 .anuncio > li > img{
+    margin: 5px;
     width: 200px;
     height: 200px;
+    border: 3px solid #66b5ba;
     border-radius: 5px;
 }
 
-.anuncio > li > span{ /*quebra de linha entre os spans*/
+.anuncio > li > span{ /*quebra de linha entre os spans*/    
+    margin-left: 5px;
     display: block;
 }
 
 .anuncio > li > .descricao{
+    position: relative;
+    left: 200px;
+    width: 200px;
+    height: 200px;
+    background-color: #66b5ba;    
     display: none; /*exibir lateralmente com jquery*/
 }
