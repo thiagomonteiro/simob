@@ -164,15 +164,16 @@ class Imovel extends \Base\Model\AbstractModel {
         return $imovel_list;
     }
     
-    public function recuperarAnuncios($de = null, $qtd = 15){
+    public function recuperarAnuncios($de = null, $qtd = null, $filtro = null, $param = null){
         if($de == null){
             $de=0;
         }
         if($qtd == null){
-            $qtd=  self::$_qtd_por_pagina;
+            $qtd=  self::$_qtd_por_pagina;//5
         }
        $adapter = $this->getAdapter();
-       $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao, Imovel.valor_transacao as imovel_valor,".
+       if($filtro == null){
+           $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao, Imovel.valor_transacao as imovel_valor,".
        " Bairro.id AS bairro_id, Bairro.nome as bairro_nome,".
        " cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
        " estado.nome as estado_nome, estado.uf as estado_uf, pais.id as pais_id, pais.nome as pais_nome,".
@@ -185,6 +186,7 @@ class Imovel extends \Base\Model\AbstractModel {
        " INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id".
        " INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id".
        " WHERE(Midia.capa = 1) GROUP BY imovel_id LIMIT ".$de.", ".($qtd+1)."";
+       }
        $statement = $adapter->query($sql);
        $results = $statement->execute();
        $anuncios_list = $this->criarVariosAnuncios($results);

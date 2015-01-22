@@ -3,10 +3,41 @@
 $rota_frontEnd=array(
     'type'    => 'segment',
     'options' => array(
-        'route'    => '/',
+        'route'    => '/site',
         'defaults' => array(
             'controller' => 'Site\Controller\Site',// localizaçao do controlher
             'action'     => 'index',//action da rota
+        ),
+    ),
+    'may_terminate' => true,
+    'child_routes' => array(
+       'proximaPagina' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[a-zA-Z0-9_-]+'
+                ),
+                'defaults' => array(
+                  'action' => 'proximaPagina',
+                ),
+            ),
+        ),
+        'paginaAnterior' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
+                'constraints' => array(
+                    'pagina' => '[0-9]+',
+                    'filtro' => '[a-zA-Z]*',
+                    'param' => '[a-zA-Z0-9_-]+'
+                ),
+                'defaults' => array(
+                  'action' => 'paginaAnterior',
+                ),
+            ),
         ),
     ),
 );
@@ -18,7 +49,7 @@ return array(
     
     'router' => array(
         'routes' => array(
-            'rota_front_end' => $rota_frontEnd,
+            'front_end' => $rota_frontEnd,
         ),
     ),
     

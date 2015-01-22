@@ -45,11 +45,11 @@ class Imovel extends \Base\Entity\AbstractEntity {
     }
     
     public function setRua($rua){
-        $this->_rua = $rua;
+        $this->_rua = utf8_encode($rua);
     }
     
     public function getRua(){
-        return $this->_rua;
+        return utf8_decode($this->_rua);
     }
     
     public function setNumero($numero){
@@ -93,11 +93,11 @@ class Imovel extends \Base\Entity\AbstractEntity {
     }
     
     public function setDescricao($descricao){
-        $this->_descricao = $descricao;
+        $this->_descricao = utf8_encode($descricao);
     }
     
     public function getDescricao(){
-        return $this->_descricao;
+        return utf8_decode($this->_descricao);
     }
     
     public function setTipoTransacao($transacao){

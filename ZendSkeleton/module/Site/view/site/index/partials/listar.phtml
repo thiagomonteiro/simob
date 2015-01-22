@@ -1,0 +1,20 @@
+<div id="div-anuncios">
+<?php
+foreach ($imoveis_list as $row):?>
+    <ul class="anuncio">
+        <li>
+            <div>
+            <img src="<?php echo $row->getUrl(); ?>"> 
+            </div>
+            <span><label>cidade:<?php echo $row->getImovel()->getBairro()->getCidade()->getNome();?></label></span>
+            <span><label>bairro:<?php echo $row->getImovel()->getBairro()->getNome(); ?></label></span>
+            <span><label>valor:<?php echo $row->getImovel()->getvalorTransacao();?></label></span>
+            <span><?php echo $row->getImovel()->getTipoTransacao()->getDescricao(); ?></span>
+            <div class="descricao"><h4>Descrição do imóvel</h4><p><?php echo $row->getImovel()->getDescricao(); ?></p></div>
+        </li>
+    </ul>
+<?php
+endforeach;
+?>
+</div>
+

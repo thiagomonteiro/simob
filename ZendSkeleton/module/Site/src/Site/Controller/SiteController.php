@@ -21,17 +21,71 @@ use Zend\Session\Container;
 
 
 class SiteController extends \Base\Controller\BaseController{
+    private $_imovelDao;
+    protected static $_qtd_por_pagina=4;
     public function __construct() {
         parent::__construct();
+        $this->_imovelDao = \Base\Model\daoFactory::factory('Imovel');
     }
     
     public function indexAction() {
         parent::indexAction();
-        $imovelDao = \Base\Model\daoFactory::factory('Imovel');
-        $imoveis = $imovelDao->recuperarAnuncios();
+        $result = $this->_imovelDao->recuperarAnuncios(null,  self::$_qtd_por_pagina);
+        $paginacao = $this->paginador->paginarDados($result,null,  self::$_qtd_por_pagina);
+        $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);  
+        $partialListarAnuncios = $this->criarListAction($result);
         $this->setTemplate('/layout/layout');
         $this->appendJavaScript("simob/home.js");
-        $view = new ViewModel(array('imoveis_list'=>$imoveis));
+        $view = new ViewModel(array('haDados' => empty($result)? false:true));
+        $view->addChild($partialListarAnuncios ,'partialListarAnuncios');
+        $view->addChild($partialBarraPaginacao ,'paginacao');
+        return $view;
+    }
+    
+    public function proximaPaginaAction(){
+       $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+       $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro'); 
+       if($filtro == 'null'){
+            $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina); 
+        }else{
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');
+            $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina,$filtro,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($result,$pagina,  self::$_qtd_por_pagina);
+        $viewModelListar= $this->criarListAction($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    public function paginaAnteriorAction(){
+       $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+       $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro'); 
+       if($filtro == 'null'){
+            $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina); 
+        }else{
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');
+            $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+        }
+        $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),  self::$_qtd_por_pagina);
+        $viewModelListar= $this->criarListAction($result);
+        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+        return $this->getResponse()->setContent(Json_encode($data));
+    }
+    
+     private function criarListAction($anunciosList){
+        $lista = new ViewModel(array('imoveis_list'=>$anunciosList));
+        $lista->setTemplate('site/index/partials/listar.phtml');
+        return $lista;
+    }
+    
+     private function criarBarraPaginacaoAction($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'front_end'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
         return $view;
     }
 }

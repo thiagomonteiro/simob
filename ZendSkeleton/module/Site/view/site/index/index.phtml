@@ -5,20 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-foreach ($imoveis_list as $row):?>
-    <ul class="anuncio">
-        <li>
-            <img src="<?php echo $row->getUrl(); ?>"> 
-            <span class="descricao"><?php echo $row->getImovel()->getDescricao(); ?></span>
-            <span><label>cidade:<?php echo $row->getImovel()->getBairro()->getCidade()->getNome();?></label></span>
-            <span><label>bairro:<?php echo $row->getImovel()->getBairro()->getNome(); ?></label></span>
-            <span><label>valor:<?php echo $row->getImovel()->getvalorTransacao();?></label></span>
-            <span><?php echo $row->getImovel()->getTipoTransacao()->getDescricao(); ?></span>
-        </li>
-    </ul>
-<?php
-endforeach;
-?>
+ echo $this->partialListarAnuncios;
+ echo $this->paginacao;
+ ?>
 
 
