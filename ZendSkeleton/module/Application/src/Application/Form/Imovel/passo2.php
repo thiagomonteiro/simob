@@ -14,7 +14,7 @@ use Zend\Form\Form;
  * @author administrador
  */
 class passo2 extends Form{
-    public function __construct($name = null, $options = array(),$dados = array(), $arrayComodos = array()) {
+    public function __construct($name = null, $options = array(),$dados = array(), $arrayComodos = array(), \Application\Entity\Imovel $imovel=null) {
         parent::__construct($name, $options);
         $this->setAttributes(array('class' => 'formulario2', 'id' => 'form-passo2'));
         $submit = new \Zend\Form\Element\Submit('enviar');
@@ -32,27 +32,29 @@ class passo2 extends Form{
         $comodos->setAttribute('class', 'fieldcomodos');
         $comodos->setLabel('Cômodos');
         $comodos->setCount(2);
-        if(!empty($arrayComodos)){
-            foreach ($arrayComodos as $row){
-                $check = new \Zend\Form\Element\Checkbox('check'.$row->getId());
-                $check->setAttribute('class', 'check-comodo')->setAttributes(array("for" => "check".$row->getDescricao()));
-                $check->setLabel($row->getDescricao());
-                $check->setUseHiddenElement(true);
-                $check->setCheckedValue($row->getId());
-                $check->setUncheckedValue(false);   
-                $comodos->add($check); 
-                $qtd = new \Zend\Form\Element\Number('qtd'.$row->getId());
-                $qtd->setAttribute('class', 'qtd-comodo');
-                $qtd->setAttribute('value', 0);
-                $qtd->setAttribute('min', 0);
-                $qtd->setLabel('Quantidade');
-                $comodos->add($qtd);
+        if($imovel->getSubCategoria()->getCategoria()->getId() != 3){
+            if(!empty($arrayComodos)){
+                foreach ($arrayComodos as $row){
+                    $check = new \Zend\Form\Element\Checkbox('check'.$row->getId());
+                    $check->setAttribute('class', 'check-comodo')->setAttributes(array("for" => "check".$row->getDescricao()));
+                    $check->setLabel($row->getDescricao());
+                    $check->setUseHiddenElement(true);
+                    $check->setCheckedValue($row->getId());
+                    $check->setUncheckedValue(false);   
+                    $comodos->add($check); 
+                    $qtd = new \Zend\Form\Element\Number('qtd'.$row->getId());
+                    $qtd->setAttribute('class', 'qtd-comodo');
+                    $qtd->setAttribute('value', 0);
+                    $qtd->setAttribute('min', 0);
+                    $qtd->setLabel('Quantidade');
+                    $comodos->add($qtd);
+                }
+            }else{
+                $comodos->setLabel("Nenhum comodo encontrado,Por favor cadastre um comodo!");//exibe uma mensagem dentro do fieldset
+                $submit->setAttribute('disabled', 'disabled');//desabilita o botão submit impedindo que o usuario prosiga.
             }
-        }else{
-            $comodos->setLabel("Nenhum comodo encontrado,Por favor cadastre um comodo!");//exibe uma mensagem dentro do fieldset
-            $submit->setAttribute('disabled', 'disabled');//desabilita o botão submit impedindo que o usuario prosiga.
+            $this->add($comodos);
         }
-        $this->add($comodos);
         $this->add($proprietario_id);
         $this->add($proprietario_txt);
         $this->add($proprietario_btn);

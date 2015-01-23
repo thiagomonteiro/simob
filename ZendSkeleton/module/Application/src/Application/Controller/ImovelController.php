@@ -54,6 +54,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_ProprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
         $this->_ImovelComodoDao = \Base\Model\daoFactory::factory('ImovelComodo');
         $this->_MidiaDao = \Base\Model\daoFactory::factory('Midia');
+        //$this->_ImovelStatusDao = \Base\Model\daoFactory::factory('ImovelStatus');
     }
     
     public function indexAction() {
@@ -73,6 +74,9 @@ class ImovelController extends \Base\Controller\BaseController{
                $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
                $params['tipoTransacao'] = $this->_TipoTransacaoDao->recuperar($params['tipoTransacao']);
                $params['subCategoria'] = $this->_SubCategoriaImovelDao->recuperar($params['subCategoria']);
+               //$imovelStatus = $this->_ImovelStatusDao->criarNovo();
+               //$imovelStatus->setStatus(\Application\Entity\TipoStatus::ATIVO);
+               //$params['imovelStatus'] = $imovelStatus;
                $imovelObj = $this->_ImovelDao->criarNovo($params);
                $this->SessionHelper()->definirSessao('imovel');
                $this->SessionHelper()->salvarObjeto('imovel', $imovelObj);
@@ -103,7 +107,7 @@ class ImovelController extends \Base\Controller\BaseController{
         }
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
-            $form = $this->getFormPasso2($params,$comodos); 
+            $form = $this->getFormPasso2($params,$comodos,$imovel_sessao);//passo o objeto imovel para o formulario para que seja verificado se ele e do tipo terreno caso seja nao exibo comodos. 
             $Filter = new filtro_passo2();
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
@@ -129,7 +133,7 @@ class ImovelController extends \Base\Controller\BaseController{
             }else{  
             }
         }else{
-            $form = $this->getFormPasso2(array(),$comodos); 
+            $form = $this->getFormPasso2(array(),$comodos,$imovel_sessao); 
         }
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $this->setTemplate('layout/admin');
@@ -143,6 +147,7 @@ class ImovelController extends \Base\Controller\BaseController{
       $request = $this->getRequest();
       $this->SessionHelper()->definirSessao('imovel');
       $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+      //print_r($imovel_sessao);
       $mensagem = $this->flashMessenger()->getSuccessMessages();
       if(count($mensagem)){
         $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
@@ -324,8 +329,8 @@ class ImovelController extends \Base\Controller\BaseController{
         return $form;
     }
     
-    public function getFormPasso2($dados_post = array(), $comodos){       
-        $form = new form_passo2(null, array(), array(), $comodos);
+    public function getFormPasso2($dados_post = array(), $comodos, $imovel){       
+        $form = new form_passo2(null, array(), array(), $comodos,$imovel);
         return $form;
     }
     

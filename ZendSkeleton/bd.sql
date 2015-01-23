@@ -16,6 +16,7 @@ INSERT INTO TipoTransacao (id,descricao) VALUES (2,"Aluguel");
 
 INSERT INTO CategoriaImovel (id,descricao) VALUES (1,"Residencial");
 INSERT INTO CategoriaImovel (id,descricao) VALUES (2,"Comercial");
+INSERT INTO CategoriaImovel (id,descricao) VALUES (3,"Terreno");
 
 
 INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (1,"Apartamento",1);
@@ -23,6 +24,9 @@ INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (2,"Casa",1);
 
 INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (3,"Loja",2);
 INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (4,"Restaurante",2);
+
+INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (5,"Area",3);
+INSERT INTO SubCategoriaImovel(id,descricao,categoria) VALUES (6, "Lote",3);
 
 INSERT INTO TipoMidia(id, descricao) VALUES (0, "sem midia");
 INSERT INTO TipoMidia(id, descricao) VALUES (1, "foto");

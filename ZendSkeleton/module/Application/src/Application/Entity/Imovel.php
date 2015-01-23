@@ -26,6 +26,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     private $_tipoTransacao;
     private $_proprietario;
     private $_subCategoria;
+    private $_imovelStatus;
     
     
     public function setId($id){
@@ -122,5 +123,13 @@ class Imovel extends \Base\Entity\AbstractEntity {
     
     public function getProprietario(){
         return $this->_proprietario;
+    }
+    
+    public function setImovelStatus(\Application\Entity\ImovelStatus $ImovelStatus){
+        $this->_imovelStatus = $ImovelStatus;
+    }
+    
+    public function getImovelStatus(){
+        return $this->_imovelStatus;
     }
 }

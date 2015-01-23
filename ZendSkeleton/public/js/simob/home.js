@@ -6,28 +6,10 @@
 
 
 $(document).ready(function(){
-   /*$(".anuncio").hover(
-        function(){
-            $(this).find('.descricao').css('visibility','visible');      
-            $(this).find('.descricao').animate({
-                     display: 'block',
-                     position: 'relative',
-                     left: '200px',
-                     opacity: 0.9,
-                 });
-        },
-        function(){      
-            $(this).find('.descricao').animate({
-                     opacity: 0.9,
-                     left: '0px',
-                 });
-            $(this).find('.descricao').css('visibility','hidden');
-        }
-    );*/
     var content = $(document);
     var timeout;
     var descricao;
-$(".anuncio").hover(function() {
+/*$(".anuncio").hover(function() {
         descricao = $(this).find('.descricao')
         timeout = setTimeout(function(){
            $(descricao).css('visibility','visible');      
@@ -48,6 +30,34 @@ $(".anuncio").hover(function() {
         $(descricao).css('visibility','hidden');
     }
 );
+*/
+
+content.delegate(".anuncio","mouseenter mouseleave",function(e){
+         if(e.type=='mouseenter')
+        {
+            descricao = $(this).find('.descricao')
+            timeout = setTimeout(function(){
+               $(descricao).css('visibility','visible');      
+               $(descricao).animate({
+                         display: 'block',
+                         position: 'relative',
+                         left: '200px',
+                         opacity: 0.9,
+                });
+            }, 700);
+        }
+        else if(e.type=='mouseleave')
+        {
+            clearTimeout(timeout);
+            $(descricao).animate({
+                         opacity: 0.9,
+                         left: '0px',
+                     });
+            $(descricao).css('visibility','hidden');
+        }
+    }
+    );
+    
 
  content.delegate(".proxima-pagina","click",function(e){
       e.preventDefault();
