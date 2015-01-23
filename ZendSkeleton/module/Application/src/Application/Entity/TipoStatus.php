@@ -15,7 +15,7 @@ namespace Application\Entity;
  */
 class TipoStatus {
     const ATIVO = 1;
-    const INATIVO = 2;   
+    const INATIVO = 0;   
 
 
     public static function getDescricao($codigo)

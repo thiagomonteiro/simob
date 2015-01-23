@@ -38,6 +38,7 @@ class ImovelController extends \Base\Controller\BaseController{
     private $_ImovelComodoDao;
     private $_imovel_session;
     private $_MidiaDao;
+    private $_ImovelStatusDao;
     /**
      * retorna uma list com os tipos de comodos {sala,quarto,suite,cozinha,garagem}
      */
@@ -54,7 +55,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $this->_ProprietarioDao = \Base\Model\daoFactory::factory('Proprietario');
         $this->_ImovelComodoDao = \Base\Model\daoFactory::factory('ImovelComodo');
         $this->_MidiaDao = \Base\Model\daoFactory::factory('Midia');
-        //$this->_ImovelStatusDao = \Base\Model\daoFactory::factory('ImovelStatus');
+        $this->_ImovelStatusDao = \Base\Model\daoFactory::factory('ImovelStatus');
     }
     
     public function indexAction() {
@@ -74,9 +75,9 @@ class ImovelController extends \Base\Controller\BaseController{
                $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
                $params['tipoTransacao'] = $this->_TipoTransacaoDao->recuperar($params['tipoTransacao']);
                $params['subCategoria'] = $this->_SubCategoriaImovelDao->recuperar($params['subCategoria']);
-               //$imovelStatus = $this->_ImovelStatusDao->criarNovo();
-               //$imovelStatus->setStatus(\Application\Entity\TipoStatus::ATIVO);
-               //$params['imovelStatus'] = $imovelStatus;
+               $imovelStatus = $this->_ImovelStatusDao->criarNovo();
+               $imovelStatus->setStatus(\Application\Entity\TipoStatus::ATIVO);
+               $params['imovelStatus'] = $imovelStatus;
                $imovelObj = $this->_ImovelDao->criarNovo($params);
                $this->SessionHelper()->definirSessao('imovel');
                $this->SessionHelper()->salvarObjeto('imovel', $imovelObj);
@@ -114,8 +115,10 @@ class ImovelController extends \Base\Controller\BaseController{
             if($form->isValid()){
                 $proprietarioObj = $this->_ProprietarioDao->recuperar($params['idProprietario']);
                 $imovel_sessao->setProprietario($proprietarioObj);
-                $data = $this->_ImovelDao->salvar($imovel_sessao);
-                $imovel_sessao->setId($data->insert_id);//apos cadastrar o imovel insiro o id retornado da função salvar. em seguida posso salvar os comodos
+                $status = $this->_ImovelStatusDao->salvar($imovel_sessao);//salvar os status do imovel passando o objeto imovel(possui imovelstatus encapsulado) como paramentro
+                $imovel_sessao->setImovelStatus($status);
+                $id = $this->_ImovelDao->salvar($imovel_sessao);
+                $imovel_sessao->setId($id->insert_id);//apos cadastrar o imovel insiro o id retornado da função salvar. em seguida posso salvar os comodos
                 $this->SessionHelper()->definirSessao('imovel');//redefinindo a sessao apos salvar o id do imovel
                 $this->SessionHelper()->salvarObjeto('imovel', $imovel_sessao);
                 $listComodos = new ArrayObject();
@@ -146,8 +149,7 @@ class ImovelController extends \Base\Controller\BaseController{
     public function passo3Action(){
       $request = $this->getRequest();
       $this->SessionHelper()->definirSessao('imovel');
-      $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
-      //print_r($imovel_sessao);
+      $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');      
       $mensagem = $this->flashMessenger()->getSuccessMessages();
       if(count($mensagem)){
         $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');

@@ -16,7 +16,7 @@ namespace Application\Entity;
 class ImovelStatus extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_data;
-    private $_descricao;
+    private $_anotacoes;
     private $_status;
     
     public function __construct() {
@@ -31,8 +31,8 @@ class ImovelStatus extends \Base\Entity\AbstractEntity {
         return $this->_data;
     }
 
-    public function getDescricaoVenda() {
-        return $this->_descricaoVenda;
+    public function getAnotacoes() {
+        return $this->_anotacoes;
     }
 
     public function getStatus() {
@@ -47,8 +47,8 @@ class ImovelStatus extends \Base\Entity\AbstractEntity {
         $this->_data = $data;
     }
 
-    public function setDescricaoVenda($descricaoVenda) {
-        $this->_descricaoVenda = $descricaoVenda;
+    public function setAnotacoes($anotacao) {
+        $this->_anotacoes = $anotacao;
     }
 
     public function setStatus($status) {

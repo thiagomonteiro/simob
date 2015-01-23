@@ -107,11 +107,11 @@ class Imovel extends \Base\Model\AbstractModel {
         $adapter =  $this->getAdapter();
         $sql = "INSERT INTO Imovel (bairro,rua,numero,area_total,area_construida".
                 ",valor_iptu,valor_transacao,descricao,tipo_transacao,proprietario".
-                ",subCategoria)VALUES('".$obj->getBairro()->getId()."','".$obj->getRua().
+                ",subCategoria, imovelStatus)VALUES('".$obj->getBairro()->getId()."','".$obj->getRua().
                 "','".$obj->getNumero()."','".$obj->getAreaTotal()."','".$obj->getAreaConstruida().
                 "','".$obj->getValorIptu()."','".$obj->getValorTransacao()."','".$obj->getDescricao().
                 "','".$obj->getTipoTransacao()->getId()."','".$obj->getProprietario()->getId().
-                "','".$obj->getSubCategoria()->getId()."')";
+                "','".$obj->getSubCategoria()->getId()."','".$obj->getImovelStatus()->getId()."')";
         $statement = $adapter->createStatement($sql);
         $results = $statement->execute();
         return $results->getResource();//retorna os dados da inserção
@@ -180,12 +180,14 @@ class Imovel extends \Base\Model\AbstractModel {
        " pais.sigla as pais_sigla ,TipoTransacao.id as tipo_transacao_id, TipoTransacao.descricao as tipo_transacao_descricao,".
        " TipoTransacao.id AS trans_id, TipoTransacao.descricao AS trans_descricao,".
        " SubCategoriaImovel.id AS sub_cat_id, SubCategoriaImovel.descricao AS sub_cat_descricao,".
+       " ImovelStatus.status as imovel_status,".
        " Midia.id AS midia_id, Midia.url AS midia_url FROM Imovel INNER JOIN Midia".
        " ON Imovel.id = Midia.imovel INNER JOIN TipoTransacao ON TipoTransacao.id = Imovel.tipo_transacao".
        " INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id".
        " INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id".
        " INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id".
-       " WHERE(Midia.capa = 1) GROUP BY imovel_id LIMIT ".$de.", ".($qtd+1)."";
+       " INNER JOIN ImovelStatus ON Imovel.imovelStatus = ImovelStatus.id".
+       " WHERE(Midia.capa = 1 AND ImovelStatus.status = ". \Application\Entity\TipoStatus::ATIVO.") GROUP BY imovel_id LIMIT ".$de.", ".($qtd+1)."";
        }
        $statement = $adapter->query($sql);
        $results = $statement->execute();
