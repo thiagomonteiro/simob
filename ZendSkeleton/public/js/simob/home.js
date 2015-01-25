@@ -9,28 +9,6 @@ $(document).ready(function(){
     var content = $(document);
     var timeout;
     var descricao;
-/*$(".anuncio").hover(function() {
-        descricao = $(this).find('.descricao')
-        timeout = setTimeout(function(){
-           $(descricao).css('visibility','visible');      
-           $(descricao).animate({
-                     display: 'block',
-                     position: 'relative',
-                     left: '200px',
-                     opacity: 0.9,
-            });
-        }, 700);
-    },
-    function(){
-        clearTimeout(timeout);
-        $(descricao).animate({
-                     opacity: 0.9,
-                     left: '0px',
-                 });
-        $(descricao).css('visibility','hidden');
-    }
-);
-*/
 
 content.delegate(".anuncio","mouseenter mouseleave",function(e){
          if(e.type=='mouseenter')
@@ -101,5 +79,15 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
       );
   });
   
+   content.delegate(".cidade-select","change",function(){
+        var cidade = $(".cidade-select option:selected").val();
+        $.get("/bairro/getBairros/"+cidade, function(data){
+           var res = jQuery.parseJSON(data);
+           if(res.success == true){
+               $(".bairro-select").replaceWith(res.bairros);
+           }
+        });
+       
+    });
   
 });

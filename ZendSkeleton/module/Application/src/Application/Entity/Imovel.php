@@ -86,6 +86,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     }
     
     public function setValorTransacao($valor){
+        $valor = str_replace(".", "", $valor);
         $this->_valorTransacao = $valor;
     }
     
@@ -131,5 +132,11 @@ class Imovel extends \Base\Entity\AbstractEntity {
     
     public function getImovelStatus(){
         return $this->_imovelStatus;
+    }
+    
+    public function mascaraValorTransacao(){
+        $aux = substr($this->_valorTransacao,0,-2);//removendo os ultimos dois caracteres que representam as casas decimais dos centavos ,00
+        setlocale(LC_MONETARY,"pt_BR", "ptb");
+        return money_format('%n', $aux);    
     }
 }

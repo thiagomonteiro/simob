@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var content = $(document);//o metodo live foi descontinuado
-    
+    mascarar();
     $('.check-comodo').on("click",function(){   
         if( $(this).is(':checked') ){
           $(this).parent().next("label").children(".qtd-comodo").val(1);   
@@ -164,3 +164,7 @@ $(document).ready(function(){
         });
 
 
+function mascarar(){
+  $(".preco").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: false});
+  $(".iptu").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: false});
+}

@@ -32,17 +32,17 @@ aside{
     float: right;
     margin-top: 20px;
     border: 3px solid #66b5ba;
-    height: 500px;
+    height: 800px;
     width: 19%;
     background:#c4e3f3;
     border-radius: 10px;
 }
 
-aside > ul{
+aside > div > ul{
     list-style: none;
 }
 
-aside > header{
+aside > div > header{
     background-color: #66b5ba;
     text-align: center;
     color: white;
@@ -50,7 +50,7 @@ aside > header{
     font-size: 20px;
 }
 
-aside > ul > li > a > img{
+aside > div > ul > li > a > img{
     border : 3px solid #66b5ba;
     border-radius: 5px;
     height: 61px;
@@ -197,3 +197,490 @@ aside > ul > li > a > img{
     color: black;
 }
 
+
+select{
+    display: block;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+
+.zf-green {
+    color: #68b604;
+}
+
+.btn-success {
+  background-color: #57a900;
+  background-image: -moz-linear-gradient(top, #70d900, #57a900);
+  background-image: -ms-linear-gradient(top, #70d900, #57a900);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
+  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
+  background-image: -o-linear-gradient(top, #70d900, #57a900);
+  background-image: linear-gradient(top, #70d900, #57a900);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  background-color: #57a900;
+}
+
+.btn-success:active, .btn-success.active {
+  background-color: #57a900;
+}
+
+div.container a.brand {
+    background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
+    margin-left: 0;
+    padding: 8px 20px 12px 40px;
+}
+
+
+
+
+/* botoes */
+input[type="submit"]{
+    /* Structure */
+    display: inline-block;
+    *display: inline; /*IE 6/7*/
+    zoom: 1;
+    line-height: normal;
+    white-space: nowrap;
+    vertical-align: baseline;
+    text-align: center;
+    cursor: pointer;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Firefox: Get rid of the inner focus border */
+input[type="submit"]::-moz-focus-inner{
+    padding: 0;
+    border: 0;
+}
+/* end from PURE buttons-core.css */
+/* from PURE buttons.css */
+/*csslint unqualified-attributes:false*/
+
+input[type="submit"] {
+    font-size: 100%;
+    *font-size: 90%; /*IE 6/7 - To reduce IE's oversized button text*/
+    *overflow: visible; /*IE 6/7 - Because of IE's overly large left/right padding on buttons */
+    padding: 0.5em 1.5em 0.5em;
+    color: #0e1320; /* rgba not supported (IE 8) */
+    border: 1px solid #a6b3d9; /*IE 6/7/8*/
+    border: none rgba(0, 0, 0, 0); /*IE9 + everything else*/
+    background: #3db2e1;
+    background: -o-linear-gradient(top, #69c4e8, #21a1d4);
+    background: -ms-linear-gradient(top, #69c4e8, #21a1d4);
+    background: -webkit-linear-gradient(top, #69c4e8, #21a1d4);
+    background: -moz-linear-gradient(top, #69c4e8, #21a1d4);
+    background: linear-gradient(to bottom, #69c4e8, #21a1d4);
+}
+
+input[type="submit"]:hover {
+    background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+input[type="submit"]:focus {
+    outline: 0;
+}
+input[type="submit"]:active {
+    box-shadow: 0 0 0 1px rgba(0,0,0, 0.15) inset, 0 0 6px rgba(0,0,0, 0.20) inset;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:active {
+    border: none;
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    filter: alpha(opacity=40);
+    -khtml-opacity: 0.40;
+    -moz-opacity: 0.40;
+    opacity: 0.40;
+    box-shadow: none;
+}
+
+
+
+/* Firefox: Get rid of the inner focus border */
+input[type="submit"]::-moz-focus-inner{
+    padding: 0;
+    border: 0;
+}
+
+input[type="submit"]{
+    background-color: #3355BA;
+    color: #fbfcfe;
+}
+
+input[type="submit"][disabled="disabled"],
+button[disabled="disabled"] {
+    cursor:url(/img/cancelar.png), not-allowed;
+}
+
+
+.update-default,
+.delete-default,
+.button-warning,
+.select-default {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.update-default {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.update-default:hover {
+	background-color:#5cbf2a;
+}
+.update-default:active {
+	position:relative;
+	top:1px;
+}
+
+.delete-default {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.delete-default:hover {
+    background-color: #f71c0f;
+}
+.delete-default:active {
+	position:relative;
+	top:1px;
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.select-default {
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.select-default:hover{
+    background-color: #00fffc;
+}
+
+/*fim botoes*/
+
+
+form {
+    margin: 0;
+}
+
+/* Define consistent border, margin, and padding.*/
+ 
+
+form fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/*
+ * 1. Corrects color not being inherited in IE 6/7/8/9.
+ * 2. Corrects text not wrapping in Firefox 3.
+ * 3. Corrects alignment displayed oddly in IE 6/7.
+ */
+
+form legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/*
+ * 1. Corrects font size not being inherited in all browsers.
+ * 2. Addresses margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improves appearance and consistency in all browsers.
+ */
+
+form button,
+form input,
+form select,
+form textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/*
+ * Addresses Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+form button,
+form input {
+    line-height: normal;
+}
+
+/*
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Corrects inability to style clickable `input` types in iOS.
+ * 3. Improves usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Removes inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+form button,
+form input[type="button"], /* 1 */
+form input[type="reset"],
+form input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/*
+ * Re-set default cursor for disabled elements.
+ */
+
+form button[disabled],
+form input[disabled] {
+    cursor: default;
+}
+
+/*
+ * 1. Addresses box sizing set to content-box in IE 8/9.
+ * 2. Removes excess padding in IE 8/9.
+ * 3. Removes excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+form input[type="checkbox"],
+form input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/*
+ * 1. Addresses `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Addresses `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+form input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/*
+ * Removes inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+form input[type="search"]::-webkit-search-cancel-button,
+form input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/*
+ * Removes inner padding and border in Firefox 3+.
+ */
+
+form button::-moz-focus-inner,
+form input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * 1. Removes default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improves readability and alignment in all browsers.
+ */
+
+form textarea {
+    overflow: auto; 
+    vertical-align: top; 
+}
+
+@media only screen and (max-width : 480px) {
+   form button[type="submit"] {
+    margin: 0.7em 0 0;
+    }
+
+    form input[type="text"],
+    form input[type="password"],
+    form input[type="email"],
+    form input[type="url"],
+    form input[type="date"],
+    form input[type="month"],
+    form input[type="time"],
+    form input[type="datetime"],
+    form input[type="datetime-local"],
+    form input[type="week"],
+    form input[type="number"],
+    form input[type="search"],
+    form input[type="tel"],
+    form input[type="color"],
+    form label {
+        margin-bottom: 0.3em;
+        display: block;
+    }
+}
+
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="url"],
+form input[type="date"],
+form input[type="month"],
+form input[type="time"],
+form input[type="datetime"],
+form input[type="datetime-local"],
+form input[type="week"],
+form input[type="number"],
+form input[type="search"],
+form input[type="tel"],
+form input[type="color"],
+form select,
+form textarea {
+    padding: 0.5em 0.6em;
+    display: inline-block;
+    border: 1px solid #e6e6e6;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px #e6e6e6;
+    border-radius: 4px;
+    -webkit-transition: 0.3s linear border;
+    -moz-transition: 0.3s linear border;
+    -ms-transition: 0.3s linear border;
+    -o-transition: 0.3s linear border;
+    transition: 0.3s linear border;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form input[type="url"]:focus,
+form input[type="date"]:focus,
+form input[type="month"]:focus,
+form input[type="time"]:focus,
+form input[type="datetime"]:focus,
+form input[type="datetime-local"]:focus,
+form input[type="week"]:focus,
+form input[type="number"]:focus,
+form input[type="search"]:focus,
+form input[type="tel"]:focus,
+form input[type="color"]:focus,
+form select:focus,
+form textarea:focus {
+    outline: 0;
+    outline: thin dotted \9; 
+    border-color: #129FEA;
+}
+
+form input[type="file"]:focus,
+form input[type="radio"]:focus,
+form input[type="checkbox"]:focus {
+    outline: thin dotted #333;
+    outline: 1px auto #129FEA;
+}
+form .pure-checkbox,
+form .pure-radio {
+    margin: 0.5em 0;
+    display: block;
+}
+form input[type="text"][disabled],
+form input[type="password"][disabled],
+form input[type="email"][disabled],
+form input[type="url"][disabled],
+form input[type="date"][disabled],
+form input[type="month"][disabled],
+form input[type="time"][disabled],
+form input[type="datetime"][disabled],
+form input[type="datetime-local"][disabled],
+form input[type="week"][disabled],
+form input[type="number"][disabled],
+form input[type="search"][disabled],
+form input[type="tel"][disabled],
+form input[type="color"][disabled],
+form select[disabled],
+form textarea[disabled] {
+    cursor: not-allowed;
+    box-shadow: inset 0 1px 10px #ededed;
+    background-color: #ededed;
+    color: #adadad;
+    border-color: #e6e6e6;
+}
+form input[readonly],
+form select[readonly],
+form textarea[readonly],
+form input[readonly]:focus,
+form select[readonly]:focus,
+form textarea[readonly]:focus {
+    background: #eee;
+    color: #777; 
+    border-color: #ccc;
+}
+form input:focus:invalid,
+form textarea:focus:invalid,
+form select:focus:invalid {
+    color: #b94a48;
+    border: 1px solid #ee5f5b;
+}
+form input:focus:invalid:focus,
+form textarea:focus:invalid:focus,
+form select:focus:invalid:focus {
+    border-color: #e9322d;
+}
+form input[type="file"]:focus:invalid:focus,
+form input[type="radio"]:focus:invalid:focus,
+form input[type="checkbox"]:focus:invalid:focus {
+    outline-color: #e9322d;
+}
+form select {
+    border: 1px solid #e6e6e6;
+    background-color: white;
+}
+form select[multiple] {
+    height: auto;
+}
+form label {
+    margin: 0.5em 0 0.2em;
+    color: #4f4f4f;
+    font-size:90%;
+}
+form fieldset {
+    margin: 0;
+    padding: 0.35em 0 0.75em;
+    border: 0;
+}
+form legend {
+    display: block;
+    width: 100%;
+    padding: 0.3em 0;
+    margin-bottom: 0.3em;
+    font-size: 125%;
+    color: #262626;
+    border-bottom: 1px solid #ededed;
+}

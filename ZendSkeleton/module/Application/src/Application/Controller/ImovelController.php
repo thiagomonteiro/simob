@@ -90,6 +90,7 @@ class ImovelController extends \Base\Controller\BaseController{
         }
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
+        $this->appendJavaScript('libs/jquery.maskMoney.min.js');
         $view = new ViewModel(array('partialCadastro1'   =>  $form));
         return $view;
     }
@@ -141,6 +142,7 @@ class ImovelController extends \Base\Controller\BaseController{
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $this->setTemplate('layout/admin');
         $this->appendJavaScript('simob/imovel.js');
+        $this->appendJavaScript('libs/jquery.maskMoney.min.js');
         $view = new ViewModel(array('partialCadastro2'   => $form ));
         $view->addChild($partialBuscaProprietario , 'buscaProprietario');
         return $view;

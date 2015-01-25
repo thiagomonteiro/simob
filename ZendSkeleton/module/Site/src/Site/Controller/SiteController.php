@@ -18,6 +18,7 @@ namespace Site\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
+use Site\Form\Index\busca as form_busca;
 
 
 class SiteController extends \Base\Controller\BaseController{
@@ -34,6 +35,8 @@ class SiteController extends \Base\Controller\BaseController{
         $paginacao = $this->paginador->paginarDados($result,null,  self::$_qtd_por_pagina);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);  
         $partialListarAnuncios = $this->criarListAction($result);
+        $partialBusca = $this->criarBarraDeBuscaAction('front_end');
+        $this->layout()->busca = $partialBusca;
         $this->setTemplate('/layout/layout');
         $this->appendJavaScript("simob/home.js");
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
@@ -87,6 +90,15 @@ class SiteController extends \Base\Controller\BaseController{
         $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'front_end'));//na view $rota.'proximaPagina'
         $view->setTemplate('application/partials/paginacao.phtml');
         return $view;
+    }
+    
+     private function criarBarraDeBuscaAction($rota){//passando os params para o application/src/form
+        $cidades  = $this->Localidades()->getCidades("RJ");
+        $busca = new form_busca();//1- primeiro eu instancio o formularioarray('selecione'=>'selecione','nome' => 'nome','cidade' => 'cidade')
+        $busca->get('cidade')->setAttribute('options',$cidades);
+        //$view = new ViewModel(array('rota' => $rota,'busca'=>$busca));
+        //$view->setTemplate('site/index/partials/busca.phtml');
+        return $busca;
     }
 }
 

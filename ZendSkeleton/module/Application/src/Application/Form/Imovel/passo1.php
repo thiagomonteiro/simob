@@ -40,8 +40,9 @@ class passo1 extends Form{
         $area_construida = new \Zend\Form\Element\Number('areaConstruida');
         $area_construida->setAttribute('value', 0);
         $area_construida->setLabel('Área Construída');
-        $iptu = new \Zend\Form\Element\Number('valorIptu');
+        $iptu = new \Zend\Form\Element\Text('valorIptu');
         $iptu->setLabel('IPTU');
+        $iptu->setAttribute('class', 'iptu');
         $submit->setAttributes(array('value'=>'Salvar e Continuar','id'=>'passo1-submit'));
         $tipo_operacao = new \Zend\Form\Element\Select('tipoTransacao');
         $tipo_operacao->setLabel('Tipo de Operação');
@@ -58,6 +59,7 @@ class passo1 extends Form{
         $sub_categoria_imovel->setLabel('SubCategoria');
         $sub_categoria_imovel->setDisableInArrayValidator(true);
         $preco = new \Zend\Form\Element\Text('valorTransacao');
+        $preco->setAttribute('class', 'preco');
         $preco->setLabel('Valor da Operação');
         $this->add($estado);
         $this->add($cidade);
