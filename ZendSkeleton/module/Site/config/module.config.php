@@ -39,6 +39,15 @@ $rota_frontEnd=array(
                 ),
             ),
         ),
+        'buscarAnuncio' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/buscarAnuncio',
+                'defaults' => array(
+                    'action' => 'buscarAnuncio'
+                ),
+            ),
+        ),
     ),
 );
             

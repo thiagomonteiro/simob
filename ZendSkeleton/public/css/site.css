@@ -197,17 +197,7 @@ aside > div > ul > li > a > img{
     color: black;
 }
 
-
-select{
-    display: block;
-    width: 200px;
-    margin-bottom: 10px;
-}
-
-
-.zf-green {
-    color: #68b604;
-}
+/*formularios*/
 
 .btn-success {
   background-color: #57a900;
@@ -326,58 +316,6 @@ input[type="submit"]{
     color: #fbfcfe;
 }
 
-input[type="submit"][disabled="disabled"],
-button[disabled="disabled"] {
-    cursor:url(/img/cancelar.png), not-allowed;
-}
-
-
-.update-default,
-.delete-default,
-.button-warning,
-.select-default {
-    color: white;
-    border-radius: 4px;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-}
-
-.update-default {
-    background: rgb(28, 184, 65); /* this is a green */
-}
-
-.update-default:hover {
-	background-color:#5cbf2a;
-}
-.update-default:active {
-	position:relative;
-	top:1px;
-}
-
-.delete-default {
-    background: rgb(202, 60, 60); /* this is a maroon */
-}
-
-.delete-default:hover {
-    background-color: #f71c0f;
-}
-.delete-default:active {
-	position:relative;
-	top:1px;
-}
-
-.button-warning {
-    background: rgb(223, 117, 20); /* this is an orange */
-}
-
-.select-default {
-    background: rgb(66, 184, 221); /* this is a light blue */
-}
-
-.select-default:hover{
-    background-color: #00fffc;
-}
-
-/*fim botoes*/
 
 
 form {
@@ -416,8 +354,7 @@ form legend {
 form button,
 form input,
 form select,
-form textarea {
-    font-size: 100%; /* 1 */
+form textarea {    
     margin: 0; /* 2 */
     vertical-align: baseline; /* 3 */
     *vertical-align: middle; /* 3 */
@@ -540,7 +477,7 @@ form textarea {
     form input[type="color"],
     form label {
         margin-bottom: 0.3em;
-        display: block;
+        display: block;        
     }
 }
 
@@ -653,11 +590,7 @@ form textarea:focus:invalid:focus,
 form select:focus:invalid:focus {
     border-color: #e9322d;
 }
-form input[type="file"]:focus:invalid:focus,
-form input[type="radio"]:focus:invalid:focus,
-form input[type="checkbox"]:focus:invalid:focus {
-    outline-color: #e9322d;
-}
+
 form select {
     border: 1px solid #e6e6e6;
     background-color: white;
@@ -684,3 +617,32 @@ form legend {
     color: #262626;
     border-bottom: 1px solid #ededed;
 }
+
+/*formulario busca*/
+.filtro-valor{
+    font-size: 13px;
+    margin-left: 8px;
+    
+}
+.bairro-select{
+    margin-left: 5px;
+}
+.filtro-tipo{
+    margin-left: 13px;
+}
+.filtro-transacao{
+    margin-left: 16px;
+}
+
+select{
+    display: block;
+    width: 200px;
+    height: 34px;
+    margin-bottom: 10px;
+}
+#busca-submit{
+    margin-top: 20px;
+    margin-left: 40px;
+    border-radius: 5px;
+}
+/*formulario busca*/

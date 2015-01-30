@@ -20,12 +20,16 @@ class busca extends Form{
         $bairro->setLabel('Bairro');
         $bairro->setDisableInArrayValidator(true);
         $bairro->setDisableInArrayValidator(true);
-        $tipo = new \Zend\Form\Element\Select('filtro-tipo');
-        $tipo->setAttribute('id', 'filtro-tipo');
+        $tipo = new \Zend\Form\Element\Select('tipo');
+        $tipo->setAttribute('class', 'filtro-tipo');
         $tipo->setLabel('Tipo');
         $tipo->setDisableInArrayValidator(true);
-        $valor = new \Zend\Form\Element\Select('filtro-valor');
-        $valor->setAttribute('id','filtro-valor');
+        $finalidade = new \Zend\Form\Element\Select('transacao');
+        $finalidade->setAttribute('class', 'filtro-transacao');
+        $finalidade->setLabel('Uso');
+        $finalidade->setDisableInArrayValidator(true);
+        $valor = new \Zend\Form\Element\Select('valor');
+        $valor->setAttribute('class','filtro-valor');
         $valor->setLabel('Preço');
         $valor->setDisableInArrayValidator(true);
         $submit = new \Zend\Form\Element\Submit('enviar');
@@ -34,6 +38,7 @@ class busca extends Form{
         $this->add($cidade);
         $this->add($bairro);
         $this->add($tipo);
+        $this->add($finalidade);
         $this->add($valor);
         $this->add($submit);
     }

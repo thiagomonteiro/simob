@@ -37,6 +37,7 @@ class SiteController extends \Base\Controller\BaseController{
         $partialListarAnuncios = $this->criarListAction($result);
         $partialBusca = $this->criarBarraDeBuscaAction('front_end');
         $this->layout()->busca = $partialBusca;
+        $this->layout()->rota = 'front_end/buscarAnuncio';
         $this->setTemplate('/layout/layout');
         $this->appendJavaScript("simob/home.js");
         $view = new ViewModel(array('haDados' => empty($result)? false:true));
@@ -80,6 +81,10 @@ class SiteController extends \Base\Controller\BaseController{
         return $this->getResponse()->setContent(Json_encode($data));
     }
     
+    public function buscarAnuncioAction(){
+        
+    }
+    
      private function criarListAction($anunciosList){
         $lista = new ViewModel(array('imoveis_list'=>$anunciosList));
         $lista->setTemplate('site/index/partials/listar.phtml');
@@ -96,8 +101,19 @@ class SiteController extends \Base\Controller\BaseController{
         $cidades  = $this->Localidades()->getCidades("RJ");
         $busca = new form_busca();//1- primeiro eu instancio o formularioarray('selecione'=>'selecione','nome' => 'nome','cidade' => 'cidade')
         $busca->get('cidade')->setAttribute('options',$cidades);
-        //$view = new ViewModel(array('rota' => $rota,'busca'=>$busca));
-        //$view->setTemplate('site/index/partials/busca.phtml');
+        //
+        $categoriaDao = \Base\Model\daoFactory::factory('SubCategoriaImovel');
+        $dadosCategoria = $categoriaDao->recuperarTodos();
+        $categorias = $this->SelectHelper()->getArrayData("selecione",$dadosCategoria);
+        $busca->get('tipo')->setAttribute('options', $categorias);
+        //
+        $transacaoDao = \Base\Model\daoFactory::factory('TipoTransacao');
+        $dadosTransacoes = $transacaoDao->recuperarTodos();
+        $transacoes = $this->SelectHelper()->getArrayData("selecione",$dadosTransacoes);
+        $busca->get('transacao')->setAttribute('options', $transacoes);
+        //
+        $arrayPreco = array(1 => "R$ 100.000 a R$ 200.000",2 => "R$ 200.000 a R$ 300.000", 3 => "R$ 300.000 a R$ 400.000", 4 => "R$ 400.000 a R$ 500.000", 5 => "R$ 500.000 ou mais");
+        $busca->get('valor')->setAttribute('options', $arrayPreco);
         return $busca;
     }
 }
