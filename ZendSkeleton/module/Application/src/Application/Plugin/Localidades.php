@@ -38,7 +38,6 @@ class Localidades extends AbstractPlugin {
         $estado = $this->estadoDAO->recuperarPorUf($uf);        
         $Array_cidades = $this->cidadeDAO->recuperarPorEstado($estado);
         $dados_select =  array();
-        $dados_select[] =  array('value' => "",'label' => 'Selecione uma Cidade','disabled' => 'disabled');
         foreach ($Array_cidades as $row){
             $dados_select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getNome());
         }
@@ -48,15 +47,9 @@ class Localidades extends AbstractPlugin {
   public function getBairros(\Application\Entity\Cidade $cidade){
       $Array_bairros = $this->bairroDAO->recuperarPorCidade($cidade);
       $dados_select = array();
-      if(empty($Array_bairros)){
-          $dados_select[] = array('value' => "", 'label' => 'Nenhum bairro cadastrado' , 'disabled' => 'disabled');  
-      }else{
-          $dados_select[] = array('value' => "", 'label' => 'Selecione um Bairro' , 'disabled' => 'disabled');  
-          foreach ($Array_bairros as $row){
-                $dados_select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getNome());
-          }
+      foreach ($Array_bairros as $row){
+          $dados_select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getNome());
       }
-      
       return $dados_select;
   }     
 }

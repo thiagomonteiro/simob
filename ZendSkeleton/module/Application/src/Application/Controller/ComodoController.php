@@ -81,66 +81,74 @@ class ComodoController extends \Base\Controller\BaseController{
     }
     
     public function buscarAction(){
-            $request = $this->getRequest();//2- pego a requisiçao
-            if($request->isPost()){//3-verifico se é um post se for:
+            $request = $this->getRequest();
+            if($request->isXmlHttpRequest()){
                 $params = $request->getPost()->toArray();
-            }           
-            $param = $params['param'];
-            $result = $this->ComodoDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$param);
-            $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-            $viewModelListar= $this->GetViewLista($result);
-            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-            $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
-            return $this->getResponse()->setContent(Json_encode($data));
+                $param = $params['param'];
+                $result = $this->ComodoDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$param);
+                $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+                $viewModelListar= $this->GetViewLista($result);
+                $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+                $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+                $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+                $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
+                return $this->getResponse()->setContent(Json_encode($data));
+            }
     }
     
      public function proximaPaginaAction(){
-        //somente requisições ajax        
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        if($param == null){
-            $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina); 
-        }else{
-            $result = $this->ComodoDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$param);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            if($param == null){
+                $result = $this->ComodoDao->recuperarTodos($pagina,self::$_qtd_por_pagina); 
+            }else{
+                $result = $this->ComodoDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($result,$pagina,self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLista($result);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+            $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($result,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($result);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
-        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        if($param == null){
-            $result = $this->ComodoDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        }else{
-            $result = $this->ComodoDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$param);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            if($param == null){
+                $result = $this->ComodoDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            }else{
+                $result = $this->ComodoDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLista($result);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array("success" => true,"barrapaginacao" => $barraPaginacao,"html" => $html);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($result);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array("success" => true,"barrapaginacao" => $barraPaginacao,"html" => $html);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function deletarAction(){
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $response = $this->ComodoDao->remover($id);
-        if($response == "ok"){
-            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
-        }else{
-            $data = array('success' => false,'menssagem' => $response);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->ComodoDao->remover($id);
+            if($response == "ok"){
+                $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
+            }else{
+                $data = array('success' => false,'menssagem' => $response);
+            }
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function alterarAction(){
@@ -152,7 +160,7 @@ class ComodoController extends \Base\Controller\BaseController{
     
     public function salvarAlteracoesAction(){
         $request = $this->getRequest();
-        if($request->isPost()){
+        if($request->isXmlHttpRequest()){
             $dados = (array)$request->getPost();
             $validador = new comodo_filter();
             $inputFilter = $validador->getInputFilter();
@@ -168,8 +176,8 @@ class ComodoController extends \Base\Controller\BaseController{
                 $data = array('success'=>false,'erros'=>$inputFilter->getMessages());
 
             }
+            return $this->getResponse()->setContent(json_encode($data));
         }
-        return $this->getResponse()->setContent(json_encode($data));
     }
     
     public function criarAction(){

@@ -186,76 +186,88 @@ class ImovelController extends \Base\Controller\BaseController{
     }
     
     private function saveImage($fotos){
-        if(isset($fotos))
-        {            
-            date_default_timezone_set("Brazil/East");
-            $allowedExts = array(".gif", ".jpeg", ".jpg", ".png", ".bmp");
-            $dir = $_SERVER['DOCUMENT_ROOT'].'/fotos/';
-            $miniaturas='';
-            foreach ($fotos as $row){
-               $name = $row['name'];
-               $tmp_name = $row['tmp_name'];
-               $ext = strtolower(substr($name, -4));
-               if(in_array($ext,$allowedExts))
-               {
-                   $new_name = date("Y.m.d-H.i.s") ."-".uniqid().$ext; //gera o nome baseado na date() e na função uniqid
-                   $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
-                   $image = $this->SimpleImage();
-                   $image->load($dir.$new_name); 
-                   $image->resize(400,400);
-                   $image->save($dir.$new_name); 
-                   $midiaObj = $this->_MidiaDao->criarNovo();
-                   $midiaObj->setTipo(1);
-                   $midiaObj->setCapa(false);
-                   $midiaObj->setNome(str_replace($allowedExts,"", $name));//removendo extensões do nome
-                   //$midiaObj->setUrl($dir.$new_name);
-                   $midiaObj->setUrl("/fotos/".$new_name);
-                   $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
-                   $midiaObj->setImovel($imovel_sessao);
-                   $data = $this->_MidiaDao->salvar($midiaObj);
-                   $midiaObj->setId($data->insert_id);
-               }
+       $request = $this->getRequest();
+       if($request->isXmlHttpRequest()){
+            if(isset($fotos))
+            {            
+                date_default_timezone_set("Brazil/East");
+                $allowedExts = array(".gif", ".jpeg", ".jpg", ".png", ".bmp");
+                $dir = $_SERVER['DOCUMENT_ROOT'].'/fotos/';
+                $miniaturas='';
+                foreach ($fotos as $row){
+                   $name = $row['name'];
+                   $tmp_name = $row['tmp_name'];
+                   $ext = strtolower(substr($name, -4));
+                   if(in_array($ext,$allowedExts))
+                   {
+                       $new_name = date("Y.m.d-H.i.s") ."-".uniqid().$ext; //gera o nome baseado na date() e na função uniqid
+                       $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
+                       $image = $this->SimpleImage();
+                       $image->load($dir.$new_name); 
+                       $image->resize(400,400);
+                       $image->save($dir.$new_name); 
+                       $midiaObj = $this->_MidiaDao->criarNovo();
+                       $midiaObj->setTipo(1);
+                       $midiaObj->setCapa(false);
+                       $midiaObj->setNome(str_replace($allowedExts,"", $name));//removendo extensões do nome
+                       //$midiaObj->setUrl($dir.$new_name);
+                       $midiaObj->setUrl("/fotos/".$new_name);
+                       $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');
+                       $midiaObj->setImovel($imovel_sessao);
+                       $data = $this->_MidiaDao->salvar($midiaObj);
+                       $midiaObj->setId($data->insert_id);
+                   }
+                }
+                $data = array('success' => true);
+                return $this->getResponse()->setContent(Json_encode($data));
             }
-            $data = array('success' => true);
-            return $this->getResponse()->setContent(Json_encode($data));
-        }
+       }
     }
     
     public function removerImagemAction(){
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $response = $this->_MidiaDao->remover($id);
-        if($response == "ok"){
-            $data = array('success' => true,'menssagem'=>'Imagem removida com sucesso');
-        }else{
-            $data = array('success' => false,'menssagem' => $response);
-        }
-        return $this->getResponse()->setContent(Json_encode($data));
+       $request = $this->getRequest();
+       if($request->isXmlHttpRequest()){
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->_MidiaDao->remover($id);
+            if($response == "ok"){
+                $data = array('success' => true,'menssagem'=>'Imagem removida com sucesso');
+            }else{
+                $data = array('success' => false,'menssagem' => $response);
+            }
+            return $this->getResponse()->setContent(Json_encode($data));
+       }
     }
     
     public function alterarImagemAction(){
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $nome = $this->getEvent()->getRouteMatch()->getParam('nome');
-        $obj = $this->_MidiaDao->recuperar($id);
-        $obj->setNome(str_replace("-", " ", $nome));
-        $obj->setPersistido(true);
-        try{
-            $response = $this->_MidiaDao->salvar($obj);
-            $data = array("success" => true, "mensagem" => "nome atualizado");
-        } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
-            $data = array("success" => false, "mensagem" => "Falha ao atualizar");
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $nome = $this->getEvent()->getRouteMatch()->getParam('nome');
+            $obj = $this->_MidiaDao->recuperar($id);
+            $obj->setNome(str_replace("-", " ", $nome));
+            $obj->setPersistido(true);
+            try{
+                $response = $this->_MidiaDao->salvar($obj);
+                $data = array("success" => true, "mensagem" => "nome atualizado");
+            } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
+                $data = array("success" => false, "mensagem" => "Falha ao atualizar");
+            }
+            return $this->getResponse()->setContent(json_encode($data));
         }
-        return $this->getResponse()->setContent(json_encode($data));
     }
     
     public function selecionarCapaAction(){
-        try{
-            $id = $this->getEvent()->getRouteMatch()->getParam('id');
-            $this->_MidiaDao->salvarCapa($id);
-             $data = array('success' => true,'menssagem'=>'Capa selecionada');
-        }  catch (\Zend\Db\Adapter\Exception\RuntimeException $e){
-             $data = array('success' => false,'menssagem' => "falha ao selecionar capa");
-        }       
-        return $this->getResponse()->setContent(Json_encode($data));
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            try{
+                $id = $this->getEvent()->getRouteMatch()->getParam('id');
+                $this->_MidiaDao->salvarCapa($id);
+                 $data = array('success' => true,'menssagem'=>'Capa selecionada');
+            }  catch (\Zend\Db\Adapter\Exception\RuntimeException $e){
+                 $data = array('success' => false,'menssagem' => "falha ao selecionar capa");
+            }       
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
     }
     
     /*

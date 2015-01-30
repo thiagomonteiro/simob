@@ -52,85 +52,100 @@ class ProprietarioController extends \Base\Controller\BaseController{
     }
     
      public function proximaPaginaAction(){
-        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
-        //somente requisições ajax        
-        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        if($filtro == null){
-            $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
-        }else{            
-            $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
+            //somente requisições ajax        
+            $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            if($filtro == null){
+                $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+            }else{            
+                $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina,self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLista($proprietariosList,$visao);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($proprietariosList,$visao);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function paginaAnteriorAction(){
-        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
-        //somente requisições ajax
-        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        if($filtro == null){
-            $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        }else{
-            $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
+            //somente requisições ajax
+            $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            if($filtro == null){
+                $proprietariosList = $this->_ProprietarioDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            }else{
+                $proprietariosList = $this->_ProprietarioDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLista($proprietariosList, $visao);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($proprietariosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($proprietariosList, $visao);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function buscarAction(){
-        $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
-        $request = $this->getRequest();//2- pego a requisiçao
-        if($request->isPost()){//3-verifico se é um post se for:
-            $params = $request->getPost()->toArray();
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $visao = $this->getEvent()->getRouteMatch()->getParam('visao');
+            $request = $this->getRequest();//2- pego a requisiçao
+            if($request->isPost()){//3-verifico se é um post se for:
+                $params = $request->getPost()->toArray();
+            }
+            $param = $params['hidden-param'];
+            $filtro = $params['hidden-filtro'];
+            $result = $this->_ProprietarioDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
+            $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
+            $viewModelListar= $this->GetViewLista($result,$visao);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $param = $params['hidden-param'];
-        $filtro = $params['hidden-filtro'];
-        $result = $this->_ProprietarioDao->recuperarPorParametro(null,self::$_qtd_por_pagina,$filtro,$param);
-        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);
-        $viewModelListar= $this->GetViewLista($result,$visao);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->GetViewBarraPaginacao($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'haDados' => !empty($result),'html' => $html, 'barrapaginacao' => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function deletarAction(){
-        try{
-            $id = $this->getEvent()->getRouteMatch()->getParam('id');
-            $response = $this->_ProprietarioDao->remover($id);
-            $data = array('success' => true,'mensagem'=>'Registro removido com sucesso');
-        } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
-            $data = array('success' => false,'mensagem' => 'Operação não permitida, verifique se este usuário não se encontra cadastrado a nenhum imóvel');
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            try{
+                $id = $this->getEvent()->getRouteMatch()->getParam('id');
+                $response = $this->_ProprietarioDao->remover($id);
+                $data = array('success' => true,'mensagem'=>'Registro removido com sucesso');
+            } catch (\Zend\Db\Adapter\Exception\RuntimeException $e) {
+                $data = array('success' => false,'mensagem' => 'Operação não permitida, verifique se este usuário não se encontra cadastrado a nenhum imóvel');
+            }
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function alterarAction(){
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $form = $this->GetFormAlterar($id);
-        $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
-        $data = array('success' => true,'html'=>$viewModel);
-        return $this->getResponse()->setContent(Json_encode($data));     
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $form = $this->GetFormAlterar($id);
+            $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
+            $data = array('success' => true,'html'=>$viewModel);
+            return $this->getResponse()->setContent(Json_encode($data));     
+        }
     }
     
     public function salvarAlteracoesAction(){
         $request = $this->getRequest();
-        if($request->isPost()){
+        if($request->isXmlHttpRequest()){
             $dados = (array)$request->getPost();
             $validador = new filter_alterar();
             $inputFilter = $validador->getInputFilter();
@@ -144,8 +159,8 @@ class ProprietarioController extends \Base\Controller\BaseController{
             }else{
                 $data = array('success'=>false,'erros'=>$inputFilter->getMessages());
             }
+            return $this->getResponse()->setContent(json_encode($data));
         }
-        return $this->getResponse()->setContent(json_encode($data));
     }
     
     private function GetFormAlterar($id){

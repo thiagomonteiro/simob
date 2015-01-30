@@ -35,7 +35,7 @@ class SiteController extends \Base\Controller\BaseController{
         $paginacao = $this->paginador->paginarDados($result,null,  self::$_qtd_por_pagina);
         $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);  
         $partialListarAnuncios = $this->criarListAction($result);
-        $partialBusca = $this->criarBarraDeBuscaAction('front_end');
+        $partialBusca = $this->criarBarraDeBuscaAction();
         $this->layout()->busca = $partialBusca;
         $this->layout()->rota = 'front_end/buscarAnuncio';
         $this->setTemplate('/layout/layout');
@@ -47,42 +47,60 @@ class SiteController extends \Base\Controller\BaseController{
     }
     
     public function proximaPaginaAction(){
-       $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-       $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro'); 
-       if($filtro == 'null'){
-            $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina); 
-        }else{
-            $param = $this->getEvent()->getRouteMatch()->getParam('param');
-            $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina,$filtro,$param);
-        }
-        $paginacao = $this->paginador->paginarDados($result,$pagina,  self::$_qtd_por_pagina);
-        $viewModelListar= $this->criarListAction($result);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
-        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
+       $request = $this->getRequest();
+       if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            /*if($filtro == 'null'){*/
+                 $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina); 
+             /*}else{
+                 $param = $this->getEvent()->getRouteMatch()->getParam('param');
+                 $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina,$filtro,$param);
+             }*/
+             $paginacao = $this->paginador->paginarDados($result,$pagina,  self::$_qtd_por_pagina);
+             $viewModelListar= $this->criarListAction($result);
+             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+             $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+             $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+             return $this->getResponse()->setContent(Json_encode($data));
+       }
     }
     public function paginaAnteriorAction(){
-       $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-       $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro'); 
-       if($filtro == 'null'){
-            $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina); 
-        }else{
-            $param = $this->getEvent()->getRouteMatch()->getParam('param');
-            $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
-        }
-        $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),  self::$_qtd_por_pagina);
-        $viewModelListar= $this->criarListAction($result);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
-        $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
+       $request = $this->getRequest();
+       if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            //if($filtro == 'null'){
+                 $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina); 
+             /*}else{
+                 $param = $this->getEvent()->getRouteMatch()->getParam('param');
+                 $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+             }*/
+             $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),  self::$_qtd_por_pagina);
+             $viewModelListar= $this->criarListAction($result);
+             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+             $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+             $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+             return $this->getResponse()->setContent(Json_encode($data));
+       }
     }
     
     public function buscarAnuncioAction(){
-        
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){    
+            $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
+            $bairro = $this->getEvent()->getRouteMatch()->getParam('bairro');
+            $categoria = $this->getEvent()->getRouteMatch()->getParam('subcategoria');
+            $transacao = $this->getEvent()->getRouteMatch()->getParam('transacao');
+            $valor = $this->getEvent()->getRouteMatch()->getParam('valor');
+            $result = $this->_imovelDao->recuperarAnuncios(null,  self::$_qtd_por_pagina,$cidade,$bairro,$categoria,$transacao,$valor);
+            print_r($result);
+            $paginacao = $this->paginador->paginarDados($result,null,  self::$_qtd_por_pagina);
+            $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);  
+            $partialListarAnuncios = $this->criarListAction($result);
+            $data = array("success" => true);
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
     }
     
      private function criarListAction($anunciosList){
@@ -97,10 +115,11 @@ class SiteController extends \Base\Controller\BaseController{
         return $view;
     }
     
-     private function criarBarraDeBuscaAction($rota){//passando os params para o application/src/form
+     private function criarBarraDeBuscaAction(){//passando os params para o application/src/form
         $cidades  = $this->Localidades()->getCidades("RJ");
         $busca = new form_busca();//1- primeiro eu instancio o formularioarray('selecione'=>'selecione','nome' => 'nome','cidade' => 'cidade')
         $busca->get('cidade')->setAttribute('options',$cidades);
+        $busca->get('bairro')->setAttribute('options', array(0=>'Selecione uma Cidade'));
         //
         $categoriaDao = \Base\Model\daoFactory::factory('SubCategoriaImovel');
         $dadosCategoria = $categoriaDao->recuperarTodos();
@@ -112,7 +131,7 @@ class SiteController extends \Base\Controller\BaseController{
         $transacoes = $this->SelectHelper()->getArrayData("selecione",$dadosTransacoes);
         $busca->get('transacao')->setAttribute('options', $transacoes);
         //
-        $arrayPreco = array(1 => "R$ 100.000 a R$ 200.000",2 => "R$ 200.000 a R$ 300.000", 3 => "R$ 300.000 a R$ 400.000", 4 => "R$ 400.000 a R$ 500.000", 5 => "R$ 500.000 ou mais");
+        $arrayPreco = array(array("value"=>0, "label"=>"selecione", "disabled" => "disabled", "selected" => "selected"),array("value" => 1, "label" => "R$ 100.000 a R$ 200.000"),array("value" => 2, "label" => "R$ 200.000 a R$ 300.000"),array("value" => 3, "label" => "R$ 300.000 a R$ 400.000"),array("value" => 4, "label" => "R$ 400.000 a R$ 500.000"),array("value" => 5, "label" => "acima de R$ 500.000"));
         $busca->get('valor')->setAttribute('options', $arrayPreco);
         return $busca;
     }

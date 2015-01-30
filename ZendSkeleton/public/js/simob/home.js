@@ -89,5 +89,31 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
         });
        
     });
+    
+    content.delegate("#form-busca","submit",function(e){
+        e.preventDefault();
+        var url,cidade,bairro,tipo,transacao,valor;
+        url = $(this).attr("action");
+        cidade = $(".cidade-select").val();
+        bairro = $(".bairro-select").val();
+        tipo = $(".filtro-tipo").val();
+        transacao = $(".filtro-transacao").val();
+        valor = $(".filtro-valor").val();
+        if(bairro == null){
+            bairro = 0;
+        }
+        if(tipo == null){
+            tipo = 0;
+        }
+        if(transacao == null){
+            transacao = 0;
+        }
+        if(valor == null){
+            valor = 0;
+        }
+        $.get(url+"/"+cidade+"/"+bairro+"/"+tipo+"/"+transacao+"/"+valor,function(data){
+        });
+    });
+    
   
 });

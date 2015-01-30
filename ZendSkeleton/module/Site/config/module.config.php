@@ -17,8 +17,11 @@ $rota_frontEnd=array(
                 'route' => '/proximaPagina[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]*',
-                    'param' => '[a-zA-Z0-9_-]+'
+                    'cidade' => '[0-9]+',
+                    'bairro' => '[0-9]+',
+                    'tipo' => '[0-9]+',
+                    'transacao'=>'[0-9]+',
+                    'valor' => '[0-9]+',
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -31,8 +34,11 @@ $rota_frontEnd=array(
                 'route' => '/paginaAnterior[/:pagina][/:filtro][/:param]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'filtro' => '[a-zA-Z]*',
-                    'param' => '[a-zA-Z0-9_-]+'
+                    'cidade' => '[0-9]+',
+                    'bairro' => '[0-9]+',
+                    'tipo' => '[0-9]+',
+                    'transacao'=>'[0-9]+',
+                    'valor' => '[0-9]+',
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
@@ -42,7 +48,14 @@ $rota_frontEnd=array(
         'buscarAnuncio' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/buscarAnuncio',
+                'route' => '/buscarAnuncio[/:cidade][/:bairro][/:subcategoria][/:transacao][/:valor]',
+                'constraints' => array(
+                    'cidade' => '[0-9]+',
+                    'bairro' => '[0-9]+',
+                    'subcategoria' => '[0-9]+',
+                    'transacao'=>'[0-9]+',
+                    'valor' => '[0-9]+',
+                ),
                 'defaults' => array(
                     'action' => 'buscarAnuncio'
                 ),

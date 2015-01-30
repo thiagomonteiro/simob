@@ -81,41 +81,47 @@ class BairroController extends \Base\Controller\BaseController {
     
     
     public function proximaPaginaAction(){
-        //somente requisições ajax        
-        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        if($filtro == null){
-            $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
-        }else{            
-            $bairrosList = $this->BairroDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+        //somente requisições ajax 
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            if($filtro == null){
+                $bairrosList = $this->BairroDao->recuperarTodos($pagina,self::$_qtd_por_pagina);   
+            }else{            
+                $bairrosList = $this->BairroDao->recuperarPorParametro($pagina,self::$_qtd_por_pagina,$filtro,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($bairrosList);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($bairrosList,$pagina,self::$_qtd_por_pagina);
-        $viewModelListar= $this->criarTabelaAction($bairrosList);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function paginaAnteriorAction(){
         //somente requisições ajax
-        $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
-        $param = $this->getEvent()->getRouteMatch()->getParam('param');   
-        $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-        if($filtro == null){
-            $bairrosList = $this->BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        }else{
-            $bairrosList = $this->BairroDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $filtro = $this->getEvent()->getRouteMatch()->getParam('filtro');
+            $param = $this->getEvent()->getRouteMatch()->getParam('param');   
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            if($filtro == null){
+                $bairrosList = $this->BairroDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            }else{
+                $bairrosList = $this->BairroDao->recuperarPorParametro($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$filtro,$param);
+            }
+            $paginacao = $this->paginador->paginarDados($bairrosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($bairrosList);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $paginacao = $this->paginador->paginarDados($bairrosList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-        $viewModelListar= $this->criarTabelaAction($bairrosList);
-        $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-        $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
-        $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
-        $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function criarBairroAction(){
@@ -147,15 +153,18 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function alterarBairroAction(){
-        $form = $this->formAlterarBairroAction();
-        $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
-        $data = array('success' => true,'html'=>$viewModel);
-        return $this->getResponse()->setContent(Json_encode($data));     
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $form = $this->formAlterarBairroAction();
+            $viewModel = $this->getServiceLocator()->get('ViewRenderer')->render($form);
+            $data = array('success' => true,'html'=>$viewModel);
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
     }
     
     public function salvarAlteracoesAction(){        
         $request = $this->getRequest();
-        if($request->isPost()){
+        if($request->isXmlHttpRequest()){
             $dados = (array)$request->getPost();
             $validador = new criar_bairro_filter();
             $inputFilter = $validador->getInputFilter();
@@ -182,55 +191,64 @@ class BairroController extends \Base\Controller\BaseController {
     }
     
     public function deletarBairroAction(){
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $response = $this->BairroDao->remover($id);
-        if($response == "ok"){
-            $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
-        }else{
-            $data = array('success' => false,'menssagem' => $response);
-        }                 
-        return $this->getResponse()->setContent(Json_encode($data));
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $response = $this->BairroDao->remover($id);
+            if($response == "ok"){
+                $data = array('success' => true,'menssagem'=>'Registro removido com sucesso');
+            }else{
+                $data = array('success' => false,'menssagem' => $response);
+            }                 
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
     }
     
     public function getCidadesAction(){//funçao que preenche o select-box de cidades        
-        $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
-        $estadoDAO = \Base\Model\daoFactory::factory('Estado');
-        $estado = $estadoDAO->recuperarPorUf($uf);
-        $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
-        $cidades = $cidadeDAO->recuperarPorEstado($estado);
-        $selectCidades = '<select name="cidade" class="cidade-select">';
-        $selectCidades.='<option selected="selected" disabled="disabled" value="0" >Selecione uma Cidade</option>';
-        if(count($cidades)>1){
-            foreach ($cidades as $row){
-                $selectCidades.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $uf = $this->getEvent()->getRouteMatch()->getParam('uf');
+            $estadoDAO = \Base\Model\daoFactory::factory('Estado');
+            $estado = $estadoDAO->recuperarPorUf($uf);
+            $cidadeDAO = \Base\Model\daoFactory::factory('Cidade');
+            $cidades = $cidadeDAO->recuperarPorEstado($estado);
+            $selectCidades = '<select name="cidade" class="cidade-select">';
+            $selectCidades.='<option selected="selected" disabled="disabled" value="0" >Selecione uma Cidade</option>';
+            if(count($cidades)>1){
+                foreach ($cidades as $row){
+                    $selectCidades.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
+                }
+            }else{
+                $selectCidades.='<option value="'.$cidades->getId().'">'.  $cidades->getNome().'</option>';
             }
-        }else{
-            $selectCidades.='<option value="'.$cidades->getId().'">'.  $cidades->getNome().'</option>';
+            $selectCidades.='</select>'; 
+            $data = array('success' => true,'cidades' => $selectCidades);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        $selectCidades.='</select>'; 
-        $data = array('success' => true,'cidades' => $selectCidades);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     public function getBairrosAction(){
-        $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
-        $bairros = $this->BairroDao->recuperarPorParametro(null,null,'cidade',$cidade);
-        if(empty($bairros)){
-           $selectBairros = '<select name="bairro" class="bairro-select"><option disabled = "disabled">Nenhum bairro cadastrado</option></select>'; 
-        }else{
-            $selectBairros = '<select name="bairro" class="bairro-select">';
-            if(count($bairros)>1){
-                foreach ($bairros as $row){
-                    $selectBairros.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
-                }
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
+            $bairros = $this->BairroDao->recuperarPorParametro(null,null,'cidade',$cidade);
+            if(empty($bairros)){
+               $selectBairros = '<select name="bairro" class="bairro-select"><option disabled = "disabled">Nenhum bairro cadastrado</option></select>'; 
             }else{
-                $selectBairros.='<option value="'.$bairros[0]->getId().'">'.  $bairros[0]->getNome().'</option>';
+                $selectBairros = '<select name="bairro" class="bairro-select"><option disabled = "disabled" selected = "selected">Selecione um bairro</option>';
+                if(count($bairros)>1){
+                    foreach ($bairros as $row){
+                        $selectBairros.='<option value="'.$row->getId().'">'.  $row->getNome().'</option>';
+                    }
+                }else{
+                    $selectBairros.='<option value="'.$bairros[0]->getId().'">'.  $bairros[0]->getNome().'</option>';
+                }
+                $selectBairros.='</select>'; 
             }
-            $selectBairros.='</select>'; 
+
+             $data = array('success' => true,'bairros' => $selectBairros);
+            return $this->getResponse()->setContent(Json_encode($data));
         }
-        
-         $data = array('success' => true,'bairros' => $selectBairros);
-        return $this->getResponse()->setContent(Json_encode($data));
     }
     
     
