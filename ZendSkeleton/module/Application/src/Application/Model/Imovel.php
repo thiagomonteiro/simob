@@ -184,6 +184,14 @@ class Imovel extends \Base\Model\AbstractModel {
        if($transacao != null && $transacao != 0){
            $where.=" AND TipoTransacao.id = ".$transacao;
        }
+       if($preco != null && $preco != 0){
+           if($preco != 5){
+               $valores = array(1 => 100000, 2 => 200000, 3 => 300000, 4 => 400000);
+               $where.=" AND valor_transacao >= '".$valores[$preco]."' AND valor_transacao < '".($valores[$preco] + 100000) ."'";
+           }else{
+               $where.=" AND valor_transacao >= '". 500000 ."'";
+           }  
+       }
        $adapter = $this->getAdapter();
        $sql = "SELECT Imovel.id AS imovel_id, Imovel.descricao AS imovel_descricao, Imovel.valor_transacao as imovel_valor,".
        " Bairro.id AS bairro_id, Bairro.nome as bairro_nome,".
