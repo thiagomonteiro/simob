@@ -35,11 +35,28 @@ class busca extends Form{
         $submit = new \Zend\Form\Element\Submit('enviar');
         $submit->setAttributes(array('value'=>'buscar','id'=>'busca-submit'));
         $this->setAttributes(array('class' => 'formulario', 'id' => 'form-busca'));
+        //atributos ocultos
+        $cidade_hidden = new \Zend\Form\Element\Hidden('cidade-hidden');
+        $cidade_hidden->setAttribute('class', 'cidade-hidden');
+        $bairro_hidden = new \Zend\Form\Element\Hidden('bairro-hidden');
+        $bairro_hidden->setAttribute('class', 'bairro-hidden');
+        $tipo_hidden = new \Zend\Form\Element\Hidden('tipo-hidden');
+        $tipo_hidden->setAttribute('class', 'tipo-hidden');
+        $finalidade_hidden = new \Zend\Form\Element\Hidden('tansacao-hidden');
+        $finalidade_hidden->setAttribute('class', 'transacao-hidden');
+        $valor_hidden = new \Zend\Form\Element\Hidden('valor-hidden');
+        $valor_hidden->setAttribute('class', 'valor-hidden');
+        //adicionando elementos
         $this->add($cidade);
+        $this->add($cidade_hidden);
         $this->add($bairro);
+        $this->add($bairro_hidden);
         $this->add($tipo);
+        $this->add($tipo_hidden);
         $this->add($finalidade);
+        $this->add($finalidade_hidden);
         $this->add($valor);
+        $this->add($valor_hidden);
         $this->add($submit);
     }
 }

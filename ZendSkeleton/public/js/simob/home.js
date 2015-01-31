@@ -39,16 +39,30 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
 
  content.delegate(".proxima-pagina","click",function(e){
       e.preventDefault();
-      var url,pagina,filtro,param;
+      var url,pagina,cidade,bairro,tipo,transacao,valor;
       var url = $(this).attr('url');
       var pagina = $(this).attr('data-proxima');
-      var filtro =  null;
-      var param = null;
-      if ( $("#filtro").length ){
-          filtro = $("#filtro").val();
-          param =$("#param").val();
-      }
-      $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){
+      cidade = $(".cidade-hidden").val();
+      bairro = $(".bairro-hidden").val();
+      tipo = $(".tipo-hidden").val();
+      transacao = $(".transacao-hidden").val();
+      valor = $(".valor-hidden").val();
+        if(cidade == ""){
+            cidade = 0;
+        }
+        if(bairro == ""){
+            bairro = 0;
+        }
+        if(tipo == ""){
+            tipo = 0;
+        }
+        if(transacao == ""){
+            transacao = 0;
+        }
+        if(valor == ""){
+            valor = 0;
+        }
+      $.get(url+'/'+pagina+'/'+cidade+'/'+bairro+'/'+tipo+'/'+transacao+'/'+valor, function(data){
             var res = jQuery.parseJSON(data);
             if(res.success == true){
                 $("#div-anuncios").replaceWith(res.html);                
@@ -60,16 +74,30 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
  
   content.delegate(".pagina-anterior","click",function(e){
       e.preventDefault();
-      var url,pagina,filtro,param;
+      var url,pagina,cidade,bairro,tipo,transacao,valor;
       var url = $(this).attr('url');
       var pagina = $(this).attr('data-anterior');
-      var filtro =  null;
-      var param = null;
-      if ( $("#filtro").length ){
-          filtro = $("#filtro").val();
-          param =$("#param").val();
-      }
-      $.get(url+'/'+pagina+'/'+filtro+'/'+param, function(data){          
+      cidade = $(".cidade-hidden").val();
+      bairro = $(".bairro-hidden").val();
+      tipo = $(".tipo-hidden").val();
+      transacao = $(".transacao-hidden").val();
+      valor = $(".valor-hidden").val();
+        if(cidade == ""){
+            cidade = 0;
+        }
+        if(bairro == ""){
+            bairro = 0;
+        }
+        if(tipo == ""){
+            tipo = 0;
+        }
+        if(transacao == ""){
+            transacao = 0;
+        }
+        if(valor == ""){
+            valor = 0;
+        }
+      $.get(url+'/'+pagina+'/'+cidade+'/'+bairro+'/'+tipo+'/'+transacao+'/'+valor, function(data){
             var res = jQuery.parseJSON(data);
             if(res.success == true){
                 $("#div-anuncios").replaceWith(res.html);                
@@ -95,10 +123,18 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
         var url,cidade,bairro,tipo,transacao,valor;
         url = $(this).attr("action");
         cidade = $(".cidade-select").val();
+        $(".cidade-hidden").val(cidade);
         bairro = $(".bairro-select").val();
+        $(".bairro-hidden").val(bairro);
         tipo = $(".filtro-tipo").val();
+        $(".tipo-hidden").val(tipo);
         transacao = $(".filtro-transacao").val();
+        $(".transacao-hidden").val(transacao);
         valor = $(".filtro-valor").val();
+        $(".valor-hidden").val(valor);
+        if(cidade == null){
+            cidade = 0;
+        }
         if(bairro == null){
             bairro = 0;
         }
@@ -112,6 +148,11 @@ content.delegate(".anuncio","mouseenter mouseleave",function(e){
             valor = 0;
         }
         $.get(url+"/"+cidade+"/"+bairro+"/"+tipo+"/"+transacao+"/"+valor,function(data){
+            var res = jQuery.parseJSON(data);
+            if(res.success == true){
+                $("#div-anuncios").replaceWith(res.html);                
+                $("#barra-paginacao").replaceWith(res.barrapaginacao);
+            }
         });
     });
     

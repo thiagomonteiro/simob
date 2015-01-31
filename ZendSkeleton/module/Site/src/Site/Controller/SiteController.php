@@ -50,31 +50,39 @@ class SiteController extends \Base\Controller\BaseController{
        $request = $this->getRequest();
        if($request->isXmlHttpRequest()){
             $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-            /*if($filtro == 'null'){*/
-                 $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina); 
-             /*}else{
-                 $param = $this->getEvent()->getRouteMatch()->getParam('param');
-                 $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina,$filtro,$param);
-             }*/
-             $paginacao = $this->paginador->paginarDados($result,$pagina,  self::$_qtd_por_pagina);
-             $viewModelListar= $this->criarListAction($result);
-             $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
-             $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
-             $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
-             $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
-             return $this->getResponse()->setContent(Json_encode($data));
+            $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
+            $bairro = $this->getEvent()->getRouteMatch()->getParam('bairro');
+            $categoria = $this->getEvent()->getRouteMatch()->getParam('subcategoria');
+            $transacao = $this->getEvent()->getRouteMatch()->getParam('transacao');
+            $valor = $this->getEvent()->getRouteMatch()->getParam('valor');
+            if($cidade != '0' || $bairro != '0' || $categoria != '0' || $transacao != '0' || $valor != '0'){
+                $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina,$cidade,$bairro,$categoria,$transacao,$valor); 
+            }else{
+               $result = $this->_imovelDao->recuperarAnuncios($pagina,self::$_qtd_por_pagina); 
+            }
+            $paginacao = $this->paginador->paginarDados($result,$pagina,  self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarListAction($result);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar); 
+            $data = array("success" => true,"html" => $html,"barrapaginacao" => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
        }
     }
     public function paginaAnteriorAction(){
        $request = $this->getRequest();
        if($request->isXmlHttpRequest()){
             $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
-            //if($filtro == 'null'){
-                 $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina); 
-             /*}else{
-                 $param = $this->getEvent()->getRouteMatch()->getParam('param');
-                 $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
-             }*/
+            $cidade = $this->getEvent()->getRouteMatch()->getParam('cidade');
+            $bairro = $this->getEvent()->getRouteMatch()->getParam('bairro');
+            $categoria = $this->getEvent()->getRouteMatch()->getParam('subcategoria');
+            $transacao = $this->getEvent()->getRouteMatch()->getParam('transacao');
+            $valor = $this->getEvent()->getRouteMatch()->getParam('valor');
+            if($cidade != '0' || $bairro != '0' || $categoria != '0' || $transacao != '0' || $valor != '0'){
+                $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina,$cidade,$bairro,$categoria,$transacao,$valor); 
+            }else{
+                $result = $this->_imovelDao->recuperarAnuncios($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina); 
+            }
              $paginacao = $this->paginador->paginarDados($result,$pagina - (self::$_qtd_por_pagina - 1),  self::$_qtd_por_pagina);
              $viewModelListar= $this->criarListAction($result);
              $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
@@ -93,12 +101,13 @@ class SiteController extends \Base\Controller\BaseController{
             $categoria = $this->getEvent()->getRouteMatch()->getParam('subcategoria');
             $transacao = $this->getEvent()->getRouteMatch()->getParam('transacao');
             $valor = $this->getEvent()->getRouteMatch()->getParam('valor');
-            $result = $this->_imovelDao->recuperarAnuncios(null,  self::$_qtd_por_pagina,$cidade,$bairro,$categoria,$transacao,$valor);
-            print_r($result);
+            $result = $this->_imovelDao->recuperarAnuncios(null,  self::$_qtd_por_pagina,$cidade,$bairro,$categoria,$transacao,$valor);           
             $paginacao = $this->paginador->paginarDados($result,null,  self::$_qtd_por_pagina);
-            $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);  
-            $partialListarAnuncios = $this->criarListAction($result);
-            $data = array("success" => true);
+            $viewModelListar = $this->criarListAction($result);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar = $this->criarBarraPaginacaoAction($paginacao);  
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array("success" => true, "html" => $html, "barrapaginacao" => $barraPaginacao);
             return $this->getResponse()->setContent(Json_encode($data));
         }
     }

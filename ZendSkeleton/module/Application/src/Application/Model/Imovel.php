@@ -172,7 +172,7 @@ class Imovel extends \Base\Model\AbstractModel {
             $qtd=  self::$_qtd_por_pagina;//5
         }
        $where = " WHERE(Midia.capa = 1 AND ImovelStatus.status = ". \Application\Entity\TipoStatus::ATIVO;
-       if($cidade != null){
+       if($cidade != null && $cidade != 0){
            $where.=" AND cidade.id = ".$cidade;
        }
        if($bairro != null && $bairro != 0){
