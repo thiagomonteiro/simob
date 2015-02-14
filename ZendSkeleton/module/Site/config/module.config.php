@@ -61,6 +61,18 @@ $rota_frontEnd=array(
                 ),
             ),
         ),
+        'detalhar' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/detalhar[/:id]',
+                'constraints' => array(
+                    'id' => '[0-9]+',
+                ),
+                'defaults' => array(
+                    'action' => 'detalhar'
+                ),
+            ),
+        ),
     ),
 );
             
@@ -89,8 +101,9 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/site/layout/layout.phtml',
-            'site/site/index' => __DIR__ . '/../view/site/index/index.phtml',
+            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+            'site/site/detalhar' => __DIR__ . '/../view/site/detalhar.phtml',
+            'site/site/index' => __DIR__ . '/../view/site/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),

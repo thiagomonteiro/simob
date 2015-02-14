@@ -135,6 +135,18 @@ aside > div > ul > li > a > img{
     width: 80%;
 }
 
+.anuncio > a{
+    text-decoration: none;
+    color: black;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active{
+    color: black;
+}
+
 .anuncio > li{
     margin-top: 20px;
     margin-right: 20px;

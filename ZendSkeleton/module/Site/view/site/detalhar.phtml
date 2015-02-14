@@ -1,0 +1,33 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+?>
+<div>
+    <div class="jcarousel">
+        <ul>
+            <?php foreach($midias as $row):?>
+                <li><img src="<?php echo $row->getUrl(); ?>"></li>
+            <?php endforeach; ?>  
+        </ul>
+    </div>
+    <!-- Pagination -->
+    <div class="jcarousel-pagination">
+        <!-- Pagination items will be generated in here -->
+    </div>
+</div>
+<div>
+    <ul>
+        <?php
+            echo '<li>Cidade: '.$imovel->getBairro()->getNome().'</li>';
+            echo '<li>Bairro: '.$imovel->getBairro()->getCidade()->getNome().'</li>';
+            echo '<li>Descrição: '.$imovel->getDescricao().'</li>';
+            echo '<li>Valor: '.$imovel->mascaraValorTransacao().'</li>';
+            echo '<li>Area total: '.$imovel->getAreaTotal().'</li>';
+            echo '<li>Area Construída: '.$imovel->getAreaConstruida().'</li>';
+        ?>
+    </ul>
+</div>

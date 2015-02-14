@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/view/layout/detalharlayout.phtml</file>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/src/Site/Controller/SiteController.php</file>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/config/module.config.php</file>
+            <file>file:/opt/lampp/htdocs/simob/ZendSkeleton/module/Site/view/site/index/partials/listar.phtml</file>
+        </group>
     </open-files>
 </project-private>

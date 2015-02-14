@@ -65,9 +65,9 @@ class Midia extends \Base\Model\AbstractModel {
             return $listaMidia[0];
         }else{
             return $listaMidia;
-        }
-        
+        }   
     }
+      
     
     public function salvar($obj){
         if($obj->isPersistido()){
@@ -213,5 +213,35 @@ class Midia extends \Base\Model\AbstractModel {
         $this->fecharConexao();
         return true;
     }
+    
+    public function recuperarPorImovel($imovel){
+        $adapter = $this->getAdapter();
+        $sql  = "SELECT * FROM Midia WHERE(Midia.imovel =".$imovel->getId().")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();
+        $this->fecharConexao();
+        $midias_list = $this->criarVariosParaGaleria($results,$imovel);
+        return $midias_list;
+    }
+    
+    public function criarNovoParaGaleria($params = null,$imovel = null){      
+        $dados = array('id' => $params['id'], 'nome' => $params['nome'], 'url' => $params['url'], 'capa' => $params['capa'], 'tipo' => $params['tipo']);
+        $this->_ImovelMidia = new MidiaEntity($dados);
+        return $this->_ImovelMidia;
+    }
+    
+    public function criarVariosParaGaleria($results, $imovel = null){
+        $listaMidia = array();
+        foreach ($results as $row){
+            $listaMidia[]= $this->criarNovoParaGaleria($row);
+        }
+        if(count($listaMidia)== 1){
+            return $listaMidia[0];
+        }else{
+            return $listaMidia;
+        }   
+    }
+    
+    
 
 }

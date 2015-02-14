@@ -1,6 +1,7 @@
 <div id="div-anuncios">
 <?php
 foreach ($imoveis_list as $row):?>
+    <a href="<?php echo $this->url("front_end/detalhar",array("id"=>$row->getId())); ?>">
     <ul class="anuncio">
         <li>
             <div>
@@ -13,6 +14,7 @@ foreach ($imoveis_list as $row):?>
             <div class="descricao"><h4>Descrição do imóvel</h4><p><?php echo $row->getImovel()->getDescricao(); ?></p></div>
         </li>
     </ul>
+    </a>
 <?php
 endforeach;
 ?>

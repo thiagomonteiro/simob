@@ -9,7 +9,7 @@ $(document).ready(function(){
     var content = $(document);
     var timeout;
     var descricao;
-
+    
 content.delegate(".anuncio","mouseenter mouseleave",function(e){
          if(e.type=='mouseenter')
         {

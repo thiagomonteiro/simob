@@ -114,7 +114,7 @@ class SiteController extends \Base\Controller\BaseController{
     
      private function criarListAction($anunciosList){
         $lista = new ViewModel(array('imoveis_list'=>$anunciosList));
-        $lista->setTemplate('site/index/partials/listar.phtml');
+        $lista->setTemplate('site/partials/listar.phtml');
         return $lista;
     }
     
@@ -143,6 +143,18 @@ class SiteController extends \Base\Controller\BaseController{
         $arrayPreco = array(array("value"=>0, "label"=>"selecione", "disabled" => "disabled", "selected" => "selected"),array("value" => 1, "label" => "R$ 100.000 a R$ 200.000"),array("value" => 2, "label" => "R$ 200.000 a R$ 300.000"),array("value" => 3, "label" => "R$ 300.000 a R$ 400.000"),array("value" => 4, "label" => "R$ 400.000 a R$ 500.000"),array("value" => 5, "label" => "acima de R$ 500.000"));
         $busca->get('valor')->setAttribute('options', $arrayPreco);
         return $busca;
+    }
+    
+    public function detalharAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $imovel = $this->_imovelDao->recuperar($id);
+        $midiaDao = \Base\Model\daoFactory::factory('Midia');
+        $midias = $midiaDao->recuperarPorImovel($imovel[0]);
+        $event = $this->getEvent();
+        $event->getViewModel()->setTemplate('layout/detalhar');
+        $this->appendJavaScript("simob/detalhar.js");
+        $view = new ViewModel(array('imovel' => $imovel[0], 'midias' => $midias));
+        return $view;
     }
 }
 
