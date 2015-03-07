@@ -28,8 +28,17 @@ class ImovelComodo extends \Base\Model\AbstractModel {
         return $this->_imovelComodo;
     }
     
-    public function criarVarios(){
-        
+    public function criarVarios($results){
+        $comodosArray= array();
+        foreach ($results as $row){
+            $tipoComodo = new \Application\Entity\TipoComodos();
+            $tipoComodo->setDescricao($row['TipoComodos_descricao']);
+            $this->_imovelComodo = new \Application\Entity\ImovelComodo();
+            $this->_imovelComodo->setTipoComodo($tipoComodo);
+            $this->_imovelComodo->setQtd($row['ImovelComodo_qtd']);
+            $comodosArray[]=  $this->_imovelComodo;
+        }
+        return $comodosArray;
     }
 
     public function salvar($arrayObj){
@@ -65,6 +74,16 @@ class ImovelComodo extends \Base\Model\AbstractModel {
 
     protected function remover($obj) {
         
+    }
+    
+    public function recuperarPorImovel($imovel){
+        $adapter = $this->getAdapter();
+        $sql = "SELECT TipoComodos.descricao as TipoComodos_descricao, ImovelComodo.qtd  as ImovelComodo_qtd from TipoComodos INNER JOIN ImovelComodo ON TipoComodos.id = ImovelComodo.comodo WHERE (ImovelComodo.imovel =".$imovel->getId().")";
+        $statement = $adapter->query($sql);
+        $results = $statement->execute();         
+        $this->fecharConexao();
+        $comodos_list = $this->criarVarios($results, null);
+        return $comodos_list;        
     }
 
 }

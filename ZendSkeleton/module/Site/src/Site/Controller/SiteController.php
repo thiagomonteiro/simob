@@ -150,10 +150,12 @@ class SiteController extends \Base\Controller\BaseController{
         $imovel = $this->_imovelDao->recuperar($id);
         $midiaDao = \Base\Model\daoFactory::factory('Midia');
         $midias = $midiaDao->recuperarPorImovel($imovel[0]);
+        $imovelComodoDao = \Base\Model\daoFactory::factory('ImovelComodo');
+        $comodos = $imovelComodoDao->recuperarPorImovel($imovel[0]);
         $event = $this->getEvent();
         $event->getViewModel()->setTemplate('layout/detalhar');
         $this->appendJavaScript("simob/detalhar.js");
-        $view = new ViewModel(array('imovel' => $imovel[0], 'midias' => $midias));
+        $view = new ViewModel(array('imovel' => $imovel[0], 'midias' => $midias, 'comodos' => $comodos));
         return $view;
     }
 }

@@ -6,28 +6,59 @@
  * and open the template in the editor.
  */
 ?>
-<div>
-    <div class="jcarousel">
-        <ul>
-            <?php foreach($midias as $row):?>
-                <li><img src="<?php echo $row->getUrl(); ?>"></li>
-            <?php endforeach; ?>  
-        </ul>
-    </div>
-    <!-- Pagination -->
-    <div class="jcarousel-pagination">
-        <!-- Pagination items will be generated in here -->
-    </div>
-</div>
-<div>
-    <ul>
-        <?php
-            echo '<li>Cidade: '.$imovel->getBairro()->getNome().'</li>';
-            echo '<li>Bairro: '.$imovel->getBairro()->getCidade()->getNome().'</li>';
-            echo '<li>Descrição: '.$imovel->getDescricao().'</li>';
-            echo '<li>Valor: '.$imovel->mascaraValorTransacao().'</li>';
-            echo '<li>Area total: '.$imovel->getAreaTotal().'</li>';
-            echo '<li>Area Construída: '.$imovel->getAreaConstruida().'</li>';
-        ?>
-    </ul>
-</div>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+            <link type="text/css" href="/css/galeria/right.css" rel="stylesheet" />
+            <script type="text/javascript" src="/js/galeria/jquery.js"></script>
+            <script type="text/javascript" src="/js/galeria/jquery.jcarousel.min.js"></script>
+            <script type="text/javascript" src="/js/galeria/jquery.pikachoose.min.js"></script>
+            <script type="text/javascript" src="/js/galeria/jquery.touchwipe.min.js"></script>
+            <script language="javascript">
+            $(document).ready(
+		function (){
+			$("#pikame").PikaChoose({carousel:true, carouselVertical:true});
+			});
+	    </script>
+
+		
+</head>
+    <body>
+            
+        
+        
+            <div class="pikachoose">
+            <ul id="pikame" class="jcarousel-skin-pika">
+                    <?php foreach($midias as $row):?>
+                        <li><a href="#"><image src="<?php echo $row->getUrl(); ?>"></a><span></span></li>
+                    <?php endforeach; ?>  
+            </ul>
+            </div>                 
+        
+            <div>
+                <ul class="informacoes">
+                    <?php
+                        echo '<li class="destaque">'.$imovel->mascaraValorTransacao().'</li>';
+                        echo '<li>Cidade: '.$imovel->getBairro()->getCidade()->getNome().'</li>';
+                        echo '<li>Bairro: '.$imovel->getBairro()->getNome().'</li>';
+                        echo '<li>Rua: '.$imovel->getRua().'</li>';
+                        echo '<li>Area total: '.$imovel->getAreaTotal().'</li>';
+                        echo '<li>Area Construída: '.$imovel->getAreaConstruida().'</li>';
+                    ?>
+                </ul>
+                
+                <?php echo '<div class="desc"><div>Descrição</div>'.$imovel->getDescricao().'</div>';?>
+                
+                <ul class="comodos">
+                    <label>Comodos</label>
+                    <?php 
+                        foreach ($comodos as $row){
+                            echo "<li>".$row->getTipoComodo()->getDescricao().": ".$row->getQtd()."</li>";
+                        }
+                    ?>
+                </ul>
+            </div>
+    </body>
+</html>

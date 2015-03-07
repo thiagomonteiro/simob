@@ -130,7 +130,7 @@ class Imovel extends \Base\Model\AbstractModel {
         "Proprietario.id as proprietario_id, Proprietario.nome as proprietario_nome, Proprietario.logradouro as logradouro,".
         "Proprietario.numero as numero, Proprietario.telefone as telefone, Proprietario.celular as celular,".
         "Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao".
-        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id WHERE(Imovel.id=".$id.")";
+        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id WHERE(Imovel.id=".$id.")";        
         $statement = $adapter->query($sql);
         $results = $statement->execute();        
         $imovel_list = $this->criarVariosFromSql($results);

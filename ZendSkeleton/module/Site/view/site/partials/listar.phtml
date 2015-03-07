@@ -1,15 +1,15 @@
 <div id="div-anuncios">
 <?php
 foreach ($imoveis_list as $row):?>
-    <a href="<?php echo $this->url("front_end/detalhar",array("id"=>$row->getId())); ?>">
+    <a href="<?php echo $this->url("front_end/detalhar",array("id"=>$row->getImovel()->getId())); ?>">
     <ul class="anuncio">
         <li>
             <div>
             <img src="<?php echo $row->getUrl(); ?>"> 
             </div>
+            <span><label>valor:<?php echo $row->getImovel()->mascaraValorTransacao();?></label></span>
             <span><label>cidade:<?php echo $row->getImovel()->getBairro()->getCidade()->getNome();?></label></span>
             <span><label>bairro:<?php echo $row->getImovel()->getBairro()->getNome(); ?></label></span>
-            <span><label>valor:<?php echo $row->getImovel()->mascaraValorTransacao();?></label></span>
             <span><?php echo $row->getImovel()->getTipoTransacao()->getDescricao(); ?></span>
             <div class="descricao"><h4>Descrição do imóvel</h4><p><?php echo $row->getImovel()->getDescricao(); ?></p></div>
         </li>
