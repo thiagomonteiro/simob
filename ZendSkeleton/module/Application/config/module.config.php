@@ -34,7 +34,7 @@ $rota_adm_home = array(
 ); 
 
 
-$rota_home = array(
+/*$rota_home = array(
     'type' => 'Zend\Mvc\Router\Http\Literal',
     'options' => array(
         'route'    => '/',
@@ -43,7 +43,7 @@ $rota_home = array(
             'action'     => 'index',
         ),
     ),
-); 
+);*/ 
 
 
 
@@ -564,7 +564,7 @@ return array(
         'routes' => array(
             'login_admin' => $rota_login,
             'home_admin'    =>  $rota_adm_home,
-            'home'  => $rota_home,
+            //'home'  => $rota_home,
             'crud_bairro'  => $rota_bairro,
             'crud_comodo' => $rota_comodo,//esta funcional mas nao sera implementado por enquanto
             'get_cidades' =>    $rota_get_cidade,

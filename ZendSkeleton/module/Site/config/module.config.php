@@ -1,6 +1,16 @@
 <?php
 
-$rota_frontEnd=array(
+// essa rota 1 é utilizada para redirecionar para www.lagosbyte.com.br
+$rota_1= array('type'    => 'segment',
+    'options' => array(
+        'route'    => '/',
+        'defaults' => array(
+            'controller' => 'Site\Controller\Site',// localizaçao do controlher
+            'action'     => 'index',//action da rota
+        ),
+    ));
+
+$rota_frontEnd=array( // essa é utilizada para redirecionara para www.lagosbyte.com.br/site
     'type'    => 'segment',
     'options' => array(
         'route'    => '/site',
@@ -84,6 +94,7 @@ return array(
     'router' => array(
         'routes' => array(
             'front_end' => $rota_frontEnd,
+            'rota_1' => $rota_1,
         ),
     ),
     
