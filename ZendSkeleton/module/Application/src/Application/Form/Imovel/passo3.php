@@ -27,8 +27,13 @@ class passo3 extends Form{
         $imgButton->setAttributes(
                 array('class' => 'upload-button','src' => "/img/add_foto.png")
                 );
+        $concluir = new \Zend\Form\Element\Submit('concluir');
+        $concluir->setAttributes(
+                array('class' => 'concluir-passo3','value' => 'concluir')
+                );
         $this->add($contador);
         $this->add($file);
         $this->add($imgButton);
+        $this->add($concluir);
     }
 }

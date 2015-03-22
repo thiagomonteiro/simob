@@ -90,6 +90,41 @@ $(document).ready(function(){
                 
             });        
 });
+
+$(".concluir-passo3").click(
+        function(e){
+        e.preventDefault();
+        if(!$('.miniatura').length){
+            $("#dialog-mensagem").find('p').html("Para concluir o cadastro do Imovel é necessário adicionar imagens!");
+            $("#dialog-mensagem").dialog({
+                            height: 250,
+                            width:400,
+                            modal: true,
+                            buttons:{
+                                Fechar:function(){
+                                    $("#dialog-mensagem").dialog("close");    
+                                }
+                            }
+                        });
+        }else{
+            if(!$("#capa").children("img").length){
+            $("#dialog-mensagem").find('p').html("Para concluir o cadastro do Imovel é necessário selecionar uma capa");
+            $("#dialog-mensagem").dialog({
+                            height: 250,
+                            width:400,
+                            modal: true,
+                            buttons:{
+                                Fechar:function(){
+                                    $("#dialog-mensagem").dialog("close");    
+                                }
+                            }
+                        });
+            }else{
+                window.location = "index";
+            }
+        }
+});
+
 function replaceAll(string, token, newtoken) {
 	while (string.indexOf(token) != -1) {
  		string = string.replace(token, newtoken);
