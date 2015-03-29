@@ -1,8 +1,25 @@
-<?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+<header>
+    Gerenciamento de Imóveis
+</header>
+<section class="listar">
+    <h4>Imóveis Cadastrados</h4>
+    <?php if($this->haDados):?>
+                <table id="tabela-imoveis" class="default-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Cidade</th>
+                            <th>Valor</th>
+                            <th>Edição</th>
+                        </tr>
+                    </thead>
+                    <?php echo $this->partialListarImoveis; ?>
+                 </table>
+                    <?php echo $this->paginacao; ?>
+    <?php else:?>
+        <h1>Nenhum registro encontrado</h1>
+    <?php endif;?>
+</section>
+<div id="dialog-mensagem" title="Aviso" style="display: none;">
+    <p id="mensagem"></p>
+</div>

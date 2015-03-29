@@ -159,7 +159,7 @@ class Midia extends \Base\Model\AbstractModel {
     }
     
     
-    public function existeCapa($imovel){//verifica se existe alguma capa para o imovel
+   public function existeCapa($imovel){//verifica se existe alguma capa para o imovel
         $adapter = $this->getAdapter();
         $sql = "SELECT * FROM Midia WHERE(imovel='".$imovel->getId()."' AND Midia.capa = '".TRUE."')";
         $statement = $adapter->query($sql);

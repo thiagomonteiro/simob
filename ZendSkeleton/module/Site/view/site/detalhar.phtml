@@ -32,10 +32,23 @@
             <div class="pikachoose">
             <ul id="pikame" class="jcarousel-skin-pika">
                     <?php foreach($midias as $row):?>
-                        <li><a href="#"><image src="<?php echo $row->getUrl(); ?>"></a><span></span></li>
+                        <?php
+                        if($row->getTipo()!= \Application\Entity\TipoMidia::SEM_MIDIA){
+                        ?>
+                            <li><a href="#"><image src="<?php echo $row->getUrl(); ?>"></a><span></span></li>
+                        <?php
+                        }
+                        ?>
                     <?php endforeach; ?>  
             </ul>
-            </div>                 
+            </div>
+        
+            <div class="contatenos">
+                <div>Gostou? Contate-nos.</div>
+                <img src="/img/email.png">
+                <img src="/img/facebook.png">
+                <img src="/img/twitter.png">
+            </div>
         
             <div>
                 <ul class="informacoes">

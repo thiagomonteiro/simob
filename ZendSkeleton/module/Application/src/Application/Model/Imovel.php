@@ -60,6 +60,12 @@ class Imovel extends \Base\Model\AbstractModel {
         $this->_imovelObj->setValorIptu($params['iptu']);
         $this->_imovelObj->setValorTransacao($params['valor_transacao']);
         $bairro = $this->_bairroDao->criarNovo($params);
+        if(array_key_exists('imovel_status', $params)){
+             $status = new \Application\Entity\ImovelStatus();
+             $status->setStatus($params['imovel_status']);
+             $status->setId($params['imovelstatus_id']);
+             $this->_imovelObj->setImovelStatus($status);
+        }
         $this->_imovelObj->setBairro($bairro);
         return $this->_imovelObj;
     }
@@ -129,8 +135,10 @@ class Imovel extends \Base\Model\AbstractModel {
         "CategoriaImovel.id as categoria_id, CategoriaImovel.descricao as categoria_descricao,".
         "Proprietario.id as proprietario_id, Proprietario.nome as proprietario_nome, Proprietario.logradouro as logradouro,".
         "Proprietario.numero as numero, Proprietario.telefone as telefone, Proprietario.celular as celular,".
-        "Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao".
-        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id WHERE(Imovel.id=".$id.")";        
+        "Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao,".
+        "ImovelStatus.status as imovel_status, ImovelStatus.id as imovelstatus_id".
+        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id INNER JOIN ImovelStatus ON Imovel.imovelStatus = ImovelStatus.id".
+        " WHERE(Imovel.id=".$id.")";        
         $statement = $adapter->query($sql);
         $results = $statement->execute();        
         $imovel_list = $this->criarVariosFromSql($results);
@@ -155,8 +163,9 @@ class Imovel extends \Base\Model\AbstractModel {
         "CategoriaImovel.id as categoria_id, CategoriaImovel.descricao as categoria_descricao,".
         "Proprietario.id as proprietario_id, Proprietario.nome as proprietario_nome, Proprietario.logradouro as logradouro,".
         "Proprietario.numero as numero, Proprietario.telefone as telefone, Proprietario.celular as celular,".
-        "Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao".
-        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id".        
+        "Proprietario.cpf as cpf, Proprietario.rg as rg, Proprietario.profissao as profissao,".
+        "ImovelStatus.status as imovel_status, ImovelStatus.id as imovelstatus_id".
+        " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id INNER JOIN ImovelStatus ON Imovel.imovelStatus = ImovelStatus.id".
         " LIMIT ".$de.", ".($qtd+1)."";
         $statement = $adapter->query($sql);
         $results = $statement->execute();        
@@ -214,9 +223,45 @@ class Imovel extends \Base\Model\AbstractModel {
        return $anuncios_list;
     }
     
+    public function ativarInativar($id,$status){
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE ImovelStatus SET status =".$status." WHERE id=".$id;
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute();        
+        return true;
+    }
     
-    protected function remover($obj) {
+    
+    public function remover($id) {
+        $imovel = $this->recuperar($id);
+        $adapter = $this->getAdapter();
         
+        $sql1 = "DELETE FROM ImovelComodo WHERE(imovel =".$imovel[0]->getId().")";
+        $statement1 = $adapter->query($sql1);
+        $results1 = $statement1->execute();
+        
+        $sql2 = "DELETE FROM Midia WHERE(imovel =".$imovel[0]->getId().")";
+        $statement2 = $adapter->query($sql2);
+        $results2 = $statement2->execute();
+        
+        $sql3 = "DELETE FROM Imovel WHERE(id =".$imovel[0]->getId().")";
+        $statement3 = $adapter->query($sql3);
+        $results3 = $statement3->execute();
+        
+        $sql4 = "DELETE FROM ImovelStatus WHERE(id =".$imovel[0]->getImovelStatus()->getId().")";
+        $statement4 = $adapter->query($sql4);
+        $results4 = $statement4->execute();
+        
+    
+        /*
+        //consulta1
+        
+        //consulta2
+        
+        //deletar midias
+        
+        //deletar imovel
+        */
     }
 
 }

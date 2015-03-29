@@ -415,10 +415,9 @@ $rota_imovel = array(
         'proximaPagina' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/proximaPagina[/:pagina][/:param]',
+                'route' => '/proximaPagina[/:pagina]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
                 ),
                 'defaults' => array(
                   'action' => 'proximaPagina',
@@ -428,10 +427,9 @@ $rota_imovel = array(
         'paginaAnterior' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/paginaAnterior[/:pagina][/:param]',
+                'route' => '/paginaAnterior[/:pagina]',
                 'constraints' => array(
                     'pagina' => '[0-9]+',
-                    'param' => '[a-zA-Z]*'
                 ),
                 'defaults' => array(
                   'action' => 'paginaAnterior',
@@ -447,6 +445,30 @@ $rota_imovel = array(
                 ),
             ),
         ),
+         'ativar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/ativar[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'ativar',
+                    ),
+                ),
+            ), 
+         'inativar' => array(
+            'type' => 'segment',
+            'options' => array(
+                    'route' => '/inativar[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'action' => 'inativar',
+                    ),
+                ),
+            ), 
         'deletar' => array(
             'type' => 'segment',
             'options' => array(

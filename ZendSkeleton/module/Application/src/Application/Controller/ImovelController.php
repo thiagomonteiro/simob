@@ -60,9 +60,75 @@ class ImovelController extends \Base\Controller\BaseController{
     
     public function indexAction() {
         $this->setTemplate('layout/admin');
-        $view = new ViewModel();
+        $result = $this->_ImovelDao->recuperarTodos();
+        $paginacao = $this->paginador->paginarDados($result,null,self::$_qtd_por_pagina);        
+        $partialListarImoveis = $this->criarTabelaAction($result);
+        $partialBarraPaginacao = $this->criarBarraPaginacaoAction($paginacao);
+        $view = new ViewModel(array('haDados' => empty($result)? false:true));
+        $this->appendJavaScript('simob/imovelindex.js');
+        $view->addChild($partialListarImoveis ,'partialListarImoveis');
+        $view->addChild($partialBarraPaginacao ,'paginacao');
         return $view;
     }
+    
+    public function proximaPaginaAction(){
+        //somente requisições ajax 
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');           
+            $imoveisList = $this->_ImovelDao->recuperarTodos($pagina,self::$_qtd_por_pagina);
+            $paginacao = $this->paginador->paginarDados($imoveisList,$pagina,self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($imoveisList);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
+    }
+    
+    public function paginaAnteriorAction(){
+        $request = $this->getRequest();
+        if($request->isXmlHttpRequest()){
+            $pagina = $this->getEvent()->getRouteMatch()->getParam('pagina');
+            $imoveisList = $this->_ImovelDao->recuperarTodos($pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            $paginacao = $this->paginador->paginarDados($imoveisList,$pagina - (self::$_qtd_por_pagina - 1),self::$_qtd_por_pagina);
+            $viewModelListar= $this->criarTabelaAction($imoveisList);
+            $html= $this->getServiceLocator()->get('ViewRenderer')->render($viewModelListar);
+            $viewModelPaginar= $this->criarBarraPaginacaoAction($paginacao);
+            $barraPaginacao = $this->getServiceLocator()->get('ViewRenderer')->render($viewModelPaginar);
+            $data = array('success' => true,'html' => $html, 'barrapaginacao' => $barraPaginacao);
+            return $this->getResponse()->setContent(Json_encode($data));
+        }
+    }
+    
+     private function criarTabelaAction($imoveisList){
+        $lista = new ViewModel(array('imoveisList'=>$imoveisList));
+        $lista->setTemplate('application/imovel/partials/listar.phtml');
+        return $lista;
+    }
+    
+    private function criarBarraPaginacaoAction($paginacao){
+        $view = new ViewModel(array('paginacao'=>$paginacao,'rota'=>'crud_imovel'));//na view $rota.'proximaPagina'
+        $view->setTemplate('application/partials/paginacao.phtml');
+        return $view;
+    }
+    
+    public function ativarAction(){
+       $id = $this->getEvent()->getRouteMatch()->getParam('id');
+       $aux = $this->_ImovelDao->ativarInativar($id, \Application\Entity\TipoStatus::ATIVO);
+    }
+    
+    public function inativarAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $aux = $this->_ImovelDao->ativarInativar($id, \Application\Entity\TipoStatus::INATIVO);
+    }
+    
+    public function deletarAction(){
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $this->_ImovelDao->remover($id);
+    }
+    
     public function passo1Action(){
         $request = $this->getRequest();
         if($request->isPost()){

@@ -1,0 +1,22 @@
+<tbody>
+    <?php foreach ($this->imoveisList as $row):?>
+    <tr>
+        <input type="hidden" class="id-bairro" value="<?php  ?>">
+        <td class="id"><?php echo $row->getId();?></td>
+        <td class="cidade"><?php echo $row->getBairro()->getCidade()->getNome();?></td>
+        <td class="valor"><?php echo $row->getValorTransacao();?></td>
+        <td>
+            <button class="alterar-bairro update-default">Alterar</button>
+            <button class="deletar-bairro delete-default">Deletar</button>
+            <?php if($row->getImovelStatus()->getStatus() == \Application\Entity\TipoStatus::ATIVO){?>
+            <button class="inativar" value="<?php echo $row->getImovelStatus()->getId()?>">Inativar</button>
+            <?php
+            }if($row->getImovelStatus()->getStatus() == \Application\Entity\TipoStatus::INATIVO){?>
+                <button class="ativar" value="<?php echo $row->getImovelStatus()->getId()?>">Ativar</button>
+            <?php
+            }
+            ?>
+        </td>
+    </tr>
+    <?php endforeach;?>
+</tbody>
