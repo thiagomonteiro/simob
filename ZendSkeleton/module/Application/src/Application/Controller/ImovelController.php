@@ -23,6 +23,8 @@ use Application\Filter\Imovel\passo3 as filtro_passo3;
 use Application\Form\Imovel\passo2 as form_passo2;
 use Application\Form\Proprietario\busca as form_busca;
 use Application\Form\Imovel\passo3 as form_passo3;
+use Application\Form\Imovel\alterarPasso1 as form_alterar_passo1;
+use Application\Form\Imovel\alterarPasso2 as form_alterar_passo2;
 use ArrayObject;
 
 class ImovelController extends \Base\Controller\BaseController{
@@ -126,7 +128,135 @@ class ImovelController extends \Base\Controller\BaseController{
     
     public function deletarAction(){
         $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $imovel = $this->_ImovelDao->recuperar($id);        
+        $midias = $this->_MidiaDao->recuperarPorImovel($imovel[0]);
+        $this->_MidiaDao->removerVarias($midias);
         $this->_ImovelDao->remover($id);
+    }
+    
+    public function alterarPasso1Action(){
+        $request = $this->getRequest();
+        $id = $this->getEvent()->getRouteMatch()->getParam('id');
+        $imovel = $this->_ImovelDao->recuperar($id);
+        if($request->isPost()){
+            $params = $request->getPost()->toArray();            
+            $form = $this->formAlterarPasso1Action($params,$imovel[0]); 
+            $Filter = new filtro_passo1();
+            $form->setData($params);
+            $form->setInputFilter($Filter->getInputFilter());
+            if($form->isValid()){                                             
+               $params['bairro'] = $this->_BairroDao->recuperar($params['bairro']);
+               $params['tipoTransacao'] = $this->_TipoTransacaoDao->recuperar($params['tipoTransacao']);
+               $params['subCategoria'] = $this->_SubCategoriaImovelDao->recuperar($params['subCategoria']);
+               $imovelStatus = $this->_ImovelStatusDao->criarNovo();
+               $imovelStatus->setStatus(\Application\Entity\TipoStatus::ATIVO);
+               $params['imovelStatus'] = $imovelStatus;
+               $imovelNew = $this->_ImovelDao->criarNovo($params);
+               $imovelNew->setId($id);
+               $imovelNew->setPersistido(true);
+               $this->SessionHelper()->definirSessao('imovel');
+               $this->SessionHelper()->salvarObjeto('imovel', $imovelNew);
+               $id =$this->_ImovelDao->atualizarPasso1($imovelNew);
+               $this->flashMessenger()->addSuccessMessage('Dados atualizados com sucesso!');
+               $this->redirect()->toRoute('crud_imovel/alterarPasso2');
+            }else{  
+            }
+        }else{
+            $form = $this->formAlterarPasso1Action(array(),$imovel[0]); 
+        }
+         $this->setTemplate('layout/admin');
+         $this->appendJavaScript('simob/imovel.js');
+         $this->appendJavaScript('libs/jquery.maskMoney.min.js');
+         $view = new ViewModel(array('form'   =>  $form, 'id' => $id));
+         return $view;
+    }
+    
+    public function formAlterarPasso1Action($dadosPost=array(),$imovel){
+        //setando uf
+        $dados_uf = $this->Localidades()->getEstados();        
+        unset($dados_uf[0]);
+        $uf =  $imovel->getBairro()->getCidade()->getEstado(); 
+        $dados_uf[$uf->getId()]["selected"]="selected";
+        //uf
+        //setando cidade
+        $cidade = $imovel->getBairro()->getCidade();
+        $dados_cidade = $this->Localidades()->getCidades($uf->getUf());        
+        $dados_cidade[$cidade->getId()]["selected"]="selected";
+        //cidade
+        //setando bairro
+        $bairro = $imovel->getBairro();
+        $dados_bairro = $this->Localidades()->getBairros($cidade);
+        $dados_bairro[$bairro->getId()]["selected"]="selected";
+        //bairro
+        $form = new form_alterar_passo1();//1- primeiro eu instancio o formulario
+        $form->get('uf')->setAttribute('options', $dados_uf);
+        $form->get('cidade')->setAttribute('options', $dados_cidade); 
+        $form->get('bairro')->setAttribute('options', $dados_bairro);
+        $form->get('rua')->setAttribute('value', $imovel->getRua());        
+        $form->get('numero')->setAttribute('value', $imovel->getNumero());
+        $form->get('descricao')->setAttribute('value', $imovel->getDescricao());
+        $form->get('areaTotal')->setAttribute('value', $imovel->getAreaTotal());
+        $form->get('areaConstruida')->setAttribute('value', $imovel->getAreaConstruida());
+        $form->get('valorIptu')->setAttribute('value', $imovel->getValorIptu());
+        
+        $operacoes = $this->_TipoTransacaoDao->recuperarTodos();
+        $dados_select_operacao = $this->SelectHelper()->getArrayDataAlterar($imovel->getTipoTransacao()->getId(),$operacoes); 
+        $form->get('tipoTransacao')->setAttribute('options', $dados_select_operacao);
+
+        $form->get('valorTransacao')->setAttribute('value', $imovel->getValorTransacao());
+        
+        $categorias = $this->_CategoriaImovelDao->recuperarTodos();
+        $dados_select_categoria = $this->SelectHelper()->getArrayDataAlterar($imovel->getSubCategoria()->getCategoria()->getId(),$categorias);
+        $form->get('categoria')->setAttribute('options', $dados_select_categoria);
+        
+        $subCategorias = $this->_SubCategoriaImovelDao->recuperarTodosPorCategoria($imovel->getSubCategoria()->getCategoria()->getId());
+        $dados_select_subCategoria = $this->SelectHelper()->getArrayDataAlterar($imovel->getSubCategoria()->getId(),$subCategorias);               
+        $form->get('subCategoria')->setAttribute('options', $dados_select_subCategoria);
+        return $form;
+    }
+    
+    public function alterarPasso2Action(){
+        $request = $this->getRequest();
+        $this->SessionHelper()->definirSessao('imovel');
+        $imovel_sessao = $this->SessionHelper()->recuperarObjeto('imovel');        
+        $mensagem = $this->flashMessenger()->getSuccessMessages();
+        if(count($mensagem)){
+                $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
+        }
+        if($request->isPost()){
+            $params = $request->getPost()->toArray();            
+            $form = $this->getFormPasso2($params,$imovel_sessao);//passo o objeto imovel para o formulario para que seja verificado se ele e do tipo terreno caso seja nao exibo comodos. 
+            $Filter = new filtro_passo2();
+            $form->setData($params);
+            $form->setInputFilter($Filter->getInputFilter());
+            if($form->isValid()){
+                $proprietarioObj = $this->_ProprietarioDao->recuperar($params['idProprietario']);
+                $imovel_sessao->setProprietario($proprietarioObj);
+                $aux = $this->_ImovelDao->atualizarPasso2($imovel_sessao);
+                $this->SessionHelper()->definirSessao('imovel');//redefinindo a sessao apos salvar o id do imovel
+                $this->SessionHelper()->salvarObjeto('imovel', $imovel_sessao);
+                $this->flashMessenger()->addSuccessMessage('Passo 2 concluído com sucesso! complete o cadastro');
+                $this->redirect()->toRoute('crud_imovel/passo3');
+            }else{/*se nao for valido*/}
+        }else{
+            $form = $this->formAlterarPasso2(array(),$imovel_sessao); 
+        }
+        $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
+        $this->setTemplate('layout/admin');
+        $this->appendJavaScript('simob/imovel.js');
+        $this->appendJavaScript('libs/jquery.maskMoney.min.js');
+        $view = new ViewModel(array('form'   =>  $form, 'id' => $imovel_sessao->getId()));
+        $view->addChild($partialBuscaProprietario , 'buscaProprietario');
+        return $view;
+    }
+    
+    public function formAlterarPasso2($dados_post = array(), $imovel){       
+        $form = new form_alterar_passo2(null, array(), array(),$imovel);
+        return $form;
+    }
+    
+    public function alterarPasso3Action(){
+        
     }
     
     public function passo1Action(){
@@ -169,13 +299,9 @@ class ImovelController extends \Base\Controller\BaseController{
         if(count($mensagem)){
                 $this->layout()->mensagemTopo = $this->criarNotificacao($mensagem,'success','center');
         }
-        $comodos = $this->_TipoComodosDao->getAll();
-        if(empty($comodos)){
-            $this->layout()->mensagemCentro = $this->criarNotificacao("Nenum comodo cadastrado, cadastre novos comodos e tente novamente!", 'info','center');
-        }
         if($request->isPost()){
             $params = $request->getPost()->toArray();            
-            $form = $this->getFormPasso2($params,$comodos,$imovel_sessao);//passo o objeto imovel para o formulario para que seja verificado se ele e do tipo terreno caso seja nao exibo comodos. 
+            $form = $this->getFormPasso2($params,$imovel_sessao);//passo o objeto imovel para o formulario para que seja verificado se ele e do tipo terreno caso seja nao exibo comodos. 
             $Filter = new filtro_passo2();
             $form->setData($params);
             $form->setInputFilter($Filter->getInputFilter());
@@ -189,21 +315,13 @@ class ImovelController extends \Base\Controller\BaseController{
                 $this->SessionHelper()->definirSessao('imovel');//redefinindo a sessao apos salvar o id do imovel
                 $this->SessionHelper()->salvarObjeto('imovel', $imovel_sessao);
                 $listComodos = new ArrayObject();
-                foreach ($comodos as $row){
-                    if(!empty($params['check'.$row->getId()])){
-                        $qtd = $params['qtd'.$row->getId()];
-                        $comodo = $this->_ImovelComodoDao->criarNovo($imovel_sessao , $row, $qtd);
-                        $listComodos->append($comodo);
-                    }   
-                } 
-                $this->_ImovelComodoDao->salvar($listComodos);
                 $this->setCapaDefault();
                 $this->flashMessenger()->addSuccessMessage('Passo 2 concluído com sucesso! complete o cadastro');
                 $this->redirect()->toRoute('crud_imovel/passo3');
             }else{  
             }
         }else{
-            $form = $this->getFormPasso2(array(),$comodos,$imovel_sessao); 
+            $form = $this->getFormPasso2(array(),$imovel_sessao); 
         }
         $partialBuscaProprietario = $this->GetViewBarraDeBuscaProprietario('crud_proprietario/buscar',null);
         $this->setTemplate('layout/admin');
@@ -270,7 +388,7 @@ class ImovelController extends \Base\Controller\BaseController{
                        $aux = move_uploaded_file($row['tmp_name'],$dir.$new_name);
                        $image = $this->SimpleImage();
                        $image->load($dir.$new_name); 
-                       $image->resize(400,400);
+                       $image->resize(600,600);
                        $image->save($dir.$new_name); 
                        $midiaObj = $this->_MidiaDao->criarNovo();
                        $midiaObj->setTipo(1);
@@ -411,8 +529,8 @@ class ImovelController extends \Base\Controller\BaseController{
         return $form;
     }
     
-    public function getFormPasso2($dados_post = array(), $comodos, $imovel){       
-        $form = new form_passo2(null, array(), array(), $comodos,$imovel);
+    public function getFormPasso2($dados_post = array(), $imovel){       
+        $form = new form_passo2(null, array(), array(),$imovel);
         return $form;
     }
     

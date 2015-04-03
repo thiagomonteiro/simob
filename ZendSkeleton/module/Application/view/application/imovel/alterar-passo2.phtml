@@ -1,0 +1,33 @@
+<header>
+    Alterar Imóvel Passo2
+</header>
+<section class="alterar">
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('crud_imovel/alterarPasso2',array('id' => $this->id)));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+    ?>
+    <div id="caixa-busca" style="display: none;">
+        <?php
+            echo $this->buscaProprietario;// form de busca proprietario
+        ?>
+        <table id="tabela-proprietarios" class="default-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cpf</th>
+                    <th>Edição</th>
+                </tr>
+            </thead>
+            <tbody>
+                <h5>Entre com dados de busca</h5>
+            </tbody>
+        </table>
+    </div>
+    <div id="dialog-mensagem" title="Aviso" style="display: none;">
+    <p id="mensagem"></p>
+    </div> 
+</section>

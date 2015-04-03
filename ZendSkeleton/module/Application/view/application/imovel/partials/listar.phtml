@@ -6,8 +6,8 @@
         <td class="cidade"><?php echo $row->getBairro()->getCidade()->getNome();?></td>
         <td class="valor"><?php echo $row->getValorTransacao();?></td>
         <td>
-            <button class="alterar-bairro update-default">Alterar</button>
-            <button class="deletar-bairro delete-default">Deletar</button>
+            <button class="alterar-imovel update-default">Alterar</button>
+            <button class="deletar-imovel delete-default">Deletar</button>
             <?php if($row->getImovelStatus()->getStatus() == \Application\Entity\TipoStatus::ATIVO){?>
             <button class="inativar" value="<?php echo $row->getImovelStatus()->getId()?>">Inativar</button>
             <?php

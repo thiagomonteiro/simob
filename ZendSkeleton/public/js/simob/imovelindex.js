@@ -3,7 +3,6 @@ $(document).ready(function() {
     /*****************************paginação***************************************/
     
     var content = $(document);//o metodo live foi descontinuado
-    
     content.delegate(".proxima-pagina","click",function(){
         var url = $(this).attr('url');
         var pagina = $(this).attr('data-proxima');
@@ -49,14 +48,33 @@ $(document).ready(function() {
         });
     });
     
-    content.delegate(".delete-default","click",function(){
+    content.delegate(".deletar-imovel","click",function(){
+        var linha = $(this).closest('tr');
         var id = $(this).closest('tr').find(".id").text();
         $.post('/imovel/deletar/'+id,function(data){
+            $(linha).remove();
         });
     });
+    
+    
+    content.delegate(".alterar-imovel","click",function(){
+        $(this).closest('tr').addClass('tr-edit');        
+        var id = $(this).closest('tr').find(".id").text();
+        window.location.href = "alterarPasso1/"+id;
+    });
+    
+    $("#passo1-update")
+    
+    
+    
+    
     
     /*      fim de botoes           */
     
     });
 
 
+function mascarar(){
+  $(".preco").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: false});
+  $(".iptu").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: false});
+}

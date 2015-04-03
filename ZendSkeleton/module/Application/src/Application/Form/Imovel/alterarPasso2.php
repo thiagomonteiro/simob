@@ -13,7 +13,7 @@ use Zend\Form\Form;
  *
  * @author administrador
  */
-class passo2 extends Form{
+class alterarPasso2 extends Form{
     public function __construct($name = null, $options = array(),$dados = array(), \Application\Entity\Imovel $imovel=null) {
         parent::__construct($name, $options);
         $this->setAttributes(array('class' => 'formulario2', 'id' => 'form-passo2'));

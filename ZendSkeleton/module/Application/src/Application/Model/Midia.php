@@ -99,7 +99,7 @@ class Midia extends \Base\Model\AbstractModel {
     public function recuperar($id) {
         $adapter = $this->getAdapter();
         $sql = "SELECT Midia.id as midia_id, Midia.url as midia_url, Midia.capa as midia_capa, Midia.nome as midia_nome, Midia.tipo as midia_tipo,".
-        "Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as numero,".
+        "Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as imovel_numero,".
         "Imovel.area_total as area_total, Imovel.area_construida as area_construida,Imovel.valor_iptu as iptu,".
         "Imovel.valor_transacao as valor_transacao, Imovel.descricao as descricao, Bairro.id as bairro_id,".
         "Bairro.nome as bairro_nome, cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
@@ -128,7 +128,7 @@ class Midia extends \Base\Model\AbstractModel {
         }
         $adapter = $this->getAdapter();
         $sql = "SELECT Midia.id as midia_id, Midia.url as midia_url, Midia.capa as midia_capa, Midia.nome as midia_nome, Midia.tipo as midia_tipo,".
-        "Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as numero,".
+        "Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as imovel_numero,".
         "Imovel.area_total as area_total, Imovel.area_construida as area_construida,Imovel.valor_iptu as iptu,".
         "Imovel.valor_transacao as valor_transacao, Imovel.descricao as descricao, Bairro.id as bairro_id,".
         "Bairro.nome as bairro_nome, cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
@@ -190,6 +190,12 @@ class Midia extends \Base\Model\AbstractModel {
            $statement = $adapter->createStatement($sql);
            $results = $statement->execute();
        }
+    }
+    
+    public function removerVarias($imagens){
+        for($i=1;$i < count($imagens); $i++){//a imagem[0] representa o no image que é comum de todos por isso nao pode ser apagada
+            unlink($_SERVER['DOCUMENT_ROOT'].'/'.$imagens[$i]->getUrl());            
+        }
     }
     
     public function salvarCapa($id){

@@ -12,12 +12,22 @@ class SelectHelper extends AbstractPlugin{
     
     public function getArrayData($default,$dados){
         $select = array();
-        $select[] =  array('value' => "",'label' => $default,'disabled' => 'disabled','selected' => 'selected');
+        $select[] =  array('value' => 0,'label' => $default,'disabled' => 'disabled','selected' => 'selected');
         foreach($dados as $row){
             $select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getDescricao());
         }
         return $select;
     }
+    
+    public function getArrayDataAlterar($indice,$dados){
+        $select = array();
+        foreach($dados as $row){
+            $select[$row->getId()] = array('value' => $row->getId(), 'label' => $row->getDescricao());
+        }
+        $select[$indice]['selected']='selected';
+        return $select;
+    }
+    
     
     /*
      * função que cria um select html a partir de um objeto

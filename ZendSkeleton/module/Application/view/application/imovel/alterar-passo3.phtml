@@ -1,0 +1,13 @@
+<header>
+    Alterar Imóvel
+</header>
+<section class="alterar">
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('crud_imovel/alterarPasso1'));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form),
+    $this->formCollection($form),
+    $this->form()->closeTag();
+    ?>
+</section>

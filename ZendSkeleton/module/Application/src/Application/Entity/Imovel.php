@@ -16,7 +16,7 @@ namespace Application\Entity;
 class Imovel extends \Base\Entity\AbstractEntity {
     private $_id;
     private $_bairro;
-    private $_rua;
+    private $_rua;  
     private $_numero;
     private $_areaTotal;
     private $_areaConstruida;
@@ -52,7 +52,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     public function getRua(){
         return utf8_decode($this->_rua);
     }
-    
+     
     public function setNumero($numero){
         $this->_numero = $numero;
     }
@@ -78,6 +78,7 @@ class Imovel extends \Base\Entity\AbstractEntity {
     }
     
     public function setValorIptu($iptu){
+        $iptu = str_replace(".", "", $iptu);
         $this->_valorIptu = $iptu; 
     }
     

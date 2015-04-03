@@ -59,6 +59,7 @@ class Imovel extends \Base\Model\AbstractModel {
         $this->_imovelObj->setAreaConstruida($params['area_construida']);
         $this->_imovelObj->setValorIptu($params['iptu']);
         $this->_imovelObj->setValorTransacao($params['valor_transacao']);
+        $this->_imovelObj->setNumero($params['imovel_numero']);//para nao dar conflito com o numero do proprietario
         $bairro = $this->_bairroDao->criarNovo($params);
         if(array_key_exists('imovel_status', $params)){
              $status = new \Application\Entity\ImovelStatus();
@@ -66,13 +67,31 @@ class Imovel extends \Base\Model\AbstractModel {
              $status->setId($params['imovelstatus_id']);
              $this->_imovelObj->setImovelStatus($status);
         }
+        if(array_key_exists('tipo_transacao_id', $params)){
+            $tipoTransacao = new \Application\Entity\TipoTransacao();
+            $tipoTransacao->setId($params['tipo_transacao_id']);
+            $tipoTransacao->setDescricao($params['tipo_transacao_descricao']);
+        }
+        if(array_key_exists('categoria_id', $params)){
+         $categoria = new \Application\Entity\CategoriaImovel();
+         $categoria->setId($params['categoria_id']);
+         $categoria->setDescricao($params['categoria_descricao']);
+        }
+        if(array_key_exists('subCategoria_id', $params)){
+            $subCategoria = new \Application\Entity\SubCategoriaImovel();
+            $subCategoria->setId($params['subCategoria_id']);
+            $subCategoria->setDescricao($params['subCategoria_descricao']);
+            $subCategoria->setCategoria($categoria);
+        }
         $this->_imovelObj->setBairro($bairro);
+        $this->_imovelObj->setTipoTransacao($tipoTransacao);
+        $this->_imovelObj->setSubCategoria($subCategoria);
         return $this->_imovelObj;
     }
     
     public function criarVariosFromSql($results){
         $listaImovel = array();        
-        foreach ($results as $row){            
+        foreach ($results as $row){       
             $listaImovel[] = $this->criarNovoFromSql($row);
         }
         return $listaImovel;
@@ -104,9 +123,22 @@ class Imovel extends \Base\Model\AbstractModel {
             return $this->inserir($obj);
         }
     }
+    public function atualizar($obj){        
+    }
     
-    protected function atualizar($obj) {
-        
+     public function atualizarPasso1($obj){        
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE Imovel SET descricao='".$obj->getDescricao()."',rua='".$obj->getRua()."',numero = '".$obj->getNumero()."' , bairro ='".$obj->getBairro()->getId()."',area_total=".$obj->getAreaTotal().",area_construida=".$obj->getAreaConstruida().",valor_iptu='".$obj->getValorIptu()."',valor_transacao='".$obj->getValorTransacao()."',tipo_transacao='".$obj->getTipoTransacao()->getId()."',subCategoria='".$obj->getSubCategoria()->getId()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute(); 
+        return true;
+    }
+    public function atualizarPasso2($obj){        
+        $adapter = $this->getAdapter();
+        $sql =  "UPDATE Imovel SET proprietario='".$obj->getProprietario()->getId()."' WHERE id=".$obj->getId();
+        $statement = $adapter->createStatement($sql);
+        $results = $statement->execute(); 
+        return true;
     }
 
     protected function inserir($obj) {
@@ -125,7 +157,7 @@ class Imovel extends \Base\Model\AbstractModel {
 
     public function recuperar($id) {        
         $adapter = $this->getAdapter();        
-        $sql = "SELECT Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as numero,".
+        $sql = "SELECT Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as imovel_numero,".
         "Imovel.area_total as area_total, Imovel.area_construida as area_construida,Imovel.valor_iptu as iptu,".
         "Imovel.valor_transacao as valor_transacao, Imovel.descricao as descricao, Bairro.id as bairro_id,".
         "Bairro.nome as bairro_nome, cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".
@@ -140,7 +172,7 @@ class Imovel extends \Base\Model\AbstractModel {
         " FROM Imovel INNER JOIN Bairro ON Imovel.bairro = Bairro.id INNER JOIN cidade ON Bairro.cidade = cidade.id INNER JOIN estado ON cidade.estado = estado.id INNER JOIN pais ON estado.pais = pais.id INNER JOIN TipoTransacao ON Imovel.tipo_transacao = TipoTransacao.id INNER JOIN SubCategoriaImovel ON Imovel.subCategoria = SubCategoriaImovel.id INNER JOIN CategoriaImovel ON SubCategoriaImovel.categoria = CategoriaImovel.id INNER JOIN Proprietario ON Imovel.proprietario = Proprietario.id INNER JOIN ImovelStatus ON Imovel.imovelStatus = ImovelStatus.id".
         " WHERE(Imovel.id=".$id.")";        
         $statement = $adapter->query($sql);
-        $results = $statement->execute();        
+        $results = $statement->execute();                
         $imovel_list = $this->criarVariosFromSql($results);
         return $imovel_list;
     }
@@ -153,7 +185,7 @@ class Imovel extends \Base\Model\AbstractModel {
             $qtd=  self::$_qtd_por_pagina;
         }
         $adapter = $this->getAdapter();        
-        $sql = "SELECT Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as numero,".
+        $sql = "SELECT Imovel.id as imovel_id, Imovel.rua as rua, Imovel.numero as imovel_numero,".
         "Imovel.area_total as area_total, Imovel.area_construida as area_construida,Imovel.valor_iptu as iptu,".
         "Imovel.valor_transacao as valor_transacao, Imovel.descricao as descricao, Bairro.id as bairro_id,".
         "Bairro.nome as bairro_nome, cidade.id as cidade_id, cidade.nome as cidade_nome, estado.id as estado_id,".

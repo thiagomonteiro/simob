@@ -481,21 +481,39 @@ $rota_imovel = array(
                     ),
                 ),
             ),  
-        'alterar' => array(
+        'alterarPasso1' => array(
             'type' => 'segment',
             'options' => array(
-                    'route' => '/alterar',
+                    'route' => '/alterarPasso1[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+',                       
+                    ),
                     'defaults' => array(
-                        'action' => 'alterar',
+                        'action' => 'alterarPasso1',
                     ),
                 ),
             ), 
-        'salvarAlteracoes' => array(
+        'alterarPasso2' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => '/salvarAlteracoes',
+                'route' => '/alterarPasso2[/:id]',
+                'constraints' => array(
+                    'id' => '[0-9]+',
+                ),
                 'defaults' => array(
-                    'action' => 'salvarAlteracoes',
+                    'action' => 'alterarPasso2',
+                ),
+            ),
+        ),
+         'alterarPasso3' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => '/alterarPasso3[/:id]',
+                'constraints' => array(
+                    'id' => '[0-9]+',
+                ),
+                'defaults' => array(
+                    'action' => 'alterarPasso3',
                 ),
             ),
         ),

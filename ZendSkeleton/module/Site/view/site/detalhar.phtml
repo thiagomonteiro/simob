@@ -64,14 +64,14 @@
                 
                 <?php echo '<div class="desc"><div>Descrição</div>'.$imovel->getDescricao().'</div>';?>
                 
-                <ul class="comodos">
+                <!--<ul class="comodos">
                     <label>Comodos</label>
                     <?php 
-                        foreach ($comodos as $row){
-                            echo "<li>".$row->getTipoComodo()->getDescricao().": ".$row->getQtd()."</li>";
-                        }
+                        /*foreach ($comodos as $row){
+                            echo "<li>".$row->getQtd()." ".$row->getTipoComodo()->getDescricao()."(s)</li>";
+                        }*/
                     ?>
-                </ul>
+                </ul>-->
             </div>
     </body>
 </html>

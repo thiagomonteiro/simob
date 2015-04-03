@@ -665,26 +665,12 @@ select{
     float: left;
     list-style: none;
     height: 200px;
-    margin-left: 15%;    
-}
-
-.comodos{
-    background-color: white;
-    float: left;
-    width: 150px;
-    list-style: none;
-    margin-left: 20px;
-    word-wrap: break-word;
-    border-radius: 5px;
-    height: 200px;
+    width: 25%;
+    margin-left: 15%; 
     overflow:scroll;
+    word-wrap: break-word;
 }
 
-
-
-.comodos label{
-    display: block;
-}
 
 .destaque{
     color: #66b5ba;
@@ -694,7 +680,7 @@ select{
 .desc{
     background-color: white;
     float: left;
-    width: 300px;
+    width: 50%;
     height: 200px;
     display: block;
     overflow-y:scroll;
